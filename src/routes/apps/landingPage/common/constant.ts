@@ -9,5 +9,6 @@ export const NAV_ITEMS: INavItem[] = [
   { label: "Contact Us", hasDropdown: false },
 ];
 export const MENU_ITEMS = ["Buy", "Installamental payment", "Resell"];
+export const MOBILE_MENU_ITEMS = [...MENU_ITEMS, "About Us", "Contact Us"];
 
 export const TAB_LIST = ["Lease", "Buy", "Sell"];

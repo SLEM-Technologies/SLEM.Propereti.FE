@@ -1,10 +1,13 @@
+import { forwardRef } from "react";
+
 interface LogoProps {
   variant?: "primary" | "secondary";
 }
 
-function Logo({ variant = "primary" }: LogoProps) {
+const Logo = forwardRef<HTMLDivElement, LogoProps>((props, ref) => {
+  const { variant = "primary", ...rest } = props;
   return (
-    <div className="flex items-center gap-1">
+    <div className="flex items-center gap-1" ref={ref} {...rest}>
       <svg
         width="32"
         height="32"
@@ -36,7 +39,7 @@ function Logo({ variant = "primary" }: LogoProps) {
         </defs>
       </svg>
       <span
-        className={`text-[1.3rem] leading-[28px] font-[700] ${
+        className={`text-sm md:text-[1.3rem] leading-[28px] font-[700] ${
           variant === "primary" ? "text-primary-50" : "text-black"
         }`}
       >
@@ -44,6 +47,7 @@ function Logo({ variant = "primary" }: LogoProps) {
       </span>
     </div>
   );
-}
+});
 
+Logo.displayName = "Logo";
 export default Logo;

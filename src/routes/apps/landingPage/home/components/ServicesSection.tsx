@@ -36,17 +36,17 @@ const SERVICES = [
 
 function ServicesSection() {
   return (
-    <div className="w-full h-full bg-white flex gap-16 p-10">
-      <div className="flex flex-col gap-3 w-[459px] bg-[#F7F7FD] border border-primary-100 rounded-md ">
+    <div className="w-full h-full bg-white p-4 md:flex md:gap-16 md:p-10">
+      <div className="flex flex-col gap-3 md:w-[459px] bg-[#F7F7FD] border border-primary-100 rounded-md ">
         <div className="flex flex-col gap-5 max-w-[300px] mx-auto mt-6">
-          <h2 className="text-primary-50 text-[2rem] font-[700] leading-[40px] mb-2">
+          <h2 className="text-primary-50  text-[1.8rem] font-[700] leading-[35px] mb-2 md:leading-[40px] md:text-[2rem]">
             The new way to find your new home
           </h2>
           <p className="font-[400] leading-[25px]">
             Find your dream place to live in with more than 10k+ properties
             listed.
           </p>
-          <PrimaryButton className="w-[159px] h-[40px] bg-primary-50">
+          <PrimaryButton className="text-[0.9rem] w-[159px] h-[40px] bg-primary-50 md:text-base">
             Browser Properties
           </PrimaryButton>
         </div>
@@ -62,15 +62,18 @@ function ServicesSection() {
         </div>
       </div>
 
-      <div className="w-[732px] mt-6">
-        <div className="grid grid-cols-2 gap-x-4 gap-y-10">
+      <div className="md:w-[732px] mt-6">
+        <div className="grid gap-y-10 md:grid-cols-2 md:gap-x-4">
           {SERVICES.map((service, index) => (
-            <div key={index} className="flex flex-col gap-4">
+            <div
+              key={index}
+              className="flex flex-col gap-4 justify-center items-center md:justify-start md:items-start"
+            >
               <span>{service.icon}</span>
-              <h3 className="text-primary-50 text-[1.6rem] font-[700] leading-[32px]">
+              <h3 className="text-primary-50 text-[1.2rem] font-[700] leading-[28px] md:leading-[32px] md:text-[1.6rem]">
                 {service.title}
               </h3>
-              <p className="text-[1rem] font-[400] leading-[24px]">
+              <p className="max-w-2/3 text-center leading-[18px] text-[0.85rem] font-[400] md:leading-[24px] md:text-[1rem] md:w-full md:text-left">
                 {service.description}
               </p>
             </div>

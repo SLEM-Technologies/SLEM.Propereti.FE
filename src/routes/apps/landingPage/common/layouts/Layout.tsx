@@ -6,7 +6,7 @@ function Layout() {
   return (
     <div className="w-full h-full">
       <Header />
-      <div className="w-full h-full overflow-y-auto">
+      <div className="w-full h-full">
         <Outlet />
       </div>
       <Footer />

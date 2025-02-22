@@ -61,19 +61,21 @@ const SOCIAL_ICONS = [
 function Footer() {
   return (
     <div className="bg-white text-white">
-      <div className="w-[70%] mx-auto flex gap-24 items-start p-16">
-        <Logo variant="secondary" />
-        <div className="flex-1 grid grid-cols-1 gap-8 md:grid-cols-3">
+      <div className=" flex items-start p-8 md:gap-24 md:p-16 md:w-[70%] md:mx-auto">
+        <div className="hidden md:block">
+          <Logo variant="secondary" />
+        </div>
+        <div className="grid grid-cols-2 gap-4 md:gap-8 md:grid-cols-3">
           {CONTENT.map((item, index) => (
             <div key={index} className="flex flex-col gap-2">
-              <h3 className="text-[#191926] font-[700] text-[1.25rem]">
+              <h3 className="text-[#191926] font-[700] text-base md:text-[1.25rem]">
                 {item.title}
               </h3>
               <ul className="flex flex-col gap-1">
                 {item.links.map((link, index) => (
                   <li
                     key={index}
-                    className="text-[#191926] font-[500] text-[0.88rem]"
+                    className="text-[#191926] font-[500]  text-[0.8rem] md:text-sm"
                   >
                     {link}
                   </li>
@@ -84,12 +86,12 @@ function Footer() {
         </div>
       </div>
       <div className="border-t-[1px] border-[#F0EFFB]">
-        <div className="w-[70%] mx-auto py-8 flex justify-between items-center">
+        <div className="flex justify-between items-center py-4 px-4 md:w-[70%] md:mx-auto md:py-8 md:px-0">
           <p className="text-[#191926] text-center">
             ©{new Date().getFullYear()} Estatery. All rights reserved.
           </p>
 
-          <div className="flex gap-4">
+          <div className="flex gap-2 md:gap-4">
             {SOCIAL_ICONS.map((item, index) => (
               <a
                 key={index}

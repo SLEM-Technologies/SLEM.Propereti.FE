@@ -9,7 +9,9 @@ function Home() {
     <div className="w-full h-full">
       <HeroSection />
       <ServicesSection />
-      <MapSection />
+      <div className="hidden md:block">
+        <MapSection />
+      </div>
       <FeatureSection />
       <NewesLetterSection />
     </div>
