@@ -1,4 +1,4 @@
-import { BrowserRouter, Navigate, Route, Routes } from "react-router";
+import { BrowserRouter, Route, Routes } from "react-router";
 import {
   LandingPageRouter,
   LandingPageRoot,
@@ -11,7 +11,6 @@ function App() {
       <BrowserRouter>
         <Routes>
           <Route element={<AppLayout />}>
-            <Route path="/" element={<Navigate to={LandingPageRoot} />} />
             <Route
               path={`${LandingPageRoot}/*`}
               element={<LandingPageRouter />}

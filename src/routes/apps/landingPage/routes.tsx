@@ -1,6 +1,7 @@
-import { Route, Routes } from "react-router";
+import { Navigate, Route, Routes } from "react-router";
 import Home from "./home/Home";
 import Layout from "./common/layouts/Layout";
+import AboutUs from "./about-us/AboutUs";
 
 export const LandingPageRoutes = {
   HOME: "home",
@@ -11,14 +12,15 @@ export const LandingPageRoutes = {
   CONTACT_US: "contact-us",
 };
 
-export const LandingPageRoot = "/landing-page";
+export const LandingPageRoot = "/";
 
 export const LandingPageRouter = () => {
   return (
     <Routes>
       <Route element={<Layout />}>
-        <Route path="/" element={<Home />} />
+        <Route path="/" element={<Navigate to={LandingPageRoutes.HOME} />} />
         <Route path={`${LandingPageRoutes.HOME}`} element={<Home />} />
+        <Route path={`${LandingPageRoutes.ABOUT_US}`} element={<AboutUs />} />
       </Route>
     </Routes>
   );

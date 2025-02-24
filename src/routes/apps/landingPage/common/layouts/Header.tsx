@@ -19,6 +19,8 @@ import {
   NAV_ITEMS,
 } from "@/routes/apps/landingPage/common";
 import { HiX } from "react-icons/hi";
+import { NavLink } from "react-router";
+import { twMerge } from "tailwind-merge";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -33,7 +35,7 @@ function Header() {
   } = useFloating({
     open: isMenuOpen,
     onOpenChange: setIsMenuOpen,
-    middleware: [offset({ mainAxis: 28, crossAxis: 80 }), flip(), shift()],
+    middleware: [offset({ mainAxis: 28, crossAxis: 65 }), flip(), shift()],
     whileElementsMounted: autoUpdate,
   });
 
@@ -63,7 +65,15 @@ function Header() {
     e.stopPropagation();
     if (NAV_ITEMS[index].hasDropdown) {
       setIsMenuOpen((prev) => !prev);
+    } else {
+      setIsMenuOpen(false);
     }
+  };
+
+  const handleIsActiveHomeRoute = () => {
+    const url = location.pathname.replace("/", "");
+    const homeLinks = ["home", ...MENU_ITEMS].map((link) => link.toLowerCase());
+    return homeLinks.includes(url);
   };
 
   useEffect(() => {
@@ -96,12 +106,32 @@ function Header() {
                   ref={item.hasDropdown ? desktopRefs.setReference : null}
                   {...(item.hasDropdown ? getDesktopReferenceProps() : {})}
                   onClick={(e) => handleMenuToggle(index, e)}
-                  className="text-primary-50 cursor-pointer font-[500] leading-[24px] flex items-center gap-2 hover:text-primary-100 transition-colors ease-in-out"
                   aria-haspopup="true"
                   aria-expanded={isMenuOpen && item.hasDropdown}
                 >
-                  <span>{item.label}</span>
-                  {item.hasDropdown && <HiChevronDown />}
+                  <NavLink
+                    to={item.link}
+                    className={({ isActive }) => {
+                      let showActiveStyle = false;
+                      if (isActive && item.label === "Property") {
+                        showActiveStyle = handleIsActiveHomeRoute();
+                      }
+                      if (isActive && item.label !== "Property") {
+                        showActiveStyle = true;
+                      }
+                      return twMerge(
+                        ", text-primary-50 cursor-pointer font-[500] leading-[24px] flex items-center gap-2 hover:text-primary-100 transition-colors ease-in-out",
+                        `${
+                          showActiveStyle
+                            ? "pb-1 border-b border-primary-50 hover:border-primary-100 transition-all ease-in-out"
+                            : ""
+                        }`
+                      );
+                    }}
+                  >
+                    <span>{item.label}</span>
+                    {item.hasDropdown && <HiChevronDown />}
+                  </NavLink>
                 </li>
               ))}
             </ul>

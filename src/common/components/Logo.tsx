@@ -1,13 +1,21 @@
 import { forwardRef } from "react";
+import { useNavigate } from "react-router";
 
 interface LogoProps {
   variant?: "primary" | "secondary";
 }
 
 const Logo = forwardRef<HTMLDivElement, LogoProps>((props, ref) => {
+  const navigate = useNavigate();
+
   const { variant = "primary", ...rest } = props;
   return (
-    <div className="flex items-center gap-1" ref={ref} {...rest}>
+    <div
+      className="flex items-center gap-1 cursor-pointer"
+      ref={ref}
+      {...rest}
+      onClick={() => navigate("/")}
+    >
       <svg
         width="32"
         height="32"
