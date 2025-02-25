@@ -87,7 +87,7 @@ function Footer() {
       </div>
       <div className="border-t-[1px] border-[#F0EFFB]">
         <div className="flex justify-between items-center py-4 px-4 md:w-[70%] md:mx-auto md:py-8 md:px-0">
-          <p className="text-[#191926] text-center">
+          <p className="text-[#191926] text-center text-[0.85rem] md:text-base">
             ©{new Date().getFullYear()} Estatery. All rights reserved.
           </p>
 

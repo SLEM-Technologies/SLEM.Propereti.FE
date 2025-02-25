@@ -5,6 +5,7 @@ import SearchInput from "../interaction/SearchInput";
 import { PrimaryButton } from "./Button";
 import { IPropertyCard, PROPERTY_CARD_CONTENT } from "../contants";
 import PropertyCard from "../interaction/PropertyCard";
+import { twMerge } from "tailwind-merge";
 
 const filter = [
   {
@@ -21,9 +22,23 @@ const filter = [
   },
 ];
 
-function PropertiesBasedOnLocation() {
+const bgStyle = {
+  primary: "from-secondary-100/50 to-white",
+  secondary: "from-white to-secondary-100/50",
+};
+
+interface IProps {
+  variant?: "primary" | "secondary";
+}
+
+function PropertiesBasedOnLocation({ variant = "primary" }: IProps) {
   return (
-    <div className="w-full h-full bg-linear-to-t from-secondary-100/50 to-white text-primary-50 py-7 md:py-14">
+    <div
+      className={twMerge(
+        "w-full h-full bg-linear-to-t text-primary-50 py-7 md:py-14",
+        bgStyle[variant]
+      )}
+    >
       <div className="w-full md:w-[80%] md:mx-auto flex flex-col justify-center items-center gap-12 md:gap-16">
         <div className="flex flex-col justify-center items-center space-y-1">
           <h2 className="text-[1.8rem] font-[700] leading-[40px] md:leading-[56px] md:text-[2.5rem]">
