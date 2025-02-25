@@ -19,7 +19,7 @@ import {
   NAV_ITEMS,
 } from "@/routes/apps/landingPage/common";
 import { HiX } from "react-icons/hi";
-import { NavLink } from "react-router";
+import { Link, NavLink } from "react-router";
 import { twMerge } from "tailwind-merge";
 
 function Header() {
@@ -72,7 +72,9 @@ function Header() {
 
   const handleIsActiveHomeRoute = () => {
     const url = location.pathname.replace("/", "");
-    const homeLinks = ["home", ...MENU_ITEMS].map((link) => link.toLowerCase());
+    const homeLinks = ["home", ...MENU_ITEMS.map((item) => item.label)].map(
+      (link) => link.toLowerCase()
+    );
     return homeLinks.includes(url);
   };
 
@@ -144,13 +146,14 @@ function Header() {
                 className="w-[220px] bg-white shadow-md py-4 px-3 z-50"
               >
                 <ul role="menu" className="space-y-3">
-                  {MENU_ITEMS.map((item: string, index: number) => (
-                    <li
-                      key={index}
-                      className="text-primary-50 text-[1.1rem] font-[500] cursor-pointer leading-[24px] hover:text-primary-100 transition-colors ease-in-out"
-                      role="menuitem"
-                    >
-                      <span>{item}</span>
+                  {MENU_ITEMS.map((item: INavItem, index: number) => (
+                    <li key={index} role="menuitem">
+                      <Link
+                        className="text-primary-50 text-[1.1rem] font-[500]  leading-[24px] cursor-pointer hover:text-primary-100 transition-colors ease-in-out"
+                        to={`${item.link.toLowerCase().replace(" ", "-")}`}
+                      >
+                        {item.label}
+                      </Link>
                     </li>
                   ))}
                 </ul>
@@ -180,13 +183,14 @@ function Header() {
               size={24}
             />
             <ul role="mobileMenu" className="space-y-3">
-              {MOBILE_MENU_ITEMS.map((item: string, index: number) => (
-                <li
-                  key={index}
-                  className="text-primary-50 text-[1.1rem] font-[500] cursor-pointer leading-[24px] hover:text-primary-100 transition-colors ease-in-out"
-                  role="mobileMenuItem"
-                >
-                  <span>{item}</span>
+              {MOBILE_MENU_ITEMS.map((item: INavItem, index: number) => (
+                <li key={index} role="mobileMenuItem">
+                  <Link
+                    className="text-primary-50 text-[1.1rem] font-[500] cursor-pointer leading-[24px] hover:text-primary-100 transition-colors ease-in-out"
+                    to={`${item.link.toLowerCase()}`}
+                  >
+                    {item.label}
+                  </Link>
                 </li>
               ))}
             </ul>
