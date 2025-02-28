@@ -4,7 +4,7 @@ on:
   push:
     branches:
       - main
-      - master  # Adjust this if your main branch has a different name
+      - Develop  # Adjust this if your main branch has a different name
 
 jobs:
   build-and-deploy:
