@@ -8,22 +8,28 @@ function HeroSection() {
           <h2 className="text-primary-50 text-[2.3rem] leading-[50.48px] font-[700] md:leading-[60.48px] md:text-[3rem]">
             Our purpose is to turn anyone and everyone into a property owner
           </h2>
-          <p className="text-base leading-[25px] font-[400] md:text-[1.2rem] md:leading-[30px]">
-            Lorem ipsum dolor sit amet consectetur. Commodo mauris erat ipsum
-            habitasse. Consectetur fringilla sed elementum at ac pharetra est
-            pellentesque. Lectus neque id quis viverra interdum. Pretium eu
-            fames mauris id at platea. Suspendisse amet sed arcu diam arcu diam
-            vitae faucibus. Odio donec scelerisque fusce lorem pulvinar amet. Ac
-            massa vehicula venenatis eget eget pretium quis. Lectus morbi nunc
-            tellus volutpat purus et. Ut sed id risus a sed enim.
+          <p className="text-base leading-[25px] font-[400] md:text-[1.1rem] md:leading-[30px]">
+            At SLEM Technologies, we believe that owning property should not be
+            a privilege reserved for a few but an opportunity available to
+            everyone. Our goal is to simplify, digitize, and democratize real
+            estate investment, making it more accessible, transparent, and
+            secure for individuals, families, and businesses.
+          </p>
+
+          <p className="text-base leading-[25px] font-[400] md:text-[1.1rem] md:leading-[30px]">
+            Through our trusted real estate platform, we enable users to buy,
+            sell, and invest in properties with confidence—whether through
+            outright purchases, flexible installment plans, or resale options.
+            By leveraging cutting-edge technology, strategic partnerships, and
+            market insights, we empower people to own a piece of the future.
           </p>
         </div>
       </div>
-      <div className="w-[40%] hidden md:block">
+      <div className="w-[50%] hidden md:block">
         <img
           src={heroImage}
           alt="Hero image"
-          className="w-[600px] -translate-y-20 object-cover"
+          className="w-[800px] -translate-y-20 object-cover"
         />
       </div>
     </div>

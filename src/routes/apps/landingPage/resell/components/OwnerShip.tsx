@@ -23,9 +23,10 @@ function OwnerShip() {
             The best help you can get in your resale
           </h2>
           <p className="text-[0.82rem] max-w-md md:max-w-[900px] text-black leading-[25px] font-[400] md:text-[1.1rem] md:leading-[30px]">
-            Founded in 2010, [Company Name] has been a trusted name in the real
-            estate industry, helping thousands of clients buy, sell, and rent
-            properties across Nigeria. Founded in 2010,
+            We do the work, you get the profits! Not sure what your property is
+            worth? We handle pricing, valuation, and buyer connections so you
+            can sell at the best rate. No stress, no hidden fees—just a smooth
+            resale process!
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-12">

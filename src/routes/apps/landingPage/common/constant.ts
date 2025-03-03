@@ -9,6 +9,7 @@ export const NAV_ITEMS: INavItem[] = [
   { label: "About Us", hasDropdown: false, link: "/about-us" },
   { label: "Contact Us", hasDropdown: false, link: "/contact-us" },
 ];
+
 export const MENU_ITEMS: INavItem[] = [
   { label: "Buy", hasDropdown: true, link: "/buy" },
   {
@@ -18,6 +19,7 @@ export const MENU_ITEMS: INavItem[] = [
   },
   { label: "Resell", hasDropdown: false, link: "/resell" },
 ];
+
 export const MOBILE_MENU_ITEMS: INavItem[] = [...MENU_ITEMS, ...NAV_ITEMS];
 
 export const TAB_LIST = ["Lease", "Buy", "Sell"];

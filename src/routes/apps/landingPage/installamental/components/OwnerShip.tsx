@@ -30,9 +30,10 @@ function OwnerShip() {
             The best property ownership deal
           </h2>
           <p className="text-[0.82rem] max-w-md md:max-w-[720px] text-black leading-[25px] font-[400] md:text-[1.1rem] md:leading-[30px]">
-            Founded in 2010, [Company Name] has been a trusted name in the real
-            estate industry, helping thousands of clients buy, sell, and rent
-            properties across Nigeria. Founded in 2010,
+            Why pay more when you can pay smarter? Our platform provides the
+            best deals on real estate, ensuring you get verified properties at
+            competitive prices. No hidden charges, no inflated costs—just the
+            best value for your investment.
           </p>
         </div>
         <div className="flex flex-col gap-2 md:flex-row md:gap-12">
