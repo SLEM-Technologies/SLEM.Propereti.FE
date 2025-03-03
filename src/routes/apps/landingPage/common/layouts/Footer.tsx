@@ -5,6 +5,7 @@ import facebookIcon from "@/assets/icons/facebook-icon.svg";
 import instagramIcon from "@/assets/icons/instagram-icon.svg";
 import twitterIcon from "@/assets/icons/twitter-icon.svg";
 import linkedinIcon from "@/assets/icons/linkedin-icon.svg";
+import { Link } from "react-router";
 
 const CONTENT = [
   {
@@ -75,9 +76,9 @@ function Footer() {
                 {item.links.map((link, index) => (
                   <li
                     key={index}
-                    className="text-[#191926] font-[500]  text-[0.8rem] md:text-sm"
+                    className="text-[#191926] font-[500]  text-[0.8rem] md:text-sm hover:text-primary-50"
                   >
-                    {link}
+                    <Link to="#">{link}</Link>
                   </li>
                 ))}
               </ul>

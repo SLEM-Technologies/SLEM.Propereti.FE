@@ -19,8 +19,8 @@ import {
   NAV_ITEMS,
 } from "@/routes/apps/landingPage/common";
 import { HiX } from "react-icons/hi";
-import { Link, NavLink } from "react-router";
 import { twMerge } from "tailwind-merge";
+import { LinkToTop } from "@/common/interaction/LinkToTop";
 
 function Header() {
   const [isMenuOpen, setIsMenuOpen] = useState(false);
@@ -111,7 +111,8 @@ function Header() {
                   aria-haspopup="true"
                   aria-expanded={isMenuOpen && item.hasDropdown}
                 >
-                  <NavLink
+                  <LinkToTop
+                    type="navlink"
                     to={item.link}
                     className={({ isActive }) => {
                       let showActiveStyle = false;
@@ -133,7 +134,7 @@ function Header() {
                   >
                     <span>{item.label}</span>
                     {item.hasDropdown && <HiChevronDown />}
-                  </NavLink>
+                  </LinkToTop>
                 </li>
               ))}
             </ul>
@@ -148,12 +149,13 @@ function Header() {
                 <ul role="menu" className="space-y-3">
                   {MENU_ITEMS.map((item: INavItem, index: number) => (
                     <li key={index} role="menuitem">
-                      <Link
+                      <LinkToTop
+                        type="link"
                         className="text-primary-50 text-[1.1rem] font-[500]  leading-[24px] cursor-pointer hover:text-primary-100 transition-colors ease-in-out"
                         to={`${item.link.toLowerCase().replace(" ", "-")}`}
                       >
                         {item.label}
-                      </Link>
+                      </LinkToTop>
                     </li>
                   ))}
                 </ul>
@@ -161,9 +163,11 @@ function Header() {
             )}
           </div>
         </nav>
-        <PrimaryButton className="hidden md:block w-[174px] h-[48px] bg-primary-50 text-sm font-[700] leading-[24px]">
-          Contact Us
-        </PrimaryButton>
+        <LinkToTop type="link" to="/contact-us">
+          <PrimaryButton className="hidden md:block w-[174px] h-[48px] bg-primary-50 text-sm font-[700] leading-[24px]">
+            Contact Us
+          </PrimaryButton>
+        </LinkToTop>
         <HiMenu
           size={24}
           className="md:hidden text-primary-50 cursor-pointer"
@@ -185,12 +189,13 @@ function Header() {
             <ul role="mobileMenu" className="space-y-3">
               {MOBILE_MENU_ITEMS.map((item: INavItem, index: number) => (
                 <li key={index} role="mobileMenuItem">
-                  <Link
+                  <LinkToTop
+                    type="link"
                     className="text-primary-50 text-[1.1rem] font-[500] cursor-pointer leading-[24px] hover:text-primary-100 transition-colors ease-in-out"
                     to={`${item.link.toLowerCase()}`}
                   >
                     {item.label}
-                  </Link>
+                  </LinkToTop>
                 </li>
               ))}
             </ul>

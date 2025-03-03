@@ -10,9 +10,9 @@ function HeroSection() {
             You bought and want to RESELL?
           </h2>
           <p className="text-base leading-[25px] font-[400] max-w-sm md:max-w-full md:text-[1.2rem] md:leading-[30px]">
-            Lorem ipsum dolor sit amet consectetur. Commodo mauris erat ipsum
-            habitasse. Consectetur fringilla sed elementum at ac pharetra est
-            pellentesque.
+            Maximize your investment with ease! Looking to sell your property?
+            Our resale service allows you to list and sell properties
+            seamlessly, ensuring you get the best market value with zero hassle.
           </p>
           <PrimaryButton className="w-[205.58px] h-[46px] md:h-[56px] bg-primary-50 text-[0.88rem] md:text-base">
             Get Started

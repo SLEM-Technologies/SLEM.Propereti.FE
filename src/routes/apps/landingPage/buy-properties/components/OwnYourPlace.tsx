@@ -23,9 +23,11 @@ function OwnYourPlace() {
             The smart way to owning your place
           </h2>
           <p className="text-[0.82rem] max-w-md md:max-w-[900px] text-black leading-[25px] font-[400] md:text-[1.1rem] md:leading-[30px]">
-            Lorem ipsum dolor sit amet consectetur. Commodo mauris erat ipsum
-            habitasse. Consectetur fringilla sed elementum at ac pharetra est
-            pellentesque.{" "}
+            Invest with confidence, grow your assets! We provide a transparent,
+            hassle-free process that allows you to find and purchase your
+            perfect property at the best market rates. From virtual tours to
+            price tracking, we help you make smart, data-driven decisions about
+            your investment
           </p>
         </div>
         <div className="flex flex-col md:flex-row gap-12">

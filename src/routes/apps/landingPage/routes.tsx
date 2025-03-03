@@ -5,6 +5,7 @@ import AboutUs from "./about-us/AboutUs";
 import Properties from "./buy-properties/Properties";
 import Installamental from "./installamental/Installamental";
 import Resell from "./resell/Resell";
+import ContactUs from "./contact-us/ContactUs";
 
 export const LandingPageRoutes = {
   HOME: "home",
@@ -30,6 +31,10 @@ export const LandingPageRouter = () => {
           element={<Installamental />}
         />
         <Route path={`${LandingPageRoutes.RESELL}`} element={<Resell />} />
+        <Route
+          path={`${LandingPageRoutes.CONTACT_US}`}
+          element={<ContactUs />}
+        />
       </Route>
     </Routes>
   );
