@@ -30,9 +30,9 @@ function Accordion({ content }: IAccordionProps) {
   return (
     <div
       className={twMerge(
-        "w-[350px] md:w-[896px] flex justify-between bg-white p-4 md:p-8 shadow-lg rounded-lg",
+        "w-[350px] md:w-[896px] flex justify-between bg-white p-4 md:p-7 shadow-lg rounded-lg",
         isOpenAccordion
-          ? "border-primary-200 border-[3px] items-start md:h-[210px]"
+          ? "border-primary-200 border-[3px] items-start md:h-[230px]"
           : "border-0 items-center md:h-[132px]"
       )}
     >
@@ -41,7 +41,7 @@ function Accordion({ content }: IAccordionProps) {
           {content.title}
         </h2>
         {isOpenAccordion && (
-          <p className="font-[400]  leading-[30px] text-[0.85rem] md:text-[1.1rem] md:w-[715.3px]">
+          <p className="font-[400] leading-[30px] text-[0.85rem] md:text-[1.1rem] md:w-[715.3px]">
             {content.description}
           </p>
         )}
