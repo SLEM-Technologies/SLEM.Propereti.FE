@@ -1,0 +1,125 @@
+/* Hero.module.css */
+.hero {
+  position: relative;
+  background-size: cover;
+  background-position: center;
+  height: 100vh;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: #1e2a78;
+  font-family: "Segoe UI", sans-serif;
+}
+
+.overlayyer {
+  text-align: center;
+  font-family: Montserrat;
+  background-color: #f0effb;
+  padding-bottom: 5px;
+  padding-top: 20px;
+}
+.overlay {
+  text-align: center;
+  padding: 40px;
+  border-radius: 12px;
+  max-width: 900px;
+  width: 100%;
+}
+
+.title {
+  font-size: 2.8rem;
+  font-weight: bold;
+  margin-bottom: 1rem;
+  color: #2c318e;
+  font-family: Montserrat;
+}
+
+.subtitle {
+  font-size: 1.1rem;
+  color: #3949ab;
+  margin-bottom: 2rem;
+  font-family: Open Sans;
+}
+
+.searchBox {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 20px;
+  border-radius:  0px 12px 12px 12px;
+}
+
+.tabs {
+  display: flex;
+  /* justify-content: center; */
+      border-radius: 12px;
+
+
+}
+.span{
+        background: rgba(255, 255, 255, 0.7);
+    padding: 5px;
+    border-radius: 12px 12px 0px 0px;
+    margin-top: 2rem;
+        max-width: 275px;
+
+}
+
+.tab {
+  background: transparent;
+  border: none;
+  padding: 10px 20px;
+  font-size: 1rem;
+  color: #2c318e;
+  cursor: pointer;
+  transition: all 0.3s ease;
+}
+
+.activeTab {
+  font-weight: bold;
+  border-bottom: 2px solid #2c318e;
+}
+
+.inputs {
+  display: flex;
+  gap: 20px;
+  align-items: center;
+  /* justify-content: center; */
+  flex-wrap: wrap;
+}
+
+.inputGroup {
+  /* background: white; */
+  padding: 15px;
+  border-radius: 10px;
+  text-align: left;
+  min-width: 220px;
+  box-shadow: 0 2px 6px rgba(0, 0, 0, 0.1);
+}
+
+.inputGroup label {
+  display: block;
+  font-size: 0.9rem;
+  color: #444;
+  margin-bottom: 5px;
+}
+
+.location,
+.date {
+  font-weight: bold;
+  color: #2c318e;
+}
+
+.button {
+  background-color: #3949ab;
+  color: white;
+  padding: 12px 24px;
+  font-size: 0.95rem;
+  border: none;
+  border-radius: 8px;
+  cursor: pointer;
+  white-space: nowrap;
+  transition: background 0.3s ease;
+}
+
+.button:hover {
+  background-color: #303f9f;
+}
