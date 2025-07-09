@@ -44,23 +44,20 @@
 .searchBox {
   background: rgba(255, 255, 255, 0.7);
   padding: 20px;
-  border-radius:  0px 12px 12px 12px;
+  border-radius: 0px 12px 12px 12px;
 }
 
 .tabs {
   display: flex;
   /* justify-content: center; */
-      border-radius: 12px;
-
-
+  border-radius: 12px;
 }
-.span{
-        background: rgba(255, 255, 255, 0.7);
-    padding: 5px;
-    border-radius: 12px 12px 0px 0px;
-    margin-top: 2rem;
-        max-width: 275px;
-
+.span {
+  background: rgba(255, 255, 255, 0.7);
+  padding: 5px;
+  border-radius: 12px 12px 0px 0px;
+  margin-top: 2rem;
+  max-width: 275px;
 }
 
 .tab {
@@ -126,16 +123,20 @@
 .benefitsSection {
   display: flex;
   flex-wrap: wrap;
-  gap: 2rem;
+  gap: 3rem;
   padding: 4rem 2rem;
   background: #f7fafd;
   justify-content: center;
+  max-width: 1200px;
+  margin: auto;
 }
-
+.whole {
+  background: #f7fafd;
+}
 .leftCard {
   flex: 1 1 300px;
   max-width: 400px;
-  background: white;
+  background: #e0def7;
   border-radius: 10px;
   padding: 2rem;
   box-shadow: 0 0 15px rgba(0, 0, 0, 0.05);
@@ -147,20 +148,23 @@
 }
 
 .leftCard h2 {
-  font-size: 1.5rem;
+  font-size: 32px;
   font-weight: 700;
-  color: #2a2e43;
+  color: #3a4999;
   margin-bottom: 1rem;
+  font-family: Montserrat;
 }
 
 .leftCard p {
   color: #6b6f80;
-  font-size: 0.95rem;
+  font-size: 17px;
+  font-weight: 400;
   margin-bottom: 1.5rem;
+  font-family: Open Sans;
 }
 
 .leftCard button {
-  background-color: #2a2e43;
+  background-color: #3a4999;
   color: white;
   padding: 0.6rem 1.2rem;
   border: none;
@@ -169,10 +173,15 @@
   width: fit-content;
   cursor: pointer;
 }
+.leftCard button:hover {
+  cursor: pointer;
+  background-color: #4657b7c1;
+}
 
 .houseImg {
   margin-top: 2rem;
   width: 100%;
+  margin-left: 30px;
 }
 
 .rightFeatures {
@@ -184,8 +193,10 @@
 
 .featureBox {
   display: flex;
-  gap: 1rem;
+  /* gap: 1rem; */
   align-items: flex-start;
+  flex-direction: column;
+  margin: auto;
 }
 
 .featureBox img {
@@ -194,15 +205,55 @@
 }
 
 .featureBox h3 {
-  font-size: 1.1rem;
-  color: #2a2e43;
+  font-size: 32px;
+  font-weight: 700;
+  color: #3a4999;
   margin-bottom: 0.5rem;
+  font-family: Montserrat;
 }
 
 .featureBox p {
   font-size: 0.9rem;
   color: #6b6f80;
+  font-family: Open Sans;
+  max-width: 250px;
 }
+/* Prevent body scroll */
+:global(body) {
+  margin: 0;
+  overflow-x: hidden;
+}
+
+.wrapper {
+  position: relative;
+  width: 100%;
+  max-width: 1400px;
+  height: 100vh;
+  margin: 0 auto;
+}
+
+.mapImage {
+  position: absolute;
+  top: 0;
+  left: 0;
+  min-width: 100%;
+  min-height: 100%;
+  object-fit: cover;
+  cursor: grab;
+  user-select: none;
+}
+
+.overlayyed {
+  position: absolute;
+  bottom: 40px;
+  left: 50%;
+  transform: translateX(-50%);
+  z-index: 10;
+  width: 90%;
+  max-width: 1000px;
+
+}
+
 
 /* Responsive tweaks */
 @media (max-width: 768px) {
