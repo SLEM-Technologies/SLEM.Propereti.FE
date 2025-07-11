@@ -10,6 +10,11 @@ import icon4 from "../assets/icons/resale-icon.svg";
 import Draggable from "react-draggable";
 import mapImage from "../assets/images/map.png";
 import LocationSearch from "../Components/LocationSearch.jsx";
+import { FaCamera, FaHome, FaClipboardList } from "react-icons/fa";
+import Virt from "../assets/icons/virtual-home-icon.svg";
+import Best from "../assets/icons/find-best-home-icon.svg";
+import Copy from "../assets/images/IconCopy.png";
+import ForFooter from "../Components/ForFooter.jsx";
 
 // import { classicNameResolver } from "typescript";
 
@@ -27,7 +32,7 @@ const Home = () => {
   };
 
   return (
-    <div>
+    <div className={styles.body}>
       <Horheader />
       <div className={styles.overlayyer}>
         <h1 className={styles.title}>
@@ -152,6 +157,111 @@ const Home = () => {
           </div>
         </div>
       </section>
+      <section>
+        <div className={styles.tl_section}>
+          <div className={styles.tl_topContent}>
+            <div className={styles.tl_left}>
+              <h2>We make it easy for tenants and landlords.</h2>
+            </div>
+            <div className={styles.tl_right}>
+              <p>
+                Whether it’s selling your current home, getting financing, or
+                buying a new home, we make it easy and efficient. The best part?
+                you’ll save a bunch of money and time with our services.
+              </p>
+            </div>
+          </div>
+
+          <div className={styles.tl_wrapper}>
+            <div className={styles.tl_cards}>
+              <div className={styles.tl_card}>
+                <div className={styles.tl_img}>
+                  <img src={Virt} alt="virtual " />
+                </div>
+                <div className={styles.tl_cont}>
+                  {" "}
+                  <h3>Virtual home tour</h3>
+                  <p>
+                    You can communicate directly with landlords and we provide
+                    you with virtual tour before you buy or rent the property.
+                  </p>
+                </div>
+              </div>
+
+              <div className={styles.tl_card}>
+                <div className={styles.tl_img}>
+                  <img src={Best} alt="virtual " />
+                </div>
+                <div className={styles.tl_cont}>
+                  {" "}
+                  <h3>Find the best deal</h3>
+                  <p>
+                    Browse thousands of properties, save your favorites and set
+                    up search alerts so you don’t miss the best home deal!
+                  </p>
+                </div>
+              </div>
+
+              <div className={`${styles.tl_card} ${styles.custom_card}`}>
+                <div className={`${styles.tl_img} ${styles.custom_img}`}>
+                  <img src={Copy} alt="virtual" />
+                </div>
+                <div className={`${styles.tl_cont} ${styles.custom_cont}`}>
+                  <h3 className={`${styles.custom_title}`}>Get financing</h3>
+                  <p className={`${styles.custom_text}`}>
+                    Find financing options to help make your dream home a
+                    reality and speed up the buying or renting process.
+                  </p>
+                </div>
+              </div>
+            </div>
+          </div>
+
+          <div className={styles.tl_stats}>
+            <div className={styles.tl_stat}>
+              <h4>7.4%</h4>
+              <p>Property Return Rate</p>
+            </div>
+            <div className={styles.tl_divider}></div>
+            <div className={styles.tl_stat}>
+              <h4>3,856</h4>
+              <p>Property in Sell & Rent</p>
+            </div>
+            <div className={styles.tl_divider}></div>
+            <div className={styles.tl_stat}>
+              <h4>2,540</h4>
+              <p>Daily Completed Transactions</p>
+            </div>
+          </div>
+        </div>
+      </section>
+      <section className={styles.cta_section}>
+      <p className={styles.cta_note}>No Spam Promise</p>
+      <h2 className={styles.cta_heading}>Are you a landowner?</h2>
+      <p className={styles.cta_subtext}>
+        Discover ways to increase your home's value and get listed. No Spam.
+      </p>
+
+      <form className={styles.cta_form}>
+        <div className={styles.cta_input_container}>
+          <input
+            type="email"
+            placeholder="Enter your email address"
+            className={styles.cta_input}
+          />
+          <button type="submit" className={styles.cta_button}>
+            Submit
+          </button>
+        </div>
+      </form>
+
+      <p className={styles.cta_footer}>
+        Join <span className={styles.cta_highlight}>10,000+</span> other landlords in our estatery community.
+      </p>
+    </section>
+    <footer>
+      <ForFooter />
+    </footer>
     </div>
   );
 };

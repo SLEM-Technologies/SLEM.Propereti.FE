@@ -122,3 +122,13 @@
 .whole {
   background: #f7fafd;
 }
+@media (max-width: 768px) {
+  .overlay{
+    width: auto;
+  }
+  .inputGroup{
+        min-width: auto;
+        width: auto;
+
+  }
+}
