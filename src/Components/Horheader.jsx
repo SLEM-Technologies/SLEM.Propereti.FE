@@ -1,6 +1,7 @@
 import React, { useState } from "react";
 import styles from "../Styles/Horheader.module.css";
 import Estatery from "../assets/icons/logo.svg";
+import { Link } from "react-router";
 
 const Horheader = () => {
   const [isOpen, setIsOpen] = useState(false);
@@ -13,12 +14,15 @@ const Horheader = () => {
     <header className={styles.header}>
       <div className={styles.container}>
         {/* Logo Section */}
-        <div className={styles.logo}>
-          <div className={styles.logoIcon}>
-            <img src={Estatery} alt="" />
+        <Link to="/">
+          {" "}
+          <div className={styles.logo}>
+            <div className={styles.logoIcon}>
+              <img src={Estatery} alt="" />
+            </div>
+            <span className={styles.logoText}>Estatery</span>
           </div>
-          <span className={styles.logoText}>Estatery</span>
-        </div>
+        </Link>
 
         {/* Navigation Menu */}
         <nav className={styles.nav}>
@@ -72,9 +76,11 @@ const Horheader = () => {
               </div>
             )}
           </div>
-          <a href="#" className={styles.navLink}>
-            About Us
-          </a>
+          <Link to="/about-us">
+            {" "}
+            <p className={styles.navLink}>About Us</p>
+          </Link>
+
           <a href="#" className={styles.navLink}>
             Contact Us
           </a>
