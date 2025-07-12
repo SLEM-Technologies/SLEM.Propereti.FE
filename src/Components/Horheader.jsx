@@ -60,19 +60,27 @@ const Horheader = () => {
                   boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
                   borderRadius: "4px",
                   marginTop: "8px",
-                  minWidth: "150px",
+                  minWidth: "180px",
                   zIndex: 10,
                 }}
               >
-                <a href="/property1" className={styles.dropdownItem}>
-                  Property 1
-                </a>
-                <a href="/property2" className={styles.dropdownItem}>
-                  Property 2
-                </a>
-                <a href="/property3" className={styles.dropdownItem}>
-                  Property 3
-                </a>
+                <Link to="/properties">
+                  <p  className={styles.dropdownItem}>
+                    Buy
+                  </p>
+                </Link>
+
+                <Link to="/installmental">
+                  <p  className={styles.dropdownItem}>
+                    Installmental Payment{" "}
+                  </p>
+                </Link>
+
+                <Link to="resell">
+                  <p href="/property1" className={styles.dropdownItem}>
+                    Resell{" "}
+                  </p>
+                </Link>
               </div>
             )}
           </div>
