@@ -23,7 +23,6 @@ const Horheader = () => {
             <span className={styles.logoText}>Estatery</span>
           </div>
         </Link>
-
         {/* Navigation Menu */}
         <nav className={styles.nav}>
           <div
@@ -65,15 +64,11 @@ const Horheader = () => {
                 }}
               >
                 <Link to="/properties">
-                  <p  className={styles.dropdownItem}>
-                    Buy
-                  </p>
+                  <p className={styles.dropdownItem}>Buy</p>
                 </Link>
 
                 <Link to="/installmental">
-                  <p  className={styles.dropdownItem}>
-                    Installmental Payment{" "}
-                  </p>
+                  <p className={styles.dropdownItem}>Installmental Payment </p>
                 </Link>
 
                 <Link to="/resell">
@@ -94,9 +89,10 @@ const Horheader = () => {
             <p className={styles.navLink}>Contact Us </p>
           </Link>
         </nav>
-
         {/* Contact Button */}
-        <button to="/contact" className={styles.contactButton}>Contact Us</button>
+        <Link to="/contact">
+          <button className={styles.contactButton}>Contact Us</button>
+        </Link>{" "}
       </div>
     </header>
   );

@@ -5,6 +5,7 @@ import About from "./Pages/AboutUs";
 import Properties from "./Pages/Properties";
 import Installmental from "./Pages/Installmental";
 import Resell from "./Pages/Resell"
+import Contact from "./Pages/Contact"
 const App = () => {
   return (
     <div className="app">
@@ -14,6 +15,7 @@ const App = () => {
         <Route path="/properties" element={<Properties />} />
         <Route path="/installmental" element={<Installmental />} />
         <Route path="/resell" element={<Resell />} />
+        <Route path="/contact" element={<Contact />} />
       </Routes>
     </div>
   );
