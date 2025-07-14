@@ -27,11 +27,11 @@ const Properties = () => {
       {/* Info Section */}
       <section className={styles.choice}>
         <div className={styles.re_text}>
-          <h3>The smart way to owning your place</h3>
+          <h3>The best help you can get in your resale </h3>
           <p>
             Founded in 2010, [Company Name] has been a trusted name in the real
             estate industry, helping thousands of clients buy, sell, and rent
-            properties across Nigeria.
+            properties across Nigeria. Founded in 2010,
           </p>
         </div>
 

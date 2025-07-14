@@ -54,13 +54,18 @@
 }
 
 .img_one {
-  width: 700px;
-  height: 700px;
+  width: 100%;
+  aspect-ratio: 1 / 1; /* keeps square shape */
   object-fit: cover;
-  border-radius: 8px; /* optional */
+  border-radius: 8px;
 }
+
 .img_two {
   display: none;
+}
+.imageContainer {
+  max-width: 700px;
+  width: 100%;
 }
 
 /* Second Part  */
@@ -137,7 +142,6 @@
   font-weight: 700;
   color: #373f92;
   margin-bottom: 0.8rem;
-  
 }
 
 .cardContent p {
@@ -199,5 +203,40 @@
     position: relative;
     width: 100%;
     left: -15%;
+  }
+}
+@media (max-width: 400px) {
+  .card {
+    width: 100%;
+    max-width: 320px;
+  }
+
+  .imageWrapper {
+    height: 180px;
+  }
+
+  .cardContent {
+    padding: 1rem;
+  }
+
+  .cardContent h3 {
+    font-size: 22px;
+  }
+
+  .cardContent p {
+    font-size: 14px;
+    margin-bottom: 1rem;
+  }
+
+  .button {
+    padding: 0.5rem 1rem;
+    font-size: 14px;
+  }
+
+  .wrapper {
+    gap: 2rem;
+    padding: 1.5rem 1rem;
+        grid-template-columns: auto;
+
   }
 }

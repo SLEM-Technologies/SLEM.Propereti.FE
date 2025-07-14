@@ -40,8 +40,10 @@ const Installmental = () => {
             </p>
             <button className={styles.btn_one}>Get Started</button>
           </div>
-          <img className={styles.img_one} src={InstallmentIMg} alt="Img" />
-          <img className={styles.img_two} src={InstallmentIMg2} alt="Img" />
+                  <div className={styles.imageContainer}>
+                    <img className={styles.img_one} src={InstallmentIMg} alt="Img" />
+                    <img className={styles.img_two} src={InstallmentIMg2} alt="Img" />
+                  </div>
         </div>
       </section>
       <section className={styles.section_two_b}>

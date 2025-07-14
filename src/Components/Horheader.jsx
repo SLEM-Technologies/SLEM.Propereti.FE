@@ -76,7 +76,7 @@ const Horheader = () => {
                   </p>
                 </Link>
 
-                <Link to="resell">
+                <Link to="/resell">
                   <p href="/property1" className={styles.dropdownItem}>
                     Resell{" "}
                   </p>
@@ -89,13 +89,14 @@ const Horheader = () => {
             <p className={styles.navLink}>About Us</p>
           </Link>
 
-          <a href="#" className={styles.navLink}>
-            Contact Us
-          </a>
+          <Link to="/contact">
+            {" "}
+            <p className={styles.navLink}>Contact Us </p>
+          </Link>
         </nav>
 
         {/* Contact Button */}
-        <button className={styles.contactButton}>Contact Us</button>
+        <button to="/contact" className={styles.contactButton}>Contact Us</button>
       </div>
     </header>
   );
