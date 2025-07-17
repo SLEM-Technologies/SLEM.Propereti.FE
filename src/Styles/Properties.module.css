@@ -114,7 +114,7 @@
 .cta {
   margin-top: 1.5rem;
   padding: 0.75rem 1.5rem;
-  background-color: #3A4999;
+  background-color: #3a4999;
   color: #fff;
   font-weight: 600;
   border: none;
@@ -137,8 +137,8 @@
     width: auto;
   }
   .hero_text {
-    background: url("../assets/images/hands-luxurious-house.png") no-repeat
-      center center;
+    /* background: url("../assets/images/hands-luxurious-house.png") no-repeat
+      center center; */
     background-size: cover;
     height: 100vh; /* Or any height you prefer */
     display: flex;
@@ -159,12 +159,20 @@
     display: flex;
     flex-wrap: wrap;
   }
-  .title_2{
+  .title_2 {
     font-size: 25px;
-
   }
-  .description_2{
-        font-size: 14px;
-
+  .description_2 {
+    font-size: 14px;
+  }
+}
+@media (max-width: 500px) {
+  .hero_tin {
+    /* background: url(/src/assets/images/hands-luxurious-house.png) no-repeat center center; */
+    background-size: cover;
+    height: 80vh;
+  }
+  .hero_text{
+    height: auto;
   }
 }

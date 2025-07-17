@@ -11,7 +11,7 @@
   width: 741px;
   height: 900px;
   position: relative;
-  z-index: 11111;
+  z-index: -1;
   top: -13%;
 }
 .sidetxt h3 {

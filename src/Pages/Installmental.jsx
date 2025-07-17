@@ -20,11 +20,11 @@ const Installmental = () => {
       desc: "Not sure what you should be charging for your property? No need to worry, let us do the numbers for you.",
       image: collaborationImg,
     },
-    {
-      title: "Installmental Payment",
-      desc: "Not sure what you should be charging for your property? No need to worry, let us do the numbers for you.",
-      image: installmentImg,
-    },
+    // {
+    //   title: "Installmental Payment",
+    //   desc: "Not sure what you should be charging for your property? No need to worry, let us do the numbers for you.",
+    //   image: installmentImg,
+    // },
   ];
   return (
     <div className={styles.Installmental}>
