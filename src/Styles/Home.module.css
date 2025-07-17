@@ -20,7 +20,7 @@ html, body {
 }
 
 ::-webkit-scrollbar-thumb {
-  background-color: #2c318e96; /* Or any color you like */
+  background-color: #000000b2; /* Or any color you like */
   border-radius: 10px;
   border: 1px solid transparent;
 }
@@ -514,6 +514,9 @@ html, body {
 }
 .subtitle{
   font-size: 12px;
+}
+.hero{
+  height: auto;
 }
 .overlayyer {
     text-align: center;
