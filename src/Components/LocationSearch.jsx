@@ -1,5 +1,6 @@
 import React, { useState } from "react";
 import styles from "../Styles/LocationSearch.module.css";
+import { Link } from "react-router";
 
 const LocationSearch = () => {
   const [activeTab, setActiveTab] = useState("lease");
@@ -33,7 +34,9 @@ const LocationSearch = () => {
               <label>When</label>
               <span className={styles.date}>Select Move-in Date 📅</span>
             </div>
-            <button className={styles.button}>Browse Properties</button>
+            <Link to="/properties">
+              <button className={styles.button}>Browse Properties</button>
+            </Link>
           </div>
         </div>
       </div>

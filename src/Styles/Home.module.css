@@ -5,7 +5,9 @@ html, body {
   overflow-x: hidden;
 }
 
-
+.maincontent {
+  padding-top: 80px;
+}
 .body {
   margin: 0;
   padding: 0;

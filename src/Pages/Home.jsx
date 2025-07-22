@@ -15,6 +15,7 @@ import Virt from "../assets/icons/virtual-home-icon.svg";
 import Best from "../assets/icons/find-best-home-icon.svg";
 import Copy from "../assets/images/IconCopy.png";
 import ForFooter from "../Components/ForFooter.jsx";
+import { Link } from "react-router";
 
 // import { classicNameResolver } from "typescript";
 
@@ -34,6 +35,7 @@ const Home = () => {
   return (
     <div className={styles.body}>
       <Horheader />
+      <main className={styles.maincontent}>
       <div className={styles.overlayyer}>
         <h1 className={styles.title}>
           Buy, rent, or sell <br /> your property easily
@@ -74,7 +76,10 @@ const Home = () => {
                 <label>When</label>
                 <span className={styles.date}>Select Move-in Date 📅</span>
               </div>
-              <button className={styles.button}>Browse Properties</button>
+              <Link to="/properties">
+                {" "}
+                <button className={styles.button}> Browse Properties </button>
+              </Link>
             </div>
           </div>
         </div>
@@ -87,7 +92,9 @@ const Home = () => {
               Find your dream place to live in with more than 10k+ properties
               listed.
             </p>
-            <button>Browse Properties</button>
+            <Link to="/properties">
+              <button>Browse Properties</button>
+            </Link>
             <img
               src={houseImg}
               alt="House illustration"
@@ -236,32 +243,34 @@ const Home = () => {
         </div>
       </section>
       <section className={styles.cta_section}>
-      <p className={styles.cta_note}>No Spam Promise</p>
-      <h2 className={styles.cta_heading}>Are you a landowner?</h2>
-      <p className={styles.cta_subtext}>
-        Discover ways to increase your home's value and get listed. No Spam.
-      </p>
+        <p className={styles.cta_note}>No Spam Promise</p>
+        <h2 className={styles.cta_heading}>Are you a landowner?</h2>
+        <p className={styles.cta_subtext}>
+          Discover ways to increase your home's value and get listed. No Spam.
+        </p>
 
-      <form className={styles.cta_form}>
-        <div className={styles.cta_input_container}>
-          <input
-            type="email"
-            placeholder="Enter your email address"
-            className={styles.cta_input}
-          />
-          <button type="submit" className={styles.cta_button}>
-            Submit
-          </button>
-        </div>
-      </form>
+        <form className={styles.cta_form}>
+          <div className={styles.cta_input_container}>
+            <input
+              type="email"
+              placeholder="Enter your email address"
+              className={styles.cta_input}
+            />
+            <button type="submit" className={styles.cta_button}>
+              Submit
+            </button>
+          </div>
+        </form>
 
-      <p className={styles.cta_footer}>
-        Join <span className={styles.cta_highlight}>10,000+</span> other landlords in our estatery community.
-      </p>
-    </section>
-    <footer>
-      <ForFooter />
-    </footer>
+        <p className={styles.cta_footer}>
+          Join <span className={styles.cta_highlight}>10,000+</span> other
+          landlords in our estatery community.
+        </p>
+      </section>
+      <footer>
+        <ForFooter />
+      </footer>
+      </main>
     </div>
   );
 };

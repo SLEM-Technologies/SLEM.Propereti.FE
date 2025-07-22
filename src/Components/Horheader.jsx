@@ -1,34 +1,80 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import styles from "../Styles/Horheader.module.css";
 import Estatery from "../assets/icons/logo.svg";
+import { Menu } from "lucide-react";
 import { Link } from "react-router";
 
 const Horheader = () => {
-  const [isOpen, setIsOpen] = useState(false);
+  const [isDropdownOpen, setIsDropdownOpen] = useState(false);
+  const [isMobileMenuOpen, setIsMobileMenuOpen] = useState(false);
+  const [showHeader, setShowHeader] = useState(true);
+  const [lastScrollY, setLastScrollY] = useState(0);
 
   const toggleDropdown = () => {
-    setIsOpen((prev) => !prev);
+    setIsDropdownOpen((prev) => !prev);
   };
 
+  const toggleMobileMenu = () => {
+    setIsMobileMenuOpen((prev) => !prev);
+  };
+
+useEffect(() => {
+  let ticking = false;
+
+  const handleScroll = () => {
+    const currentScrollY = window.scrollY;
+
+    if (!ticking) {
+      window.requestAnimationFrame(() => {
+        if (currentScrollY > lastScrollY && currentScrollY > 80) {
+          // scrolling down
+          setShowHeader(false);
+        } else {
+          // scrolling up
+          setShowHeader(true);
+        }
+
+        setLastScrollY(currentScrollY);
+        ticking = false;
+      });
+
+      ticking = true;
+    }
+  };
+
+  window.addEventListener("scroll", handleScroll);
+
+  return () => {
+    window.removeEventListener("scroll", handleScroll);
+  };
+}, [lastScrollY]);
+
+
   return (
-    <header className={styles.header}>
+    <header
+      className={`${styles.header} ${!showHeader ? styles.hiddenHeader : ""}`}
+    >
       <div className={styles.container}>
-        {/* Logo Section */}
+        {/* Logo */}
         <Link to="/">
-          {" "}
           <div className={styles.logo}>
             <div className={styles.logoIcon}>
-              <img src={Estatery} alt="" />
+              <img src={Estatery} alt="logo" />
             </div>
             <span className={styles.logoText}>Estatery</span>
           </div>
         </Link>
-        {/* Navigation Menu */}
-        <nav className={styles.nav}>
+
+        {/* Navigation */}
+        <nav
+          className={`${styles.nav} ${
+            isMobileMenuOpen ? styles.showNav : ""
+          }`}
+        >
           <div
             className={styles.navItem}
             onClick={toggleDropdown}
-            style={{ position: "relative", cursor: "pointer" }}
+            style={{ position: "relative" }}
           >
             <span className={styles.navLink}>Property</span>
             <svg
@@ -48,51 +94,41 @@ const Horheader = () => {
               />
             </svg>
 
-            {isOpen && (
-              <div
-                className={styles.dropdownMenu}
-                style={{
-                  position: "absolute",
-                  top: "100%",
-                  left: 0,
-                  backgroundColor: "#fff",
-                  boxShadow: "0 4px 8px rgba(0,0,0,0.1)",
-                  borderRadius: "4px",
-                  marginTop: "8px",
-                  minWidth: "180px",
-                  zIndex: 10,
-                }}
-              >
+            {isDropdownOpen && (
+              <div className={styles.dropdownMenu}>
                 <Link to="/properties">
                   <p className={styles.dropdownItem}>Buy</p>
                 </Link>
-
                 <Link to="/installmental">
-                  <p className={styles.dropdownItem}>Installmental Payment </p>
+                  <p className={styles.dropdownItem}>Installmental Payment</p>
                 </Link>
-
                 <Link to="/resell">
-                  <p href="/property1" className={styles.dropdownItem}>
-                    Resell{" "}
-                  </p>
+                  <p className={styles.dropdownItem}>Resell</p>
                 </Link>
               </div>
             )}
           </div>
+
           <Link to="/about-us">
-            {" "}
             <p className={styles.navLink}>About Us</p>
           </Link>
 
           <Link to="/contact">
-            {" "}
-            <p className={styles.navLink}>Contact Us </p>
+            <p className={styles.navLink}>Contact Us</p>
           </Link>
         </nav>
-        {/* Contact Button */}
-        <Link to="/contact">
-          <button className={styles.contactButton}>Contact Us</button>
-        </Link>{" "}
+
+        {/* Right Section */}
+        <div className={styles.rightSection}>
+          <Link to="/contact">
+            <button className={styles.contactButton}>Contact Us</button>
+          </Link>
+          <Menu
+            className={styles.hamburger}
+            size={24}
+            onClick={toggleMobileMenu}
+          />
+        </div>
       </div>
     </header>
   );
