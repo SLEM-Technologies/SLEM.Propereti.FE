@@ -1,4 +1,4 @@
-html, body {
+.body {
   padding: 0;
   margin: 0;
   width: 100%;
@@ -73,6 +73,12 @@ html, body {
   background: rgba(255, 255, 255, 0.7);
   padding: 20px;
   border-radius: 0px 12px 12px 12px;
+  transition: background 0.3s ease, transform 0.3s ease;
+}
+
+.searchBox:hover {
+  background: rgba(203, 201, 201, 0.427);
+  transform: translateY(-3px);
 }
 
 .tabs {
@@ -221,10 +227,18 @@ html, body {
 
 .featureBox {
   display: flex;
-  /* gap: 1rem; */
   align-items: flex-start;
   flex-direction: column;
   margin: auto;
+  transition: background 0.3s ease, transform 0.3s ease, padding 0.3s ease, border 0.3s ease, border-radius 0.3s ease;
+}
+
+.featureBox:hover {
+  border: 1px solid #1e2a7883;
+  padding: 10px;
+  border-radius: 20px;
+  background: rgba(30, 42, 120, 0.05); /* optional subtle background on hover */
+  transform: translateY(-2px); /* subtle lift */
 }
 
 .featureBox img {

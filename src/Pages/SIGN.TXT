@@ -1,0 +1,730 @@
+import React, { useState } from "react";
+import styles from "../Styles/signup.module.css";
+import { 
+  ArrowLeft, 
+  Eye, 
+  EyeOff, 
+  ChevronDown,
+  BarChart3,
+  Building,
+  Layers
+} from "lucide-react";
+
+const SignUp = () => {
+  const [showPassword, setShowPassword] = useState(false);
+  const [showConfirmPassword, setShowConfirmPassword] = useState(false);
+  const [passwordStrength, setPasswordStrength] = useState(0);
+  const [formData, setFormData] = useState({
+    country: "Nigeria",
+    firstName: "",
+    surname: "",
+    email: "",
+    phoneCode: "+234",
+    phoneNumber: "",
+    gender: "",
+    dob: "",
+    address: "",
+    referralCode: "",
+    password: "",
+    confirmPassword: ""
+  });
+
+  const handlePasswordChange = (e) => {
+    const password = e.target.value;
+    setFormData({...formData, password});
+    
+    // Simple password strength calculation
+    let strength = 0;
+    if (password.length >= 8) strength++;
+    if (/[A-Z]/.test(password)) strength++;
+    if (/[a-z]/.test(password)) strength++;
+    if (/[0-9]/.test(password)) strength++;
+    if (/[^A-Za-z0-9]/.test(password)) strength++;
+    
+    setPasswordStrength(strength);
+  };
+
+  const handleInputChange = (e) => {
+    const { name, value } = e.target;
+    setFormData({...formData, [name]: value});
+  };
+
+  return (
+    <div className={styles.container}>
+      {/* Left Side */}
+      <div className={styles.leftSide}>
+        <button className={styles.backButton}>
+          <ArrowLeft size={20} />
+          Back
+        </button>
+        
+        <div className={styles.welcomeContent}>
+          <div className={styles.illustration}>
+            <div className={styles.chartContainer}>
+              <div className={styles.pieChart}>
+                <BarChart3 size={40} className={styles.icon1} />
+                <Building size={30} className={styles.icon2} />
+                <Layers size={35} className={styles.icon3} />
+              </div>
+            </div>
+          </div>
+          
+          <h1 className={styles.welcomeTitle}>Welcome</h1>
+          <p className={styles.welcomeText}>
+            Login to get started<br />
+            If not yet registered click on sign up<br />
+            to get started
+          </p>
+          
+          <div className={styles.dots}>
+            <span className={styles.dot}></span>
+            <span className={styles.dot}></span>
+            <span className={styles.dot}></span>
+          </div>
+        </div>
+      </div>
+
+      {/* Right Side */}
+      <div className={styles.rightSide}>
+        <div className={styles.progressBar}>
+          <div className={styles.step}>
+            <div className={`${styles.stepCircle} ${styles.active}`}>1</div>
+            <span>Account</span>
+          </div>
+          <div className={styles.stepLine}></div>
+          <div className={styles.step}>
+            <div className={styles.stepCircle}>2</div>
+          </div>
+          <div className={styles.stepLine}></div>
+          <div className={styles.step}>
+            <div className={styles.stepCircle}>3</div>
+          </div>
+          <div className={styles.stepLine}></div>
+          <div className={styles.step}>
+            <div className={styles.stepCircle}>4</div>
+          </div>
+          <div className={styles.stepLine}></div>
+          <div className={styles.step}>
+            <div className={styles.stepCircle}>5</div>
+          </div>
+        </div>
+
+        <div className={styles.formContainer}>
+          <h2 className={styles.formTitle}>Register Individual Account</h2>
+          <p className={styles.formSubtitle}>
+            For the purpose of industry regulation, your details are required.
+          </p>
+
+          <form className={styles.form}>
+            {/* Country Dropdown */}
+            <div className={styles.inputGroup}>
+              <div className={styles.selectWrapper}>
+                <span className={styles.flag}>🇳🇬</span>
+                <select 
+                  name="country"
+                  value={formData.country}
+                  onChange={handleInputChange}
+                  className={styles.select}
+                >
+                  <option value="Nigeria">Nigeria</option>
+                  <option value="Ghana">Ghana</option>
+                  <option value="Kenya">Kenya</option>
+                </select>
+                <ChevronDown size={16} className={styles.selectIcon} />
+              </div>
+            </div>
+
+            {/* Name Fields */}
+            <div className={styles.nameRow}>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>First Name</label>
+                <input
+                  type="text"
+                  name="firstName"
+                  value={formData.firstName}
+                  onChange={handleInputChange}
+                  placeholder="Oluwatoba"
+                  className={styles.input}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>Surname</label>
+                <input
+                  type="text"
+                  name="surname"
+                  value={formData.surname}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                />
+              </div>
+            </div>
+
+            {/* Email */}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Email address</label>
+              <input
+                type="email"
+                name="email"
+                value={formData.email}
+                onChange={handleInputChange}
+                className={`${styles.input} ${styles.error}`}
+              />
+              <span className={styles.errorIcon}>!</span>
+            </div>
+
+            {/* Phone Number */}
+            <div className={styles.phoneRow}>
+              <div className={styles.phoneCode}>
+                <select 
+                  name="phoneCode"
+                  value={formData.phoneCode}
+                  onChange={handleInputChange}
+                  className={styles.phoneSelect}
+                >
+                  <option value="+234">+234</option>
+                  <option value="+233">+233</option>
+                  <option value="+254">+254</option>
+                </select>
+              </div>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>Phone Number</label>
+                <input
+                  type="tel"
+                  name="phoneNumber"
+                  value={formData.phoneNumber}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                />
+              </div>
+            </div>
+
+            {/* Gender and DOB */}
+            <div className={styles.nameRow}>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>Gender</label>
+                <input
+                  type="text"
+                  name="gender"
+                  value={formData.gender}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                />
+              </div>
+              <div className={styles.inputGroup}>
+                <label className={styles.label}>DOB</label>
+                <input
+                  type="date"
+                  name="dob"
+                  value={formData.dob}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                />
+              </div>
+            </div>
+
+            {/* Address */}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Residential Address</label>
+              <input
+                type="text"
+                name="address"
+                value={formData.address}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </div>
+
+            {/* Referral Code */}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Referral code (if any)</label>
+              <input
+                type="text"
+                name="referralCode"
+                value={formData.referralCode}
+                onChange={handleInputChange}
+                className={styles.input}
+              />
+            </div>
+
+            {/* Password */}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Password</label>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handlePasswordChange}
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={styles.eyeButton}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+              <div className={styles.passwordStrength}>
+                <div className={`${styles.strengthBar} ${styles[`strength${passwordStrength}`]}`}></div>
+              </div>
+              <p className={styles.passwordHint}>
+                *Password should contain atleast one uppercase, lowercase, digit, 
+                symbol and minimum of 8 characters*
+              </p>
+            </div>
+
+            {/* Confirm Password */}
+            <div className={styles.inputGroup}>
+              <label className={styles.label}>Confirm Password</label>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showConfirmPassword ? "text" : "password"}
+                  name="confirmPassword"
+                  value={formData.confirmPassword}
+                  onChange={handleInputChange}
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowConfirmPassword(!showConfirmPassword)}
+                  className={styles.eyeButton}
+                >
+                  {showConfirmPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
+            </div>
+
+            {/* Terms and Conditions */}
+            <div className={styles.terms}>
+              <p>
+                By continuing, you are acknowledging that you have read, 
+                understood and agreed to Omnny's{" "}
+                <a href="#" className={styles.link}>Terms and Conditions</a> and{" "}
+                <a href="#" className={styles.link}>Privacy Policy</a> as well as to{" "}
+                <a href="#" className={styles.link}>Drivewealth's Disclosures</a>,{" "}
+                <a href="#" className={styles.link}>W8-ben acknowledgement</a> and{" "}
+                <a href="#" className={styles.link}>Privacy Policy</a>.
+              </p>
+            </div>
+          </form>
+        </div>
+      </div>
+    </div>
+  );
+};
+
+export default SignUp;
+
+
+.container {
+  display: flex;
+  min-height: 100vh;
+  font-family: 'Inter', -apple-system, BlinkMacSystemFont, sans-serif;
+}
+
+/* Left Side Styles */
+.leftSide {
+  flex: 1;
+  background: linear-gradient(135deg, #667eea 0%, #764ba2 100%);
+  padding: 2rem;
+  position: relative;
+  display: flex;
+  flex-direction: column;
+}
+
+.backButton {
+  background: none;
+  border: none;
+  color: white;
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 14px;
+  cursor: pointer;
+  margin-bottom: 2rem;
+}
+
+.welcomeContent {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  align-items: center;
+  text-align: center;
+  color: white;
+}
+
+.illustration {
+  margin-bottom: 3rem;
+}
+
+.chartContainer {
+  position: relative;
+  width: 200px;
+  height: 200px;
+  margin: 0 auto;
+}
+
+.pieChart {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: linear-gradient(45deg, #ffd700, #ff6b6b, #4ecdc4, #45b7d1);
+  border-radius: 20px;
+  transform: rotate3d(1, 1, 0, 15deg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  box-shadow: 0 20px 40px rgba(0, 0, 0, 0.2);
+}
+
+.icon1, .icon2, .icon3 {
+  position: absolute;
+  color: white;
+  filter: drop-shadow(0 2px 4px rgba(0, 0, 0, 0.3));
+}
+
+.icon1 {
+  top: 20%;
+  left: 20%;
+}
+
+.icon2 {
+  bottom: 30%;
+  right: 20%;
+}
+
+.icon3 {
+  top: 50%;
+  left: 50%;
+  transform: translate(-50%, -50%);
+}
+
+.welcomeTitle {
+  font-size: 2.5rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.welcomeText {
+  font-size: 1rem;
+  line-height: 1.6;
+  opacity: 0.9;
+  margin-bottom: 2rem;
+}
+
+.dots {
+  display: flex;
+  gap: 0.5rem;
+}
+
+.dot {
+  width: 8px;
+  height: 8px;
+  border-radius: 50%;
+  background: rgba(255, 255, 255, 0.5);
+}
+
+.dot:first-child {
+  background: white;
+}
+
+/* Right Side Styles */
+.rightSide {
+  flex: 1;
+  background: #1a1b23;
+  padding: 2rem;
+  overflow-y: auto;
+}
+
+.progressBar {
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  margin-bottom: 3rem;
+  color: #8b8d98;
+}
+
+.step {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 0.5rem;
+  font-size: 12px;
+}
+
+.stepCircle {
+  width: 32px;
+  height: 32px;
+  border-radius: 50%;
+  background: #2d2e36;
+  color: #8b8d98;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-weight: 600;
+}
+
+.stepCircle.active {
+  background: #667eea;
+  color: white;
+}
+
+.stepLine {
+  width: 40px;
+  height: 2px;
+  background: #2d2e36;
+  margin: 0 0.5rem;
+}
+
+.formContainer {
+  max-width: 480px;
+  margin: 0 auto;
+}
+
+.formTitle {
+  color: white;
+  font-size: 1.75rem;
+  font-weight: 700;
+  margin-bottom: 0.5rem;
+  text-align: center;
+}
+
+.formSubtitle {
+  color: #8b8d98;
+  text-align: center;
+  margin-bottom: 2rem;
+  line-height: 1.5;
+}
+
+.form {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+}
+
+.inputGroup {
+  position: relative;
+}
+
+.label {
+  display: block;
+  color: #8b8d98;
+  font-size: 14px;
+  margin-bottom: 0.5rem;
+}
+
+.input {
+  width: 100%;
+  background: #2d2e36;
+  border: 1px solid #3d3e46;
+  border-radius: 8px;
+  padding: 12px 16px;
+  color: white;
+  font-size: 14px;
+  transition: border-color 0.2s;
+}
+
+.input:focus {
+  outline: none;
+  border-color: #667eea;
+}
+
+.input.error {
+  border-color: #ff4757;
+}
+
+.errorIcon {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  color: #ff4757;
+  width: 20px;
+  height: 20px;
+  background: #ff4757;
+  border-radius: 50%;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  font-size: 12px;
+  color: white;
+  font-weight: bold;
+}
+
+.selectWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+  background: #2d2e36;
+  border: 1px solid #3d3e46;
+  border-radius: 8px;
+}
+
+.flag {
+  padding: 0 12px;
+  font-size: 18px;
+}
+
+.select {
+  flex: 1;
+  background: transparent;
+  border: none;
+  padding: 12px 16px 12px 0;
+  color: white;
+  font-size: 14px;
+  appearance: none;
+}
+
+.select:focus {
+  outline: none;
+}
+
+.selectIcon {
+  position: absolute;
+  right: 12px;
+  color: #8b8d98;
+  pointer-events: none;
+}
+
+.nameRow {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+
+.phoneRow {
+  display: grid;
+  grid-template-columns: 100px 1fr;
+  gap: 1rem;
+  align-items: end;
+}
+
+.phoneCode {
+  position: relative;
+}
+
+.phoneSelect {
+  width: 100%;
+  background: #2d2e36;
+  border: 1px solid #3d3e46;
+  border-radius: 8px;
+  padding: 12px 8px;
+  color: white;
+  font-size: 14px;
+  appearance: none;
+}
+
+.passwordWrapper {
+  position: relative;
+}
+
+.eyeButton {
+  position: absolute;
+  right: 12px;
+  top: 50%;
+  transform: translateY(-50%);
+  background: none;
+  border: none;
+  color: #8b8d98;
+  cursor: pointer;
+  padding: 4px;
+}
+
+.passwordStrength {
+  height: 4px;
+  background: #2d2e36;
+  border-radius: 2px;
+  margin-top: 8px;
+  overflow: hidden;
+}
+
+.strengthBar {
+  height: 100%;
+  transition: all 0.3s ease;
+  border-radius: 2px;
+}
+
+.strengthBar.strength0 {
+  width: 0%;
+}
+
+.strengthBar.strength1 {
+  width: 20%;
+  background: #ff4757;
+}
+
+.strengthBar.strength2 {
+  width: 40%;
+  background: #ff6b35;
+}
+
+.strengthBar.strength3 {
+  width: 60%;
+  background: #ffa502;
+}
+
+.strengthBar.strength4 {
+  width: 80%;
+  background: #26de81;
+}
+
+.strengthBar.strength5 {
+  width: 100%;
+  background: #20bf6b;
+}
+
+.passwordHint {
+  color: #8b8d98;
+  font-size: 12px;
+  margin-top: 8px;
+  line-height: 1.4;
+}
+
+.terms {
+  background: #2d2e36;
+  border-radius: 8px;
+  padding: 1rem;
+  margin-top: 1rem;
+}
+
+.terms p {
+  color: #8b8d98;
+  font-size: 12px;
+  line-height: 1.5;
+  margin: 0;
+}
+
+.link {
+  color: #667eea;
+  text-decoration: none;
+}
+
+.link:hover {
+  text-decoration: underline;
+}
+
+/* Responsive Design */
+@media (max-width: 768px) {
+  .container {
+    flex-direction: column;
+  }
+  
+  .leftSide {
+    min-height: 40vh;
+  }
+  
+  .rightSide {
+    flex: none;
+  }
+  
+  .nameRow,
+  .phoneRow {
+    grid-template-columns: 1fr;
+  }
+  
+  .progressBar {
+    display: none;
+  }
+}
