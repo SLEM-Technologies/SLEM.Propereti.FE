@@ -3,7 +3,7 @@ import styles from "../Styles/signup.module.css";
 import Charticon from "../assets/icons/Pie chart _Isometric 2.svg";
 import Swal from "sweetalert2";
 import verifiedImg from "../assets/images/undraw_completed_ngx6 2.png";
-import { useNavigate } from "react-router-dom";
+import { Link, useNavigate } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../Components/API/API.js";
 import axios from "axios";
@@ -513,6 +513,7 @@ const SignUp = () => {
               <button className={styles.btnproceed} type="submit">
                 Proceed
               </button>
+              <p className={styles.ptag}>Already have an account ? <Link to="/login">Login</Link></p>
             </form>
           </div>
         )}

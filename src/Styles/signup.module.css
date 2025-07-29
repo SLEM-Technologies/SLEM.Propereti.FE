@@ -618,7 +618,9 @@ border: 2px solid #2a2842;
     max-width: 600px;
 }
 
-
+.ptag{
+  color: white;
+}
 /* Responsive */
 @media (max-width: 480px) {
   .otpInput {
