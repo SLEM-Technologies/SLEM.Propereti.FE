@@ -2,6 +2,11 @@ import React, { useState, useRef } from "react";
 import styles from "../Styles/signup.module.css";
 import Charticon from "../assets/icons/Pie chart _Isometric 2.svg";
 import Swal from "sweetalert2";
+import verifiedImg from "../assets/images/undraw_completed_ngx6 2.png";
+import { useNavigate } from "react-router-dom";
+import { FaCamera } from "react-icons/fa";
+import { BASE_URL } from "../Components/API/API.js";
+import axios from "axios";
 
 import {
   ArrowLeft,
@@ -14,7 +19,18 @@ import {
 } from "lucide-react";
 
 const SignUp = () => {
+  const navigate = useNavigate();
+
+  const steps = [
+    "Account",
+    "Verification",
+    "...",
+    "Bank Details",
+    "Upload ID",
+    "Finish",
+  ];
   const [step, setStep] = useState(1);
+  const fileInputRef = useRef();
 
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
@@ -56,11 +72,89 @@ const SignUp = () => {
   const inputsRef = useRef([]);
 
   const handleChange = (e, index) => {
-    const { value } = e.target;
+    const value = e.target.value;
+    if (!/^\d?$/.test(value)) return; // Only allow digits
+
+    const updatedOtp = [...otp];
+    updatedOtp[index] = value;
+    setOtp(updatedOtp);
+
     if (value.length === 1 && index < 5) {
       inputsRef.current[index + 1]?.focus();
     }
   };
+  const verifyEmail = () => {
+    const otpCode = otp.join("");
+    if (otpCode.length < 6) {
+      Swal.fire({
+        title: "Invalid Code",
+        text: "Please enter the complete 6-digit code.",
+        icon: "warning",
+      });
+      return;
+    }
+
+    axios
+      .post(`${BASE_URL}/api/v1/accounts/verify-email`, {
+        email: formData.email,
+        otpCode: otpCode,
+      })
+      .then(() => {
+        Swal.fire({
+          title: "Verified!",
+          text: "Email verification successful.",
+          icon: "success",
+        });
+        setStep(3);
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Verification Failed",
+          text: err?.response?.data?.message || "Invalid OTP.",
+          icon: "error",
+        });
+      });
+  };
+
+  const [accounts, setAccounts] = useState([{ account: "", bvn: "" }]);
+
+  const handleAccountChange = (index, field, value) => {
+    const updated = [...accounts];
+    updated[index][field] = value;
+    setAccounts(updated);
+  };
+
+  const addAccount = () => {
+    setAccounts([...accounts, { account: "", bvn: "" }]);
+  };
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+
+  const resendOTP = () => {
+    axios
+      .post(`${BASE_URL}/api/v1/accounts/register-user`, {
+        email: formData.email,
+      })
+      .then(() => {
+        Swal.fire({
+          title: "OTP Sent",
+          text: "A new OTP has been sent to your email.",
+          icon: "info",
+        });
+      })
+      .catch((err) => {
+        Swal.fire({
+          title: "Failed",
+          text: err?.response?.data?.message || "Could not resend OTP.",
+          icon: "error",
+        });
+      });
+  };
+  const [isLoading, setIsLoading] = useState(false);
+  const Spinner = () => (
+    <div className={styles.spinnerWrapper}>
+      <div className={styles.spinner}></div>
+    </div>
+  );
 
   return (
     <div className={styles.container}>
@@ -94,24 +188,25 @@ const SignUp = () => {
 
       {/* Right Side */}
       <div className={styles.rightSide}>
-        <button className={styles.backButton}>
+        <button className={styles.backButton} onClick={() => navigate(-1)}>
           <ArrowLeft size={20} />
           Back
         </button>
+
         <div className={styles.progressBar}>
-          {[1, 2, 3, 4, 5].map((s, i) => (
+          {steps.map((label, i) => (
             <React.Fragment key={i}>
               <div className={styles.step}>
                 <div
                   className={`${styles.stepCircle} ${
-                    step >= s ? styles.active : ""
+                    step >= i + 1 ? styles.active : ""
                   }`}
                 >
-                  {s}
+                  {i + 1}
                 </div>
-                {s === 1 && <span>Account</span>}
+                <span>{label}</span>
               </div>
-              {s < 5 && <div className={styles.stepLine}></div>}
+              {i < steps.length - 1 && <div className={styles.stepLine}></div>}
             </React.Fragment>
           ))}
         </div>
@@ -122,6 +217,7 @@ const SignUp = () => {
               className={styles.form}
               onSubmit={(e) => {
                 e.preventDefault();
+                setIsLoading(true);
 
                 const requiredFields = [
                   "firstName",
@@ -140,35 +236,58 @@ const SignUp = () => {
                 );
 
                 if (emptyFields.length > 0) {
+                  setIsLoading(false);
                   Swal.fire({
                     title: "Incomplete Form",
                     text: "Please fill out all required fields before proceeding.",
                     icon: "warning",
-                    confirmButtonText: "OK",
                   });
                   return;
                 }
 
                 if (formData.password !== formData.confirmPassword) {
+                  setIsLoading(false);
                   Swal.fire({
                     title: "Password Mismatch",
                     text: "Passwords do not match.",
                     icon: "error",
-                    confirmButtonText: "OK",
                   });
                   return;
                 }
 
-                // All good — show success and proceed
-                Swal.fire({
-                  title: "Success!",
-                  text: "Form data saved. Moving to the next step.",
-                  icon: "success",
-                  timer: 1500,
-                  showConfirmButton: false,
-                }).then(() => {
-                  setStep(2);
-                });
+                axios
+                  .post(`${BASE_URL}/api/v1/accounts/register-user`, {
+                    email: formData.email,
+                    password: formData.password,
+                    phoneNumber: formData.phoneNumber,
+                    username: formData.email.split("@")[0],
+                    firstName: formData.firstName,
+                    lastName: formData.surname,
+                    dob: formData.dob,
+                    address: formData.address,
+                    nationality: formData.country,
+                    gender: formData.gender,
+                    refCode: formData.referralCode || "",
+                  })
+                  .then(() => {
+                    Swal.fire({
+                      title: "Success!",
+                      text: "Registration successful. Please verify your email.",
+                      icon: "success",
+                      timer: 1500,
+                      showConfirmButton: false,
+                    });
+                    setStep(2);
+                  })
+                  .catch((err) => {
+                    Swal.fire({
+                      title: "Registration Failed",
+                      text:
+                        err?.response?.data?.message || "Something went wrong.",
+                      icon: "error",
+                    });
+                  })
+                  .finally(() => setIsLoading(false));
               }}
             >
               <h2 className={styles.formTitle}>Register Individual Account</h2>
@@ -228,7 +347,7 @@ const SignUp = () => {
                   placeholder="Email address"
                   className={`${styles.input} ${styles.error}`}
                 />
-                <span className={styles.errorIcon}>!</span>
+                {/* <span className={styles.errorIcon}>!</span> */}
               </div>
 
               {/* Phone Number */}
@@ -389,6 +508,8 @@ const SignUp = () => {
                   .
                 </p>
               </div>
+              {isLoading && <Spinner />}
+
               <button className={styles.btnproceed} type="submit">
                 Proceed
               </button>
@@ -423,7 +544,9 @@ const SignUp = () => {
               </div>
 
               <div className={styles.actions1}>
-                <button className={styles.resend}>Resend OTP</button>
+                <button className={styles.resend} onClick={resendOTP}>
+                  Resend OTP
+                </button>
                 <button className={styles.change}>Change Phone Number</button>
               </div>
             </div>
@@ -432,26 +555,276 @@ const SignUp = () => {
             <button className={styles.backButton} onClick={() => setStep(1)}>
               <ArrowLeft size={20} /> Back
             </button>
-            <button className={styles.btnproceed} onClick={() => setStep(3)}>
-              Proceed
+            <button className={styles.btnproceed} onClick={verifyEmail}>
+              Verify
             </button>
           </div>
         )}
 
         {step === 3 && (
           <div className={styles.form}>
-            <h2 className={styles.formTitle}>Step 3: Confirmation</h2>
-            <p className={styles.formSubtitle}>Final review and submit.</p>
-
+            <div className={styles.container3}>
+              <img
+                src={verifiedImg}
+                alt="Verified illustration"
+                className={styles.imag3}
+              />
+              <h1 className={styles.title3}>Congratulation</h1>
+              <p className={styles.message3}>
+                Your Email and Phone number has been verified, you can proceed
+                to the dashboard or click continue to complete your profile
+              </p>
+              <div className={styles.buttonGroup}>
+                <button className={styles.dashboardBtn}>Dashboard</button>
+                <button
+                  className={styles.btnproceed}
+                  onClick={() => setStep(step + 1)}
+                >
+                  Continue
+                </button>
+              </div>
+            </div>
             <button className={styles.backButton} onClick={() => setStep(2)}>
               <ArrowLeft size={20} /> Back
             </button>
-            <button
-              className={styles.btnproceed}
-              onClick={() => alert("Submitted!")}
-            >
-              Submit
-            </button>
+          </div>
+        )}
+
+        {step === 4 && (
+          <div className={styles.form}>
+            <div className={styles.container4}>
+              <h2 className={styles.title4}>Fill in Bank Details</h2>
+              <p className={styles.description4}>
+                Bank Details is required for you to withdraw you funds when
+                need. BVN is also required to verify your bank details as well
+                as compliance purposes
+              </p>
+
+              {accounts.map((item, index) => (
+                <div key={index} className={styles.nameRow1}>
+                  <div className={styles.inputGroup}>
+                    <select
+                      className={styles.input}
+                      value={item.account}
+                      onChange={(e) =>
+                        handleAccountChange(index, "account", e.target.value)
+                      }
+                    >
+                      <option value="">Account</option>
+                      <option value="gtb">GTBank</option>
+                      <option value="zenith">Zenith Bank</option>
+                      <option value="access">Access Bank</option>
+                      {/* Add more as needed */}
+                    </select>
+                  </div>
+                  <div className={styles.inputGroup}>
+                    <input
+                      type="text"
+                      placeholder="Enter BVN"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <p className={styles.addMore} onClick={addAccount}>
+                ＋ Add more account
+              </p>
+
+              <div className={styles.buttonGroup}>
+                <button className={styles.dashboardBtn}>Cancel</button>
+                <button
+                  className={styles.btnproceed}
+                  onClick={() => setStep(step + 1)}
+                >
+                  Continue
+                </button>
+              </div>
+
+              <p className={styles.skipText}>
+                Click Cancel to skip onboarding process and continue to
+                dashboard
+              </p>
+            </div>
+          </div>
+        )}
+        {step === 5 && (
+          <div className={styles.form}>
+            <div className={styles.container4}>
+              <h2 className={styles.title4}>Upload Identity Document </h2>
+              <p className={styles.description4}>
+                You can upload any Identity document from the options below,
+                However some require front and back upload. This will help us
+                identify that this is you!
+              </p>
+
+              {accounts.map((item, index) => (
+                <div key={index} className={styles.nameRow1}>
+                  <div className={styles.inputGroup}>
+                    <label className={styles.label}>
+                      Select Identification Document type
+                    </label>
+                    <select
+                      className={styles.input}
+                      value={item.account}
+                      onChange={(e) =>
+                        handleAccountChange(index, "account", e.target.value)
+                      }
+                    >
+                      <option value="">International Passport</option>
+                      <option value="gtb">ID Card</option>
+                      <option value="zenith">Drivers Liscence </option>
+                      <option value="access">National Card</option>
+                      {/* Add more as needed */}
+                    </select>
+                  </div>
+                  <div className={styles.inputGroup1}>
+                    <input
+                      type="text"
+                      placeholder="ID number"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                    <input
+                      type="text"
+                      placeholder="Expiry Date"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <div className={styles.buttonGroup}>
+                <button className={styles.dashboardBtn}>Cancel</button>
+                <button
+                  className={styles.btnproceed}
+                  onClick={() => setStep(step + 1)}
+                >
+                  Proceed
+                </button>
+              </div>
+
+              <p className={styles.skipText}>
+                Click Cancel to skip onboarding process and continue to
+                dashboard
+              </p>
+            </div>
+          </div>
+        )}
+        {step === 6 && (
+          <div className={styles.form}>
+            <div className={styles.container4}>
+              <h2 className={styles.title4}>
+                Upload Proof of Address Document{" "}
+              </h2>
+              <p className={styles.description4}>
+                This will also help us identify that it is you running this
+                account
+              </p>
+
+              {accounts.map((item, index) => (
+                <div key={index} className={styles.nameRow1}>
+                  <div className={styles.inputGroup1}>
+                    <input
+                      type="text"
+                      placeholder="Residential Address"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className={styles.inputGroup1}>
+                    <input
+                      type="text"
+                      placeholder="State"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                  </div>
+                  <div className={styles.inputGroup1}>
+                    <input
+                      type="text"
+                      placeholder="City"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                    <input
+                      type="text"
+                      placeholder=" Postal Code"
+                      className={styles.input}
+                      value={item.bvn}
+                      onChange={(e) =>
+                        handleAccountChange(index, "bvn", e.target.value)
+                      }
+                    />
+                  </div>
+                  <label className={styles.label}>
+                    Select Proof of Address Document type
+                  </label>
+                  <div className={styles.inputGroup}>
+                    <select
+                      className={styles.input}
+                      value={item.account}
+                      onChange={(e) =>
+                        handleAccountChange(index, "account", e.target.value)
+                      }
+                    >
+                      <option value="">Bank Statement</option>
+                      <option value="gtb">Card</option>
+                    </select>
+                  </div>
+                  <div
+                    className={styles.container6}
+                    onClick={() =>
+                      fileInputRef.current && fileInputRef.current.click()
+                    }
+                  >
+                    <p className={styles.text}>Proof of Address Document</p>
+                    <FaCamera className={styles.icon} />
+                    <input
+                      ref={fileInputRef}
+                      type="file"
+                      accept="image/*"
+                      style={{ display: "none" }}
+                    />
+                  </div>
+                </div>
+              ))}
+
+              <div className={styles.buttonGroup}>
+                <button className={styles.dashboardBtn}>Cancel</button>
+                <button
+                  className={styles.btnproceed}
+                  onClick={() => setStep(step + 1)}
+                >
+                  Proceed
+                </button>
+              </div>
+
+              <p className={styles.skipText}>
+                Click Cancel to skip onboarding process and continue to
+                dashboard
+              </p>
+            </div>
           </div>
         )}
       </div>

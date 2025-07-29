@@ -218,7 +218,7 @@
 }
 
 .input.error {
-  border-color: #ff4757;
+  /* border-color: #ff4757; */
 }
 
 .errorIcon {
@@ -277,7 +277,7 @@
 .nameRow {
   display: grid;
   grid-template-columns: 1fr 1fr;
-  gap: 1rem;
+  gap: 1.5rem;
 }
 
 .phoneRow {
@@ -394,9 +394,11 @@
   text-decoration: underline;
 }
 .btnproceed {
-  width: 200px;
+  width: 237px;
   background: linear-gradient(135deg, #617aff 0%, #3a4999 100%);
   margin-left: auto;
+  height: 76px;
+  border-radius: 16.08px;
 }
 
 .container1 {
@@ -476,6 +478,139 @@
   text-decoration: underline;
 }
 
+.container3 {
+  text-align: center;
+  color: #fff;
+  padding: 3rem 1.5rem;
+  min-height: 100vh;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.image3 {
+  width: 150px;
+  margin-bottom: 1.5rem;
+}
+j .title3 {
+  font-size: 2rem;
+  font-weight: 700;
+  margin-bottom: 1rem;
+}
+
+.message3 {
+  font-size: 1rem;
+  max-width: 500px;
+  margin: 0 auto 2rem;
+  line-height: 1.6;
+}
+
+.buttonGroup {
+  display: flex;
+  gap: 1.5rem;
+  flex-wrap: wrap;
+  justify-content: center;
+}
+
+.dashboardBtn {
+  background: transparent;
+  border: 2px solid #5e75ff;
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 16px;
+  font-size: 1rem;
+  cursor: pointer;
+  width: 237px;
+    height: 76px;
+
+}
+
+.continueBtn {
+  background: linear-gradient(90deg, #5e75ff 0%, #7764ff 100%);
+  color: #fff;
+  padding: 0.75rem 2rem;
+  border-radius: 12px;
+  font-size: 1rem;
+  border: none;
+  cursor: pointer;
+}
+
+.nameRow1 {
+  display: flex;
+  flex-direction: column;
+  gap: 1.5rem;
+  margin-bottom: 1.5rem;
+}
+
+.container4 {
+  /* padding: 3rem 10rem; */
+  color: #fff;
+  border-radius: 12px;
+  margin: auto;
+  width: 100%;
+  max-width: 520px;
+}
+
+.label{
+  margin-bottom: 20px;
+  font-size: 20px;
+  color: white;
+}
+.inputGroup1{
+  display: flex;
+  flex-direction: row;
+  gap: 30px;
+}
+.container6 {
+border: 2px solid #2a2842;
+    border-radius: 16px;
+    padding: 40px 20px;
+    /* background-color: #0f0f1b; */
+    display: flex;
+    flex-direction: column;
+    align-items: center;
+    justify-content: center;
+    gap: 20px;
+    max-width: 453px;
+    margin: auto;
+    box-shadow: 0 0 0 2px #1e1d32;
+    width: 100%;
+}
+
+.text {
+  color: #ffffff;
+  font-size: 18px;
+  font-weight: 500;
+}
+
+.icon {
+  font-size: 36px;
+  color: #6c74f5;
+}
+.spinnerWrapper {
+  display: flex;
+  justify-content: center;
+  margin-top: 1rem;
+}
+
+.spinner {
+  width: 24px;
+  height: 24px;
+  border: 3px solid #ccc;
+  border-top: 3px solid #007bff;
+  border-radius: 50%;
+  animation: spin 0.6s linear infinite;
+}
+
+@keyframes spin {
+  to {
+    transform: rotate(360deg);
+  }
+}
+
+
+
 /* Responsive */
 @media (max-width: 480px) {
   .otpInput {
@@ -488,7 +623,6 @@
     justify-content: center;
   }
 }
-
 
 /* Responsive Design */
 @media (max-width: 768px) {

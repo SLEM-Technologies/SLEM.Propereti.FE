@@ -7,6 +7,7 @@ import Installmental from "./Pages/Installmental";
 import Resell from "./Pages/Resell"
 import Contact from "./Pages/Contact"
 import SignUp from "./Pages/SignUp"
+import Login from "./Pages/Login";
 const App = () => {
   return (
     <div className="app">
@@ -18,6 +19,7 @@ const App = () => {
         <Route path="/resell" element={<Resell />} />
         <Route path="/contact" element={<Contact />} />
         <Route path="/signup" element={<SignUp />} />
+        <Route path="/login" element={<Login />} />
       </Routes>
     </div>
   );
