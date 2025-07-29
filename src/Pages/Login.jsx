@@ -93,49 +93,51 @@ const Login = () => {
 
       {/* Right Side */}
       <div className={styles.rightSide}>
-        <h2 className={styles.formTitle}>Login</h2>
-        <form className={styles.form} onSubmit={handleSubmit}>
-          <div className={styles.inputGroup}>
-            <input
-              type="email"
-              name="email"
-              value={formData.email}
-              onChange={handleInputChange}
-              placeholder="Email address"
-              className={styles.input}
-            />
-          </div>
-
-          <div className={styles.inputGroup}>
-            <div className={styles.passwordWrapper}>
+        <div className={styles.rightSide_1}>
+          <h2 className={styles.formTitle}>Login</h2>
+          <form className={styles.form} onSubmit={handleSubmit}>
+            <div className={styles.inputGroup}>
               <input
-                type={showPassword ? "text" : "password"}
-                name="password"
-                value={formData.password}
+                type="email"
+                name="email"
+                value={formData.email}
                 onChange={handleInputChange}
-                placeholder="Password"
+                placeholder="Email address"
                 className={styles.input}
               />
-              <button
-                type="button"
-                onClick={() => setShowPassword(!showPassword)}
-                className={styles.eyeButton}
-              >
-                {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
-              </button>
             </div>
-          </div>
 
-          {isLoading && (
-            <div className={styles.spinnerWrapper}>
-              <div className={styles.spinner}></div>
+            <div className={styles.inputGroup}>
+              <div className={styles.passwordWrapper}>
+                <input
+                  type={showPassword ? "text" : "password"}
+                  name="password"
+                  value={formData.password}
+                  onChange={handleInputChange}
+                  placeholder="Password"
+                  className={styles.input}
+                />
+                <button
+                  type="button"
+                  onClick={() => setShowPassword(!showPassword)}
+                  className={styles.eyeButton}
+                >
+                  {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
+                </button>
+              </div>
             </div>
-          )}
 
-          <button type="submit" className={styles.btnproceed}>
-            Login
-          </button>
-        </form>
+            {isLoading && (
+              <div className={styles.spinnerWrapper}>
+                <div className={styles.spinner}></div>
+              </div>
+            )}
+
+            <button type="submit" className={styles.btnproceed}>
+              Login
+            </button>
+          </form>
+        </div>
       </div>
     </div>
   );
