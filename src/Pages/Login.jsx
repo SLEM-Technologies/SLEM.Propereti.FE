@@ -51,7 +51,7 @@ const Login = () => {
           showConfirmButton: false,
         });
         // Redirect to dashboard or wherever
-        navigate("/dashboard");
+        navigate("/home");
       })
       .catch((err) => {
         Swal.fire({
