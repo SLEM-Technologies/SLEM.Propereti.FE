@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "../../Styles/signup.module.css";
 import Charticon from "../../assets/icons/Pie chart _Isometric 2.svg";
 import Swal from "sweetalert2";
@@ -7,13 +7,17 @@ import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { FaCamera } from "react-icons/fa";
 
-const Step5 = () => {
+const Step6 = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef();
   const [accounts, setAccounts] = useState([
     {
-      documentType: "",
-      idNumber: "",
-      expiryDate: "",
+      address: "",
+      state: "",
+      city: "",
+      postalCode: "",
+      proofType: "",
+      file: null,
     },
   ]);
 
@@ -23,15 +27,19 @@ const Step5 = () => {
     setAccounts(updated);
   };
 
-  const addAccount = () => {
-    setAccounts([
-      ...accounts,
-      { documentType: "", idNumber: "", expiryDate: "" },
-    ]);
+  const handleFileUpload = (index, file) => {
+    const updated = [...accounts];
+    updated[index].file = file;
+    setAccounts(updated);
   };
 
   const handleContinue = () => {
-    navigate("/signup/step-6");
+    Swal.fire({
+      title: "Success!",
+      text: "Your information has been submitted successfully.",
+      icon: "success",
+    });
+    navigate("/dashboard");
   };
 
   const handleCancel = () => {
@@ -74,55 +82,89 @@ const Step5 = () => {
           <ArrowLeft size={20} /> Back
         </button>
 
-        <SignupSteps currentStep={5} />
+        <SignupSteps currentStep={6} />
 
         <div className={styles.form}>
           <div className={styles.container4}>
-            <h2 className={styles.title4}>Upload Identity Document </h2>
+            <h2 className={styles.title4}>Upload Proof of Address Document</h2>
             <p className={styles.description4}>
-              You can upload any Identity document from the options below,
-              However some require front and back upload. This will help us
-              identify that this is you!
+              This will also help us identify that it is you running this
+              account
             </p>
 
             {accounts.map((item, index) => (
               <div key={index} className={styles.nameRow1}>
-                <div className={styles.inputGroup}>
-                  <label className={styles.label}>
-                    Select Identification Document type
-                  </label>
-                  <select
-                    className={styles.input}
-                    value={item.documentType}
-                    onChange={(e) =>
-                      handleAccountChange(index, "documentType", e.target.value)
-                    }
-                  >
-                    <option value="">Select Document</option>
-                    <option value="passport">International Passport</option>
-                    <option value="idcard">ID Card</option>
-                    <option value="drivers">Driver's Licence</option>
-                    <option value="national">National Card</option>
-                  </select>
-                </div>
-
                 <div className={styles.inputGroup1}>
                   <input
                     type="text"
-                    placeholder="ID number"
+                    placeholder="Residential Address"
                     className={styles.input}
-                    value={item.idNumber}
+                    value={item.address}
                     onChange={(e) =>
-                      handleAccountChange(index, "idNumber", e.target.value)
+                      handleAccountChange(index, "address", e.target.value)
+                    }
+                  />
+                </div>
+                <div className={styles.inputGroup1}>
+                  <input
+                    type="text"
+                    placeholder="State"
+                    className={styles.input}
+                    value={item.state}
+                    onChange={(e) =>
+                      handleAccountChange(index, "state", e.target.value)
+                    }
+                  />
+                </div>
+                <div className={styles.inputGroup1}>
+                  <input
+                    type="text"
+                    placeholder="City"
+                    className={styles.input}
+                    value={item.city}
+                    onChange={(e) =>
+                      handleAccountChange(index, "city", e.target.value)
                     }
                   />
                   <input
                     type="text"
-                    placeholder="Expiry Date"
+                    placeholder="Postal Code"
                     className={styles.input}
-                    value={item.expiryDate}
+                    value={item.postalCode}
                     onChange={(e) =>
-                      handleAccountChange(index, "expiryDate", e.target.value)
+                      handleAccountChange(index, "postalCode", e.target.value)
+                    }
+                  />
+                </div>
+                <label className={styles.label}>
+                  Select Proof of Address Document type
+                </label>
+                <div className={styles.inputGroup}>
+                  <select
+                    className={styles.input}
+                    value={item.proofType}
+                    onChange={(e) =>
+                      handleAccountChange(index, "proofType", e.target.value)
+                    }
+                  >
+                    <option value="">Select Document</option>
+                    <option value="bank">Bank Statement</option>
+                    <option value="card">Utility Bill</option>
+                  </select>
+                </div>
+                <div
+                  className={styles.container6}
+                  onClick={() => fileInputRef.current?.click()}
+                >
+                  <p className={styles.text}>Proof of Address Document</p>
+                  <FaCamera className={styles.icon} />
+                  <input
+                    ref={fileInputRef}
+                    type="file"
+                    accept="image/*"
+                    style={{ display: "none" }}
+                    onChange={(e) =>
+                      handleFileUpload(index, e.target.files[0] || null)
                     }
                   />
                 </div>
@@ -151,4 +193,4 @@ const Step5 = () => {
   );
 };
 
-export default Step5;
+export default Step6;
