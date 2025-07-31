@@ -240,7 +240,7 @@ const SignUp = () => {
                     address: formData.address,
                     nationality: formData.country,
                     gender: formData.gender,
-                    refCode: formData.referralCode || "",
+                    refCode: formData.referralCode || "" ,
                   })
                   .then(() => {
                     Swal.fire({
