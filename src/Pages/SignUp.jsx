@@ -554,13 +554,13 @@ const SignUp = () => {
               <div className={styles.buttonGroup}>
                 <button
                   className={styles.dashboardBtn}
-                  onClick={() => navigate("/home")}
+                  onClick={() => navigate("/dashboard")}
                 >
                   Dashboard
                 </button>
                 <button
                   className={styles.btnproceed}
-                  onClick={() => navigate("/login?fromOnboarding=true")}
+                  onClick={() => navigate("/signup/step-4")}
                 >
                   Continue
                 </button>

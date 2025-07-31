@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { FaCamera } from "react-icons/fa";
+import { BASE_URL } from "../../Components/API/API.js";
+import axios from "axios";
 
 const Step5 = () => {
   const navigate = useNavigate();
@@ -30,8 +32,73 @@ const Step5 = () => {
     ]);
   };
 
-  const handleContinue = () => {
-    navigate("/signup/step-6");
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleContinue = async () => {
+    const token = localStorage.getItem("token");
+
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "Please login again to continue.",
+      });
+      navigate("/login");
+      return;
+    }
+
+    // Validate all fields
+    for (let i = 0; i < accounts.length; i++) {
+      const { documentType, idNumber, expiryDate } = accounts[i];
+      if (!documentType || !idNumber || !expiryDate) {
+        Swal.fire({
+          icon: "warning",
+          title: "Missing Fields",
+          text: `Please complete all fields for Document ${i + 1}`,
+        });
+        return;
+      }
+    }
+
+    setIsLoading(true);
+
+    try {
+      for (const doc of accounts) {
+        await axios.post(
+          `${BASE_URL}/api/v1/documents/add-document`,
+          {
+            documentType: doc.documentType,
+            documentId: doc.idNumber,
+            expiryDate: doc.expiryDate,
+          },
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Uploaded!",
+        text: "Documents uploaded successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      navigate("/signup/step-6");
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Upload Failed",
+        text:
+          err?.response?.data?.message ||
+          "Something went wrong while uploading documents.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -133,11 +200,8 @@ const Step5 = () => {
               <button className={styles.dashboardBtn} onClick={handleCancel}>
                 Cancel
               </button>
-              <button
-                className={styles.btnproceed}
-                onClick={handleContinue}
-              >
-                Proceed
+              <button className={styles.btnproceed} onClick={handleContinue}>
+                {isLoading ? <div className={styles.spinner}></div> : "Proceed"}
               </button>
             </div>
 

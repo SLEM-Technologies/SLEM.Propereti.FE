@@ -43,6 +43,23 @@ const Login = () => {
         firstLogin: true,
       })
       .then((res) => {
+        console.log("Login response:", res.data); // Check response structure
+
+        // Use the actual token key returned by backend
+        const token = res.data?.token || res.data?.data?.token;
+
+        if (!token) {
+          Swal.fire({
+            icon: "error",
+            title: "Login Failed",
+            text: "No token received from server.",
+          });
+          return;
+        }
+
+        // Save token
+        localStorage.setItem("token", token);
+
         Swal.fire({
           icon: "success",
           title: "Login Successful",
@@ -50,8 +67,15 @@ const Login = () => {
           timer: 1500,
           showConfirmButton: false,
         });
-        // Redirect to dashboard or wherever
-        navigate("/home");
+
+        const fromOnboarding = new URLSearchParams(window.location.search).get(
+          "fromOnboarding"
+        );
+        if (fromOnboarding) {
+          navigate("/signup/step-4");
+        } else {
+          navigate("/home");
+        }
       })
       .catch((err) => {
         Swal.fire({

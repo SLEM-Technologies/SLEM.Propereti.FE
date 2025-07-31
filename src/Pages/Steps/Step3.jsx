@@ -6,6 +6,8 @@ import { useNavigate } from "react-router-dom";
 import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { FaCamera } from "react-icons/fa";
+import { BASE_URL } from "../../Components/API/API.js";
+import axios from "axios";
 
 const Step6 = () => {
   const navigate = useNavigate();
@@ -26,21 +28,113 @@ const Step6 = () => {
     updated[index][field] = value;
     setAccounts(updated);
   };
-
   const handleFileUpload = (index, file) => {
-    const updated = [...accounts];
-    updated[index].file = file;
-    setAccounts(updated);
+    if (file) {
+      const updated = [...accounts];
+      updated[index].file = file;
+      setAccounts(updated);
+
+      Swal.fire({
+        icon: "success",
+        title: "File Uploaded",
+        text: `${file.name} uploaded successfully.`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
   };
 
-  const handleContinue = () => {
+  const [isLoading, setIsLoading] = useState(false);
+
+  const handleContinue = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "Please login again to continue.",
+      });
+      navigate("/login");
+      return;
+    }
+
+    for (let i = 0; i < accounts.length; i++) {
+      const { address, state, city, postalCode, proofType, file } = accounts[i];
+      if (!address || !state || !city || !postalCode || !proofType || !file) {
+        Swal.fire({
+          icon: "warning",
+          title: "Missing Fields",
+          text: `Please complete all fields for Entry ${i + 1}`,
+        });
+        return;
+      }
+    }
+
     Swal.fire({
-      title: "Success!",
-      text: "Your information has been submitted successfully.",
-      icon: "success",
+      title: "Uploading...",
+      text: "Please wait while we upload your proof of address.",
+      allowOutsideClick: false,
+      didOpen: () => Swal.showLoading(),
     });
-    navigate("/dashboard");
+
+    try {
+      for (const entry of accounts) {
+        const base64File = await toBase64(entry.file);
+
+        const payload = {
+          address: entry.address,
+          state: entry.state,
+          city: entry.city,
+          postalCode: entry.postalCode,
+          documentType: entry.proofType,
+          addressDocument: base64File, // base64-encoded file string
+        };
+
+        console.log("Submitting JSON Payload:", payload);
+
+        await axios.post(`${BASE_URL}/api/v1/address/add-address`, payload, {
+          headers: {
+            "Content-Type": "application/json",
+            Authorization: `Bearer ${token}`,
+          },
+        });
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Proof of address uploaded successfully.",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      navigate("/dashboard");
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Upload Failed",
+        text:
+          err?.response?.data?.message ||
+          "Something went wrong while uploading proof of address.",
+      });
+      console.error("Upload error:", err?.response || err);
+    }
   };
+
+  // 👇 Helper to convert file to base64
+const toBase64 = (file) =>
+  new Promise((resolve, reject) => {
+    const reader = new FileReader();
+    reader.readAsDataURL(file);
+    reader.onload = () => {
+      const result = reader.result;
+      const base64 = result.split(",")[1]; // remove "data:image/png;base64,"
+      resolve(base64);
+    };
+    reader.onerror = (error) => reject(error);
+  });
+
+
 
   const handleCancel = () => {
     navigate("/home");
@@ -161,12 +255,17 @@ const Step6 = () => {
                   <input
                     ref={fileInputRef}
                     type="file"
-                    accept="image/*"
+                    accept=".jpg,.jpeg,.png,.pdf"
                     style={{ display: "none" }}
                     onChange={(e) =>
                       handleFileUpload(index, e.target.files[0] || null)
                     }
                   />
+                  {item.file && (
+                    <p className={styles.uploadedFile}>
+                      Uploaded: <strong>{item.file.name}</strong>
+                    </p>
+                  )}
                 </div>
               </div>
             ))}
@@ -175,11 +274,8 @@ const Step6 = () => {
               <button className={styles.dashboardBtn} onClick={handleCancel}>
                 Cancel
               </button>
-              <button
-                className={styles.btnproceed}
-                onClick={handleContinue}
-              >
-                Proceed
+              <button className={styles.btnproceed} onClick={handleContinue}>
+                {isLoading ? <div className={styles.spinner}></div> : "Proceed"}
               </button>
             </div>
 

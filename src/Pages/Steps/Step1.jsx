@@ -5,13 +5,15 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
-import { FaCamera } from "react-icons/fa";
+import { BASE_URL } from "../../Components/API/API.js";
+import axios from "axios";
 
 const Step4 = () => {
   const navigate = useNavigate();
   const [accounts, setAccounts] = useState([
     { bankName: "", accountName: "", accountNumber: "", bvn: "" },
   ]);
+  const [isLoading, setIsLoading] = useState(false);
 
   const handleAccountChange = (index, field, value) => {
     const updated = [...accounts];
@@ -26,8 +28,66 @@ const Step4 = () => {
     ]);
   };
 
-  const handleContinue = () => {
-    navigate("/signup/step-5");
+  const handleContinue = async () => {
+    const token = localStorage.getItem("token");
+    if (!token) {
+      Swal.fire({
+        icon: "error",
+        title: "Unauthorized",
+        text: "Please login again to continue.",
+      });
+      navigate("/login");
+      return;
+    }
+
+    // Validation
+    for (let i = 0; i < accounts.length; i++) {
+      const { bankName, accountName, accountNumber, bvn } = accounts[i];
+      if (!bankName || !accountName || !accountNumber || !bvn) {
+        Swal.fire({
+          icon: "warning",
+          title: "Missing Fields",
+          text: `Please complete all fields for Account ${i + 1}`,
+        });
+        return;
+      }
+    }
+
+    setIsLoading(true);
+
+    try {
+      for (const account of accounts) {
+        await axios.post(
+          `${BASE_URL}/api/v1/users/add-user-bank-details`,
+          account,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
+        );
+      }
+
+      Swal.fire({
+        icon: "success",
+        title: "Success",
+        text: "Bank details submitted successfully!",
+        timer: 1500,
+        showConfirmButton: false,
+      });
+
+      navigate("/signup/step-5");
+    } catch (err) {
+      Swal.fire({
+        icon: "error",
+        title: "Submission Failed",
+        text:
+          err?.response?.data?.message ||
+          "Something went wrong. Please try again.",
+      });
+    } finally {
+      setIsLoading(false);
+    }
   };
 
   const handleCancel = () => {
@@ -154,7 +214,11 @@ const Step4 = () => {
                 Cancel
               </button>
               <button className={styles.btnproceed} onClick={handleContinue}>
-                Continue
+                {isLoading ? (
+                  <div className={styles.spinner}></div>
+                ) : (
+                  "Continue"
+                )}
               </button>
             </div>
 
