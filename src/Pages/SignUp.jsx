@@ -526,7 +526,6 @@ const SignUp = () => {
                 <button className={styles.resend} onClick={resendOTP}>
                   Resend OTP
                 </button>
-                <button className={styles.change}>Change Phone Number</button>
               </div>
 
               <button className={styles.backButton} onClick={() => setStep(1)}>
