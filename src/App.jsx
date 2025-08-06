@@ -11,6 +11,11 @@ import Login from "./Pages/Login";
 import Step1 from "./Pages/Steps/Step1";
 import Step2 from "./Pages/Steps/Step2";
 import Step3 from "./Pages/Steps/Step3";
+import Property from "./Pages/Property/Property";
+import Property2 from "./Pages/Property/Property2";
+import Property3 from "./Pages/Property/Property3";
+import Fin from "./Pages/Property/Rounup";
+import Dashboard from "./Pages/Dashboard";
 const App = () => {
   return (
     <div className="app">
@@ -27,6 +32,12 @@ const App = () => {
         <Route path="/signup/step-6" element={<Step3 />} />
         <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
+        <Route path="/property" element={<Property />} />
+        <Route path="/property2" element={<Property2 />} />
+        <Route path="/property3" element={<Property3 />} />
+        <Route path="/cont" element={<Fin />} />
+        <Route path="/dashboard" element={<Dashboard />} />
+
       </Routes>
     </div>
   );

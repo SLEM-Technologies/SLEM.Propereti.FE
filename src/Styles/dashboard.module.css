@@ -1,0 +1,248 @@
+.dashboardContainer {
+  background: #1a1b23;
+  min-height: 100vh;
+  /* color: #e2e8f0; */
+  /* Remove height: 100vh */
+}
+
+.dashboard {
+  margin-left: 280px;
+  /* margin-top: 80px; */
+  padding: 32px;
+  background: #1a1b23;
+  min-height: calc(100vh - 80px);
+  color: #e2e8f0;
+  /* Remove height: 100vh */
+  /* Optional: Add overflow */
+  overflow-y: auto;
+}
+
+.profileSection {
+  margin-bottom: 32px;
+}
+
+.progressContainer {
+  display: flex;
+  gap: 16px;
+  margin-top: 114px;
+  padding: 31px 14px;
+  margin-left: -25px;
+  border-radius: 12px;
+  border: 1px solid #313148;
+  flex-direction: column;
+}
+
+.progressBar {
+  width: 300px;
+  height: 18px;
+  background: #ffffff;
+  border-radius: 15px;
+  overflow: hidden;
+}
+
+.progressFill {
+  width: 40%;
+  height: 20px;
+  background: linear-gradient(90deg, #607afe 0%, #607afe 100%);
+  border-radius: 4px;
+  max-height: 100%;
+}
+
+.progressText {
+  flex: 1;
+}
+
+.progressTitle {
+  color: #e2e8f0;
+  font-size: 16px;
+  font-weight: 500;
+  margin: 0 0 4px 0;
+}
+
+.progressSubtitle {
+  color: #a0aec0;
+  font-size: 14px;
+  margin: 0;
+}
+
+.mainGrid {
+  display: grid;
+  grid-template-columns: 1fr 400px;
+  gap: 32px;
+  height: calc(100vh - 200px);
+}
+
+.leftColumn {
+  display: flex;
+  flex-direction: column;
+}
+
+.balanceCards {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 24px;
+  margin-bottom: 32px;
+}
+
+.balanceCard {
+  background: #2d3748;
+  border-radius: 16px;
+  padding: 24px;
+  display: flex;
+  align-items: center;
+  gap: 16px;
+  border: 1px solid #4a5568;
+}
+
+.cardIcon {
+  width: 48px;
+  height: 48px;
+  border-radius: 12px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  color: white;
+}
+
+.cardContent {
+  flex: 1;
+}
+
+.cardTitle {
+  color: #ffffff;
+  font-size: 14px;
+  font-weight: 500;
+  margin: 0 0 8px 0;
+  font-family: Poppins;
+}
+
+.cardAmount {
+  color: #667eea;
+  font-size: 24px;
+  font-weight: 700;
+  margin: 0;
+  font-family: Poppins;
+}
+
+.rightColumn {
+  display: flex;
+  flex-direction: column;
+  gap: 24px;
+}
+
+.recentView {
+  background: #2d374800;
+  border-radius: 16px;
+  padding: 24px;
+  border: 1px solid #4a5568;
+  flex: 1;
+}
+
+.mapView {
+  background: #2d374800;
+  border-radius: 16px;
+  padding: 24px;
+  /* border: 1px solid #4a5568; */
+  height: 300px;
+  margin-top: 30px;
+}
+
+.sectionHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: 20px;
+}
+
+.sectionTitle {
+  color: #e2e8f0;
+  font-size: 18px;
+  font-weight: 600;
+  margin: 0;
+}
+
+.moreIcon {
+  color: #a0aec0;
+  cursor: pointer;
+}
+
+.userList {
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.userItem {
+    display: flex;
+    align-items: center;
+    gap: 12px;
+    padding: 15px 1px;
+    border-bottom: 1px solid #313148;
+}
+.userAvatar {
+  width: 40px;
+  height: 40px;
+  border-radius: 50%;
+  object-fit: cover;
+}
+
+.userInfo {
+  flex: 1;
+}
+
+.userName {
+  color: #e2e8f0;
+  font-size: 14px;
+  font-weight: 600;
+  margin: 0 0 4px 0;
+}
+
+.userMessage {
+  color: #a0aec0;
+  font-size: 12px;
+  margin: 0;
+  line-height: 1.4;
+}
+
+.userTime {
+  color: #718096;
+  font-size: 12px;
+}
+
+.mapContainer {
+  height: calc(100% - 60px);
+  border-radius: 12px;
+  overflow: hidden;
+}
+
+/* Responsive Design */
+@media (max-width: 1200px) {
+  .mainGrid {
+    grid-template-columns: 1fr;
+    gap: 24px;
+  }
+
+  .rightColumn {
+    flex-direction: row;
+  }
+
+  .recentView,
+  .mapView {
+    flex: 1;
+  }
+}
+
+@media (max-width: 768px) {
+  .dashboard {
+    margin-left: 0;
+    padding: 16px;
+  }
+
+  .balanceCards {
+    grid-template-columns: 1fr;
+  }
+
+  .rightColumn {
+    flex-direction: column;
+  }
+}

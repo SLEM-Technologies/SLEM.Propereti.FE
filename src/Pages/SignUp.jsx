@@ -1,4 +1,4 @@
-import React, { useState, useRef } from "react";
+import React, { useState, useRef, useEffect } from "react";
 import styles from "../Styles/signup.module.css";
 import Charticon from "../assets/icons/Pie chart _Isometric 2.svg";
 import Swal from "sweetalert2";
@@ -8,6 +8,7 @@ import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../Components/API/API.js";
 import axios from "axios";
 import SignupSteps from "../Components/Stepcounter.jsx";
+
 import { ArrowLeft, Eye, EyeOff, ChevronDown } from "lucide-react";
 
 const SignUp = () => {
@@ -18,6 +19,8 @@ const SignUp = () => {
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
   const [passwordStrength, setPasswordStrength] = useState(0);
+  const [countryList, setCountryList] = useState([]);
+
   const [formData, setFormData] = useState({
     country: "Nigeria",
     firstName: "",
@@ -49,7 +52,21 @@ const SignUp = () => {
 
   const handleInputChange = (e) => {
     const { name, value } = e.target;
-    setFormData({ ...formData, [name]: value });
+
+    // If country is selected, update phone code automatically
+    if (name === "country") {
+      const selected = countryList.find((c) => c.name === value);
+      if (selected) {
+        setFormData((prev) => ({
+          ...prev,
+          country: value,
+          phoneCode: selected.dialCode,
+        }));
+        return;
+      }
+    }
+
+    setFormData((prev) => ({ ...prev, [name]: value }));
   };
 
   const inputsRef = useRef([]);
@@ -130,6 +147,27 @@ const SignUp = () => {
       <div className={styles.spinner}></div>
     </div>
   );
+
+  useEffect(() => {
+    axios
+      .get(`${BASE_URL}/api/v1/countries/get-all-countries`)
+      .then((res) => {
+        const countries = res.data.data;
+        setCountryList(countries);
+
+        // Optional: auto-set Nigeria phone code on initial load
+        const nigeria = countries.find((c) => c.name === "Nigeria");
+        if (nigeria) {
+          setFormData((prev) => ({
+            ...prev,
+            phoneCode: nigeria.dialCode,
+          }));
+        }
+      })
+      .catch((err) => {
+        console.error("Error fetching countries", err);
+      });
+  }, []);
 
   return (
     <div className={styles.container}>
@@ -240,7 +278,7 @@ const SignUp = () => {
                     address: formData.address,
                     nationality: formData.country,
                     gender: formData.gender,
-                    refCode: formData.referralCode || "" ,
+                    refCode: formData.referralCode || "",
                   })
                   .then(() => {
                     Swal.fire({
@@ -278,10 +316,13 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     className={styles.select}
                   >
-                    <option value="Nigeria">Nigeria</option>
-                    <option value="Ghana">Ghana</option>
-                    <option value="Kenya">Kenya</option>
+                    {countryList.map((country) => (
+                      <option key={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
                   </select>
+
                   <ChevronDown size={16} className={styles.selectIcon} />
                 </div>
               </div>
@@ -324,30 +365,27 @@ const SignUp = () => {
               </div>
 
               {/* Phone Number */}
-              <div className={styles.phoneRow}>
-                <div className={styles.phoneCode}>
-                  <select
-                    name="phoneCode"
-                    value={formData.phoneCode}
-                    onChange={handleInputChange}
-                    className={styles.phoneSelect}
-                  >
-                    <option value="+234">+234</option>
-                    <option value="+233">+233</option>
-                    <option value="+254">+254</option>
-                  </select>
-                </div>
-                <div className={styles.inputGroup}>
-                  <input
-                    type="tel"
-                    name="phoneNumber"
-                    value={formData.phoneNumber}
-                    onChange={handleInputChange}
-                    placeholder="Phone Number"
-                    className={styles.input}
-                  />
-                </div>
-              </div>
+   <div className={styles.phoneRow}>
+  <div className={styles.phoneCode}>
+    <input
+      type="text"
+      value={formData.phoneCode}
+      readOnly
+      className={styles.phoneSelect}
+    />
+  </div>
+  <div className={styles.inputGroup}>
+    <input
+      type="tel"
+      name="phoneNumber"
+      value={formData.phoneNumber}
+      onChange={handleInputChange}
+      placeholder="Phone Number"
+      className={styles.input}
+    />
+  </div>
+</div>
+
 
               {/* Gender and DOB */}
               <div className={styles.nameRow}>
