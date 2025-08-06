@@ -13,7 +13,7 @@
   border-bottom: 1px solid #4a5568;
   border-radius: 16px;
   margin-top: 30px;
-      width: 78%;
+      width: 82%;
 
 }
 
@@ -120,3 +120,8 @@
   color: #a0aec0;
 }
 
+@media (max-width:1300px){
+    .header{
+        width: 76%;
+    }
+}
