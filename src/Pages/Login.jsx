@@ -74,7 +74,7 @@ const Login = () => {
         if (fromOnboarding) {
           navigate("/signup/step-4");
         } else {
-          navigate("/home");
+          navigate("/dashboard");
         }
       })
       .catch((err) => {

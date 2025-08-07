@@ -307,7 +307,7 @@ const SignUp = () => {
                 required.
               </p>
               {/* Country Dropdown */}
-              <div className={styles.inputGroup}>
+              {/* <div className={styles.inputGroup}>
                 <div className={styles.selectWrapper}>
                   <span className={styles.flag}>🇳🇬</span>
                   <select
@@ -325,7 +325,7 @@ const SignUp = () => {
 
                   <ChevronDown size={16} className={styles.selectIcon} />
                 </div>
-              </div>
+              </div> */}
 
               {/* Name Fields */}
               <div className={styles.nameRow}>
@@ -366,14 +366,42 @@ const SignUp = () => {
 
               {/* Phone Number */}
    <div className={styles.phoneRow}>
-  <div className={styles.phoneCode}>
-    <input
-      type="text"
-      value={formData.phoneCode}
-      readOnly
-      className={styles.phoneSelect}
-    />
+<div className={styles.inputGroup}>
+  <div className={styles.selectWrapper}>
+    <select
+      name="country"
+      value={formData.country}
+      onChange={(e) => {
+        const selected = countryList.find(
+          (country) => country.name === e.target.value
+        );
+
+        if (selected) {
+          setFormData({
+            ...formData,
+            country: selected.name,
+            phoneCode: selected.dialCode,
+          });
+        }
+      }}
+      className={styles.select}
+    >
+      {countryList.map((country) => {
+        const shortName = country.name.slice(0, 3); // first 3 letters
+        return (
+          <option key={country.id} value={country.name}>
+            {shortName} ({country.dialCode})
+          </option>
+        );
+      })}
+    </select>
+
+    <ChevronDown size={16} className={styles.selectIcon} />
   </div>
+</div>
+
+
+
   <div className={styles.inputGroup}>
     <input
       type="tel"
