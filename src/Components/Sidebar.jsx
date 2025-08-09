@@ -1,7 +1,7 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate, useLocation } from "react-router-dom";
 import styles from "../Styles/sidemenu.module.css";
 import {
-  Search,
   Briefcase,
   Wallet,
   Rss,
@@ -16,18 +16,32 @@ import Dashboard from "../assets/icons/Dashboard.svg";
 import Porps from "../assets/icons/Props.svg";
 
 const Sidemenu = () => {
-  const [activeIndex, setActiveIndex] = useState(0);
+  const navigate = useNavigate();
+  const location = useLocation();
 
   const menuItems = [
-    { icon: Dashboard, label: "Dashboard", type: "image" },
-    { icon: Porps, label: "Browse Properties", type: "image" },
-    { icon: Briefcase, label: "My Portfolio", type: "icon" },
-    { icon: Wallet, label: "My Wallet", type: "icon" },
-    { icon: Rss, label: "Newsfeed", type: "icon" },
-    { icon: Bell, label: "Notifications", badge: "5", type: "icon" },
-    { icon: HelpCircle, label: "Support", type: "icon" },
-    { icon: Settings, label: "Settings", type: "icon" },
+    { icon: Dashboard, label: "Dashboard", type: "image", path: "/dashboard" },
+    { icon: Porps, label: "Browse Properties", type: "image", path: "/browse-properties" },
+    { icon: Briefcase, label: "My Portfolio", type: "icon", path: "/portfolio" },
+    { icon: Wallet, label: "My Wallet", type: "icon", path: "/wallet" },
+    { icon: Rss, label: "Newsfeed", type: "icon", path: "/newsfeed" },
+    { icon: Bell, label: "Notifications", badge: "5", type: "icon", path: "/notifications" },
+    { icon: HelpCircle, label: "Support", type: "icon", path: "/support" },
+    { icon: Settings, label: "Settings", type: "icon", path: "/settings" },
   ];
+
+  const helpIndex = menuItems.length; // index for Help & Support
+  const [activeIndex, setActiveIndex] = useState(null);
+
+  // Set active menu based on current URL
+  useEffect(() => {
+    const foundIndex = menuItems.findIndex((item) => item.path === location.pathname);
+    if (foundIndex !== -1) {
+      setActiveIndex(foundIndex);
+    } else if (location.pathname === "/help-support") {
+      setActiveIndex(helpIndex);
+    }
+  }, [location.pathname]);
 
   return (
     <div className={styles.wrapper}>
@@ -50,7 +64,7 @@ const Sidemenu = () => {
               <div
                 key={index}
                 className={`${styles.menuItem} ${isActive ? styles.active : ""}`}
-                onClick={() => setActiveIndex(index)}
+                onClick={() => navigate(item.path)}
               >
                 {item.type === "image" ? (
                   <img src={item.icon} className={styles.menuIcon} alt={item.label} />
@@ -61,8 +75,7 @@ const Sidemenu = () => {
                   />
                 )}
                 <span className={styles.menuLabel}>{item.label}</span>
-                              <div className={styles.sideBar}></div> {/* for the left bar */}
-
+                <div className={styles.sideBar}></div>
                 {item.badge && <span className={styles.badge}>{item.badge}</span>}
               </div>
             );
@@ -71,10 +84,20 @@ const Sidemenu = () => {
 
         {/* Bottom */}
         <div className={styles.bottomSection}>
-          <div className={styles.menuItem}>
-            <HelpCircle className={styles.menuIcon} size={20} />
+          {/* Help & Support */}
+          <div
+            className={`${styles.menuItem} ${activeIndex === helpIndex ? styles.active : ""}`}
+            onClick={() => navigate("/help-support")}
+          >
+            <HelpCircle
+              className={`${styles.menuIcon} ${activeIndex === helpIndex ? styles.activeIcon : ""}`}
+              size={20}
+            />
             <span className={styles.menuLabel}>Help & Support</span>
+            <div className={styles.sideBar}></div>
           </div>
+
+          {/* Logout */}
           <div className={styles.logoutItem}>
             <LogOut className={styles.menuIcon} size={20} />
             <span className={styles.menuLabel}>Logout</span>

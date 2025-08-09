@@ -16,6 +16,7 @@ import Property2 from "./Pages/Property/Property2";
 import Property3 from "./Pages/Property/Property3";
 import Fin from "./Pages/Property/Rounup";
 import Dashboard from "./Pages/Dashboard";
+import HelpSupport from "./Pages/HelpSupport"
 const App = () => {
   return (
     <div className="app">
@@ -37,6 +38,7 @@ const App = () => {
         <Route path="/property3" element={<Property3 />} />
         <Route path="/cont" element={<Fin />} />
         <Route path="/dashboard" element={<Dashboard />} />
+        <Route path="/help-support" element={<HelpSupport />} />
 
       </Routes>
     </div>
