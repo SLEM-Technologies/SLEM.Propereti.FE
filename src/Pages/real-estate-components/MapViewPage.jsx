@@ -7,6 +7,8 @@ import pricerange from "../../assets/icons/price_range.svg";
 import bed from "../../assets/icons/beddings.svg";
 import share from "../../assets/icons/share.svg";
 import Locationplus from "../../assets/icons/location_on.svg";
+import Image12 from "../../assets/icons/Image13.svg";
+import Image123 from "../../assets/icons/Image3.svg";
 
 const MapViewPage = ({ isMapView, onViewToggle, onPropertySelect }) => {
   const properties = [
@@ -16,24 +18,21 @@ const MapViewPage = ({ isMapView, onViewToggle, onPropertySelect }) => {
       location: "Terry Lane, Golden CO 80403",
       size: "1507 square meters",
       image:
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop",
-    },
+Image12,    },
     {
       id: 2,
       title: "Investment Land",
       location: "Terry Lane, Golden CO 80403",
       size: "1507 square meters",
       image:
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop",
-    },
+Image12,    },
     {
       id: 3,
       title: "Investment Land",
       location: "Terry Lane, Golden CO 80403",
       size: "1507 square meters",
       image:
-        "https://images.unsplash.com/photo-1500382017468-9049fed747ef?w=400&h=300&fit=crop",
-    },
+Image12,    },
   ];
 
   return (
