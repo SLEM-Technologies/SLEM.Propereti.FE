@@ -10,6 +10,8 @@ import {
 } from "react-icons/fa";
 import Image12 from "../../assets/icons/Image13.svg";
 import Image123 from "../../assets/icons/Image3.svg";
+import Pfp from "../../assets/icons/Profile Image.svg";
+
 
 const PropertyDetailPage = () => {
   const amenities = [
@@ -110,7 +112,7 @@ const PropertyDetailPage = () => {
       <div className={styles.right}>
         <div className={styles.agentCard}>
           <img
-            src="https://randomuser.me/api/portraits/men/32.jpg"
+            src={Pfp}
             alt="agent"
             className={styles.agentImg}
           />
