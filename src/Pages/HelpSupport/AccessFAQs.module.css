@@ -61,8 +61,11 @@
 }
 
 .answerContainer {
-  padding-bottom: 24px;
-  animation: slideDown 0.3s ease-out;
+    padding-bottom: 41px;
+    background: #191926;
+    padding-top: 2px;
+    padding-left: 20px;
+    padding-right: 20px;  animation: slideDown 0.3s ease-out;
 }
 
 .answerDivider {

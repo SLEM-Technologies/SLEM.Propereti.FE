@@ -1,0 +1,412 @@
+.container {
+  min-height: 100vh;
+  background-color: #1e1e2e;
+  color: #ffffff;
+  font-family: -apple-system, BlinkMacSystemFont, "Segoe UI", sans-serif;
+  margin-top: 100px;
+}
+
+.header {
+  background-color: #2a2a3e;
+  padding: 1rem 2rem;
+  border-bottom: 1px solid #3a3a4e;
+}
+
+.nav {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.navItems {
+  display: flex;
+  gap: 2rem;
+}
+
+.navItem {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.navItem.active {
+  color: #6366f1;
+}
+
+.navItem.active::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #6366f1;
+}
+
+.mapToggle {
+  display: flex;
+  align-items: center;
+  gap: 0.75rem;
+}
+
+.mapToggleLabel {
+  color: #ffffff;
+  font-size: 1rem;
+  font-weight: 500;
+}
+
+.toggle {
+  width: 48px;
+  height: 24px;
+  background-color: #4b5563;
+  border-radius: 12px;
+  position: relative;
+  cursor: pointer;
+}
+
+.toggle.toggleActive {
+  background-color: #6366f1;
+}
+
+.toggleSlider {
+  width: 20px;
+  height: 20px;
+  background-color: #ffffff;
+  border-radius: 50%;
+  position: absolute;
+  top: 2px;
+  left: 2px;
+  transition: transform 0.2s ease;
+}
+
+.toggle.toggleActive .toggleSlider {
+  transform: translateX(24px);
+}
+
+.searchBar {
+  background-color: #2a2a3e;
+  padding: 1.5rem 2rem;
+  border-bottom: 1px solid #3a3a4e;
+}
+
+.searchContainer {
+  display: flex;
+  align-items: center;
+  gap: 1rem;
+  max-width: 1200px;
+  margin: 0 auto;
+}
+
+.searchIcon {
+  font-size: 1.25rem;
+}
+
+.imgsarch {
+  border: 1px solid #494973;
+  padding: 1.05rem 1rem;
+  border-radius: 7px;
+}
+.filterWrapper {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+
+.filterIcon {
+  position: absolute;
+  left: 12px; /* pushes the icon a little more inside */
+  width: 18px; /* you can adjust size */
+  height: 18px;
+  pointer-events: none;
+}
+
+.filterSelect {
+  background-color: #37415102;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 1.05rem 2rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  min-width: 140px;
+}
+
+.searchButton {
+  background: linear-gradient(to right, #5c74f5, #36448f);
+  color: #ffffff;
+  border: none;
+  border-radius: 8px;
+  font-size: 0.875rem;
+  font-weight: 500;
+  cursor: pointer;
+  height: 49px;
+  width: 131px;
+}
+
+.mapView {
+  display: flex;
+  flex-direction: column;
+  height: calc(100vh - 200px);
+}
+
+.mapContainer {
+  flex: 1;
+  position: relative;
+  background: linear-gradient(135deg, #e8f5e8 0%, #b8e6b8 50%, #87ceeb 100%);
+  overflow: hidden;
+}
+
+.mapPlaceholder {
+  width: 100%;
+  height: 100%;
+  position: relative;
+}
+
+.mapLabels {
+  position: absolute;
+  width: 100%;
+  height: 100%;
+}
+
+.mapLabel {
+  position: absolute;
+  color: #374151;
+  font-size: 0.875rem;
+  font-weight: 600;
+  text-transform: uppercase;
+  letter-spacing: 0.5px;
+}
+
+.mapPin {
+  position: absolute;
+  top: 50%;
+  left: 45%;
+  font-size: 2rem;
+  transform: translate(-50%, -50%);
+}
+
+.propertyCards {
+  display: flex;
+  gap: 1rem;
+  padding: 21px 10px;
+  background-color: #313148;
+  overflow-x: auto;
+  margin: auto;
+}
+
+.propertyCard {
+  background-color: #374151;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  padding: 19px 10px;
+}
+
+.propertyCard:hover {
+  transform: translateY(-4px);
+}
+
+.imageContainer {
+  position: relative;
+  height: 200px;
+}
+
+.propertyImage {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  border-radius: 30px;
+  padding: 24px 10px;
+}
+.grouph {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: flex-start;
+  gap: 70px;
+}
+.viewDetailsBtn {
+  /* position: absolute; */
+  top: 1rem;
+  right: 1rem;
+  background-color: #6366f1;
+  color: #ffffff;
+  padding: 9px 11px;
+  border: none;
+  border-radius: 6px;
+  font-size: 0.75rem;
+  cursor: pointer;
+}
+
+.propertyInfo {
+  padding: 14px 5px;
+}
+
+.propertyTitle {
+  color: #ffffff;
+  font-size: 1.125rem;
+  font-weight: 600;
+  margin: 0 0 1rem 0;
+  font-family: Poppins;
+}
+
+.propertyDetails {
+  display: flex;
+  flex-direction: column;
+  gap: 0.5rem;
+  margin-bottom: 1rem;
+  font-family: Poppins;
+}
+
+.locationInfo,
+.sizeInfo {
+  font-family: Poppins;
+
+  display: flex;
+  align-items: center;
+  gap: 0.5rem;
+}
+
+.icon {
+  font-size: 0.875rem;
+}
+
+.location,
+.size {
+  color: #d1d5db;
+  font-size: 0.875rem;
+}
+
+.priceContainer {
+  display: flex;
+  justify-content: space-between;
+  align-items: baseline;
+  font-family: Poppins;
+  flex-direction: column;
+}
+.priceContainer1 {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  font-family: Poppins;
+}
+
+.price {
+  color: #6366f1;
+  font-size: 1rem;
+  font-weight: 600;
+}
+
+.shareBtn {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  cursor: pointer;
+  padding: 0.5rem;
+  border-radius: 6px;
+}
+
+.shareBtn:hover {
+  background-color: #4b5563;
+}
+
+.filterTabs {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  margin-bottom: 2rem;
+}
+
+.tabs {
+  display: flex;
+  gap: 2rem;
+}
+
+.tab {
+  background: none;
+  border: none;
+  color: #9ca3af;
+  font-size: 1rem;
+  font-weight: 500;
+  padding: 0.5rem 0;
+  cursor: pointer;
+  position: relative;
+}
+
+.tab.activeTab {
+  color: #6366f1;
+}
+
+.tab.activeTab::after {
+  content: "";
+  position: absolute;
+  bottom: -0.5rem;
+  left: 0;
+  right: 0;
+  height: 2px;
+  background-color: #6366f1;
+}
+
+.sortContainer {
+  position: relative;
+}
+
+.sortSelect {
+  background-color: #374151;
+  border: 1px solid #4b5563;
+  border-radius: 8px;
+  color: #ffffff;
+  padding: 0.75rem 1rem;
+  font-size: 0.875rem;
+  cursor: pointer;
+  min-width: 120px;
+}
+
+.bottomRow {
+  display: grid;
+  grid-template-columns: repeat(2, 1fr);
+  gap: 1.5rem;
+}
+
+.propertyCardHorizontal {
+  background-color: #3741511d;
+  border-radius: 16px;
+  overflow: hidden;
+  cursor: pointer;
+  transition: transform 0.2s ease;
+  display: flex;
+  height: auto;
+}
+
+.propertyCardHorizontal:hover {
+  transform: translateY(-4px);
+}
+
+.propertyCardHorizontal .imageContainer {
+  width: 200px;
+  height: 100%;
+  flex-shrink: 0;
+}
+
+.propertyCardHorizontal .propertyInfo {
+  flex: 1;
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+}
+
+@media (max-width: 1024px) {
+  .propertyCards{
+    flex-wrap: wrap;
+    justify-content: center;
+  }
+}

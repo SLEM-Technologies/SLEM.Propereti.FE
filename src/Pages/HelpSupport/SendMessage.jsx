@@ -1,5 +1,6 @@
 import React, { useState } from 'react';
 import styles from './SendMessage.module.css';
+import Upload from "../../assets/icons/save.svg"
 
 const SendMessage = () => {
   const [selectedCategory, setSelectedCategory] = useState('');
@@ -63,10 +64,7 @@ const SendMessage = () => {
 
         <div className={styles.uploadSection}>
           <div className={styles.uploadIcon}>
-            <svg width="24" height="24" viewBox="0 0 24 24" fill="none" xmlns="http://www.w3.org/2000/svg">
-              <path d="M7 18C7 18.5523 7.44772 19 8 19H16C16.5523 19 17 18.5523 17 18V11H19L12 4L5 11H7V18Z" fill="#4f46e5"/>
-              <path d="M8 12H16V17H8V12Z" fill="#4f46e5"/>
-            </svg>
+      <img src={Upload} alt="/" />
           </div>
           <label className={styles.uploadLabel}>
             Upload picture if any

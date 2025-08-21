@@ -127,7 +127,7 @@
 }
 
 .submitButton {
-  background: linear-gradient(135deg, #6366f1 0%, #8b5cf6 100%);
+  background: linear-gradient(135deg, #617aff 0%, #3a4999 100%);
   border: none;
   border-radius: 8px;
   color: #ffffff;
@@ -139,6 +139,7 @@
   display: block;
   margin: 0 auto;
   min-width: 120px;
+  margin-right: inherit;
 }
 
 .submitButton:hover {

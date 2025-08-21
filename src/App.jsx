@@ -16,7 +16,13 @@ import Property2 from "./Pages/Property/Property2";
 import Property3 from "./Pages/Property/Property3";
 import Fin from "./Pages/Property/Rounup";
 import Dashboard from "./Pages/Dashboard";
-import HelpSupport from "./Pages/HelpSupport"
+import HelpSupport from "./Pages/HelpSupport";
+import Browseopps from "./Pages/Browseopps";
+import CompanySignUp from "./Pages/Companyreg";
+import RegisterOptions from "./Pages/RegisterOptions";
+import Onetime from "./Pages/HelpSupport//OneTimePayment"
+import Installmentalpay from "./Pages/HelpSupport/InstallmentalPayment";
+
 const App = () => {
   return (
     <div className="app">
@@ -27,7 +33,7 @@ const App = () => {
         <Route path="/installmental" element={<Installmental />} />
         <Route path="/resell" element={<Resell />} />
         <Route path="/contact" element={<Contact />} />
-        <Route path="/" element={<SignUp />} />
+        <Route path="/signup" element={<SignUp />} />
         <Route path="/signup/step-4" element={<Step1 />} />
         <Route path="/signup/step-5" element={<Step2 />} />
         <Route path="/signup/step-6" element={<Step3 />} />
@@ -39,6 +45,11 @@ const App = () => {
         <Route path="/cont" element={<Fin />} />
         <Route path="/dashboard" element={<Dashboard />} />
         <Route path="/help-support" element={<HelpSupport />} />
+        <Route path="/browse-properties" element={<Browseopps />} />
+        <Route path="/company-signup" element={<CompanySignUp />} />
+        <Route path="/" element={<RegisterOptions />} />
+        <Route path="/browse-properties/one-time" element={<Onetime />} />
+        <Route path="/browse-properties/installment" element={<Installmentalpay />} />
 
       </Routes>
     </div>

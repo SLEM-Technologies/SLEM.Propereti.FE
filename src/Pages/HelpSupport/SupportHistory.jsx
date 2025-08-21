@@ -1,5 +1,8 @@
 import React, { useState } from 'react';
 import styles from './SupportHistory.module.css';
+import pending from "../../assets/icons/pending_dots.svg";
+import notfunded from "../../assets/icons/not_funding.svg";
+import msg from "../../assets/icons/sendmsg.svg";
 
 const SupportHistory = () => {
   const [selectedCase, setSelectedCase] = useState('case1');
@@ -21,31 +24,14 @@ const SupportHistory = () => {
     }
   ];
 
-  const chatMessages = [
-    {
-      id: 1,
-      sender: 'Support Admin',
-      message: 'Welcome to RealSus.\nStart investing in the global and local stock markets.\n\nDownload on Google Playstore\nDownload on iOS App Store\n\nJoin RealSus Community\n\nAccess our FAQs\n\nRealSus Support hours: Mon. - Fri. (9 am - 5 pm)',
-      isAdmin: true,
-      avatar: '🔵'
-    },
-    {
-      id: 2,
-      sender: 'Olowu Oluwatobi',
-      message: 'Any update?',
-      isAdmin: false,
-      avatar: '🟡'
-    }
-  ];
-
   return (
     <div className={styles.container}>
       <div className={styles.leftPanel}>
         <h2 className={styles.panelTitle}>View Open and Closed Support Cases</h2>
-        
+
         <div className={styles.casesList}>
           {supportCases.map((supportCase) => (
-            <div 
+            <div
               key={supportCase.id}
               className={`${styles.caseItem} ${
                 selectedCase === supportCase.id ? styles.selectedCase : ''
@@ -54,7 +40,10 @@ const SupportHistory = () => {
             >
               <div className={styles.caseHeader}>
                 <div className={styles.caseIcon}>
-                  {supportCase.status === 'Open' ? '💬' : '✅'}
+                  <img
+                    src={supportCase.status === 'Open' ? pending : notfunded}
+                    alt={supportCase.status === 'Open' ? 'Pending' : 'Not Funded'}
+                  />
                 </div>
                 <div className={styles.caseInfo}>
                   <h3 className={styles.caseTitle}>{supportCase.title}</h3>
@@ -62,9 +51,13 @@ const SupportHistory = () => {
                 </div>
                 <div className={styles.caseMetadata}>
                   <span className={styles.caseDate}>{supportCase.date}</span>
-                  <span className={`${styles.caseStatus} ${
-                    supportCase.status === 'Open' ? styles.statusOpen : styles.statusClosed
-                  }`}>
+                  <span
+                    className={`${styles.caseStatus} ${
+                      supportCase.status === 'Open'
+                        ? styles.statusOpen
+                        : styles.statusClosed
+                    }`}
+                  >
                     {supportCase.status}
                   </span>
                 </div>
@@ -80,30 +73,63 @@ const SupportHistory = () => {
         </div>
 
         <div className={styles.chatContainer}>
-          {chatMessages.map((msg) => (
-            <div key={msg.id} className={styles.messageGroup}>
-              <div className={styles.messageHeader}>
-                <span className={styles.avatar}>{msg.avatar}</span>
-                <span className={styles.senderName}>{msg.sender}</span>
+          {[
+            {
+              id: 1,
+              sender: 'Support Admin',
+              message:
+                'Welcome to RealSus.\nStart investing in the global and local stock markets.\n\nDownload on Google Playstore\nDownload on iOS App Store\n\nJoin RealSus Community\n\nAccess our FAQs\n\nRealSus Support hours: Mon. - Fri. (9 am - 5 pm)',
+              isAdmin: true,
+              avatar: '🔵'
+            },
+            {
+              id: 2,
+              sender: 'Olowu Oluwatobi',
+              message: 'Any update?',
+              isAdmin: false,
+              avatar: '🟡'
+            }
+          ].map((msg) => (
+            <div
+              key={msg.id}
+              className={`${styles.messageGroup} ${
+                msg.isAdmin ? styles.adminGroup : styles.userGroup
+              }`}
+            >
+              {!msg.isAdmin && <div className={styles.spacer}></div>}
+
+              <div className={styles.messageContent1}>
+                <div className={styles.messageHeader}>
+                  <span className={styles.avatar}>{msg.avatar}</span>
+                </div>
+                <div
+                  className={`${styles.messageCard} ${
+                    msg.isAdmin ? styles.adminMessage : styles.userMessage
+                  }`}
+                >
+                  <span className={styles.senderName}>{msg.sender}</span>
+                  <p className={styles.messageText}>{msg.message}</p>
+                </div>
               </div>
-              <div className={`${styles.messageCard} ${
-                msg.isAdmin ? styles.adminMessage : styles.userMessage
-              }`}>
-                <p className={styles.messageText}>{msg.message}</p>
-              </div>
+
+              {msg.isAdmin && <div className={styles.spacer}></div>}
             </div>
           ))}
         </div>
 
         <div className={styles.messageInput}>
-          <input 
-            type="text" 
-            placeholder="Write a message"
-            className={styles.textInput}
-          />
-          <button className={styles.sendButton}>
-            <span className={styles.sendIcon}>📤</span>
-          </button>
+          <div className={styles.messageInput1}>
+            <input
+              type="text"
+              placeholder="Write a message"
+              className={styles.textInput}
+            />
+            <button className={styles.sendButton}>
+              <span className={styles.sendIcon}>
+                <img src={msg} alt="" />
+              </span>
+            </button>
+          </div>
         </div>
       </div>
     </div>
@@ -111,4 +137,3 @@ const SupportHistory = () => {
 };
 
 export default SupportHistory;
-
