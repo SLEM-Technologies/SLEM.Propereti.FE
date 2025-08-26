@@ -6,6 +6,9 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { BASE_URL } from "../Components/API/API.js";
 import axios from "axios";
+import googlelogo from "../assets/icons/Google Logo.svg";
+import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
+
 
 const Login = () => {
   const navigate = useNavigate();
@@ -87,6 +90,42 @@ const Login = () => {
       .finally(() => setIsLoading(false));
   };
 
+  const handleGoogleLogin = () => {
+    const clientId = "YOUR_GOOGLE_CLIENT_ID";
+    const redirectUri = "http://localhost:3000/auth/callback"; // or your hosted frontend URL
+    const scope = "email profile openid";
+    const authUrl = `https://accounts.google.com/o/oauth2/v2/auth?client_id=${clientId}&redirect_uri=${redirectUri}&response_type=token&scope=${scope}`;
+
+    // open popup
+    const width = 500;
+    const height = 600;
+    const left = window.innerWidth / 2 - width / 2;
+    const top = window.innerHeight / 2 - height / 2;
+
+    const popup = window.open(
+      authUrl,
+      "Google Login",
+      `width=${width},height=${height},top=${top},left=${left}`
+    );
+
+    // listen for auth response (needs your backend to redirect back to redirectUri with token)
+    window.addEventListener("message", (event) => {
+      if (event.data.type === "google-auth-success") {
+        Swal.fire({
+          icon: "success",
+          title: "Login successful!",
+          text: `Welcome ${event.data.user.name}`,
+        });
+      } else if (event.data.type === "google-auth-error") {
+        Swal.fire({
+          icon: "error",
+          title: "Login failed",
+          text: "Please try again.",
+        });
+      }
+    });
+  };
+
   return (
     <div className={styles.container}>
       {/* Left Side */}
@@ -157,9 +196,18 @@ const Login = () => {
               </div>
             )}
 
-            <button type="submit" className={styles.btnproceed}>
+            <button type="submit" className={styles.btnproceed_on}>
               Login
             </button>
+
+            <p className={styles.or}>or</p>
+
+            <div className={styles.inputGroup}>
+              <div className={styles.googleWrapper} onClick={handleGoogleLogin}>
+                <img src={googlelogo} alt="Google logo" />
+                <p>Continue with Google</p>
+              </div>
+            </div>
           </form>
         </div>
       </div>

@@ -22,7 +22,8 @@ import CompanySignUp from "./Pages/Companyreg";
 import RegisterOptions from "./Pages/RegisterOptions";
 import Onetime from "./Pages/HelpSupport//OneTimePayment"
 import Installmentalpay from "./Pages/HelpSupport/InstallmentalPayment";
-
+import Adminbp from "./Pages/Admin/AdBrowseprop"
+import Prop from "./Pages/Props/Props"
 const App = () => {
   return (
     <div className="app">
@@ -50,6 +51,9 @@ const App = () => {
         <Route path="/" element={<RegisterOptions />} />
         <Route path="/browse-properties/one-time" element={<Onetime />} />
         <Route path="/browse-properties/installment" element={<Installmentalpay />} />
+        <Route path="/admin-properties" element={<Adminbp />} />
+        <Route path="/properties-admin" element={<Prop />} />
+
 
       </Routes>
     </div>

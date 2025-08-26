@@ -1,0 +1,158 @@
+.dashboardContainer {
+  background: #1a1b23;
+  min-height: 100vh;
+  /* color: #e2e8f0; */
+  /* Remove height: 100vh */
+}
+
+.dashboard {
+  margin-left: 280px;
+  /* margin-top: 80px; */
+  padding: 32px;
+  background: #1a1b23;
+  color: #e2e8f0;
+  /* Remove height: 100vh */
+  /* Optional: Add overflow */
+  overflow-y: auto;
+}
+.overview {
+  margin-top: 130px;
+  font-size: 32px;
+}
+
+.cardsContainer {
+  display: flex;
+  justify-content: space-between;
+  gap: 20px;
+  flex-wrap: nowrap; /* keep them on one row */
+}
+
+.card {
+  background: #252534;
+  border-radius: 12px;
+  padding: 5px 20px 50px 20px; /* top right bottom left */
+  flex: 1 1 0; /* allow shrink but stay balanced */
+  min-width: 200px; /* prevent them from collapsing too much */
+  color: #fff;
+  box-shadow: 0px 2px 8px rgba(0, 0, 0, 0.2);
+  display: flex;
+  flex-direction: column;
+  justify-content: space-between;
+  margin-top: 40px;
+}
+
+.cardHeader {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  font-size: clamp(14px, 1.5vw, 16px); /* fluid scaling */
+  margin-bottom: 10px;
+  font-family: Nunito Sans;
+}
+
+.cardHeader span {
+  font-weight: 500;
+  font-family: Nunito Sans;
+}
+
+.bigNumber {
+  font-size: clamp(20px, 2.5vw, 28px); /* fluid scaling */
+  font-weight: bold;
+  margin: 0;
+  font-family: Nunito Sans;
+}
+.imgtin {
+  margin-top: 20px;
+}
+
+.tableContainer {
+  background: #1a1a2e14;
+  border-radius: 10px;
+  padding: 10px;
+  font-family: "Nunito Sans", sans-serif;
+  color: #fff;
+}
+
+.userTable {
+  width: 100%;
+  border-collapse: collapse;
+}
+
+.headerCell {
+  background: #f1f8fb;
+  padding: 10px;
+  text-align: left;
+  color: #080761;
+  font-weight: 600;
+  font-family: Open Sans;
+  text-align: center;
+}
+
+.sortIcon {
+  margin-left: 5px;
+}
+
+.tableRow {
+  border-bottom: 1px solid #f4f6f8;
+  background: #252534;
+}
+
+.tableCell {
+  padding: 10px;
+  color: #fff;
+  font-size: 13px;
+  padding: 13px;
+  text-align: center;
+}
+
+.statusBadge {
+  display: inline-block;
+  padding: 5px 10px;
+  border-radius: 5px;
+  font-size: 12px;
+  text-align: center;
+}
+
+.pending {
+  background: #F8E16C33;
+  padding: 10px 20px;
+  color: #f8e16c;
+}
+
+.active {
+  color: #4bed50;
+  background: #4bed502f;
+  padding: 10px 20px;
+}
+
+.inactive {
+  color: #f44336;
+  background: #fef1f1;
+  padding: 10px 20px;
+}
+
+.dropdownIcon {
+  color: #a3a3c2;
+  font-size: 12px;
+}
+.newacc {
+  margin-top: 40px;
+  margin-bottom: 30px;
+  font-family: Poppins;
+  font-weight: 700;
+  font-size: 24px;
+}
+@media (max-width: 1150px) {
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
+@media (max-width: 1000px) {
+  .cardsContainer {
+    display: grid;
+    grid-template-columns: repeat(auto-fill, minmax(250px, 1fr));
+    gap: 20px;
+  }
+}
