@@ -134,6 +134,51 @@ export function useSearchNearby(params: { lat?: number; lng?: number; radiusKm?:
   });
 }
 
+// Contracts
+export function useContractsList(propertyId?: string) {
+  return useQuery({
+    queryKey: ['contracts', { propertyId }],
+    queryFn: async () => (await http.get('/api/v1/contracts', { params: { propertyId } })).data,
+    enabled: !!propertyId && !!tokenStore.access,
+  });
+}
+
+export function useContractById(id?: string) {
+  return useQuery({
+    queryKey: ['contract', id],
+    queryFn: async () => (await http.get(`/api/v1/contracts/${id}`)).data,
+    enabled: !!id && !!tokenStore.access,
+  });
+}
+
+export function useCreateContract() {
+  return useMutation({
+    mutationFn: async (payload: { propertyId: string; buyerUserId: string; sellerUserId: string; contractType?: string; body: string }) => {
+      const { propertyId, buyerUserId, sellerUserId, contractType, body } = payload;
+      const res = await http.post('/api/v1/contracts', body, { params: { propertyId, buyerUserId, sellerUserId, contractType } });
+      return res.data;
+    },
+  });
+}
+
+export function useSignContract() {
+  return useMutation({
+    mutationFn: async (payload: { id: string; role?: string }) => {
+      const res = await http.post(`/api/v1/contracts/${payload.id}/sign`, null, { params: { role: payload.role } });
+      return res.data;
+    },
+  });
+}
+
+export function useCancelContract() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await http.post(`/api/v1/contracts/${id}/cancel`);
+      return res.data;
+    },
+  });
+}
+
 // Additional Auth flows
 export function useForgotPassword() {
   return useMutation({
