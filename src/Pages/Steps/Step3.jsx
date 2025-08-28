@@ -7,7 +7,7 @@ import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../Components/API/API.js";
-import apiClient from "../../lib/apiClient";
+import http from "../../api/http";
 
 const Step6 = () => {
   const navigate = useNavigate();
@@ -92,7 +92,7 @@ const Step6 = () => {
 
         console.log("Submitting JSON Payload:", payload);
 
-        await apiClient.post(`/api/v1/address/add-address`, payload);
+        await http.post(`/api/v1/address/add-address`, payload);
       }
 
       Swal.fire({

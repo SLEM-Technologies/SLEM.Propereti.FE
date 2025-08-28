@@ -6,7 +6,7 @@ import verifiedImg from "../assets/images/undraw_completed_ngx6 2.png";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../Components/API/API.js";
-import apiClient from "../lib/apiClient";
+import http from "../api/http";
 import { isValidEmail, isStrongPassword, isPhone } from "../utils/validators";
 import SignupSteps from "../Components/Stepcounter.jsx";
 
@@ -96,7 +96,7 @@ const SignUp = () => {
       return;
     }
 
-    apiClient
+    http
       .post(`/api/v1/accounts/verify-email`, {
         email: formData.email,
         otpCode: otpCode,
@@ -122,7 +122,7 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const resendOTP = () => {
-    apiClient
+    http
       .post(`/api/v1/accounts/register-user`, {
         email: formData.email,
       })
@@ -149,7 +149,7 @@ const SignUp = () => {
   );
 
   useEffect(() => {
-    apiClient
+    http
       .get(`/api/v1/countries/get-all-countries`)
       .then((res) => {
         const countries = res.data.data;
@@ -296,7 +296,7 @@ const SignUp = () => {
                   return;
                 }
 
-                apiClient
+                http
                   .post(`/api/v1/accounts/register-user`, {
                     email: formData.email,
                     password: formData.password,

@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { BASE_URL } from "../Components/API/API.js";
 import { isValidEmail } from "../utils/validators";
-import apiClient from "../lib/apiClient";
+import http, { tokenStore } from "../api/http";
 import googlelogo from "../assets/icons/Google Logo.svg";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
@@ -48,7 +48,7 @@ const Login = () => {
 
     setIsLoading(true);
 
-    apiClient
+    http
       .post(`/api/v1/accounts/user-login`, {
         email: formData.email,
         password: formData.password,
@@ -58,7 +58,8 @@ const Login = () => {
         console.log("Login response:", res.data); // Check response structure
 
         // Use the actual token key returned by backend
-        const token = res.data?.token || res.data?.data?.token;
+        const token = res.data?.token || res.data?.data?.token || res.data?.accessToken;
+        const refresh = res.data?.refreshToken || res.data?.data?.refreshToken;
 
         if (!token) {
           Swal.fire({
@@ -69,8 +70,14 @@ const Login = () => {
           return;
         }
 
-        // Save token
+        // Save token (legacy + new)
+        try {
+          tokenStore.access = token;
+          if (refresh) tokenStore.refresh = refresh;
+        } catch {}
         localStorage.setItem("token", token);
+        localStorage.setItem("access_token", token);
+        if (refresh) localStorage.setItem("refresh_token", refresh);
 
         Swal.fire({
           icon: "success",

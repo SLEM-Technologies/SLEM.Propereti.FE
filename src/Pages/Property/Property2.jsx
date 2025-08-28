@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import { Link, useNavigate } from "react-router-dom";
-// import apiClient from "../../lib/apiClient";
+// no network in this step
 import Swal from "sweetalert2";
 import { ArrowLeft } from "lucide-react";
 

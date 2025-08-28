@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { BASE_URL } from "../../Components/API/API.js";
-import apiClient from "../../lib/apiClient";
+import http from "../../api/http";
 
 const Step4 = () => {
   const navigate = useNavigate();
@@ -57,7 +57,7 @@ const Step4 = () => {
 
     try {
       for (const account of accounts) {
-        await apiClient.post(`/api/v1/users/add-user-bank-details`, account);
+        await http.post(`/api/v1/users/add-user-bank-details`, account);
       }
 
       Swal.fire({

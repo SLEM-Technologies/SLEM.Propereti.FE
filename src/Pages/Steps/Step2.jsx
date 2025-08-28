@@ -7,7 +7,7 @@ import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../Components/API/API.js";
-import apiClient from "../../lib/apiClient";
+import http from "../../api/http";
 
 const Step5 = () => {
   const navigate = useNavigate();
@@ -64,7 +64,7 @@ const Step5 = () => {
 
     try {
       for (const doc of accounts) {
-        await apiClient.post(`/api/v1/documents/add-document`, {
+        await http.post(`/api/v1/documents/add-document`, {
           documentType: doc.documentType,
           documentId: doc.idNumber,
           expiryDate: doc.expiryDate,
