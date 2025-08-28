@@ -133,3 +133,58 @@ export function useCompaniesList() {
     queryFn: async () => (await http.get('/api/v1/companies/get-all-companies')).data,
   });
 }
+
+// Transactions
+export function useTransactionHistory() {
+  return useQuery({
+    queryKey: ['transactions', 'history'],
+    queryFn: async () => (await http.get('/api/v1/transactions/get-transaction-history')).data,
+    enabled: !!tokenStore.access,
+  });
+}
+
+export function useTransactionDetails(reference?: string) {
+  return useQuery({
+    queryKey: ['transactions', 'details', reference],
+    queryFn: async () => (await http.get('/api/v1/transactions/details', { params: { reference } })).data,
+    enabled: !!reference && !!tokenStore.access,
+  });
+}
+
+export function useTransferFunds() {
+  return useMutation({
+    mutationFn: async (payload: { receiverId: string; amount: number }) => {
+      const res = await http.post('/api/v1/transactions/transfer-funds', null, {
+        params: { receiverId: payload.receiverId, Amount: payload.amount },
+      });
+      return res.data;
+    },
+  });
+}
+
+export function useRefundTransaction() {
+  return useMutation({
+    mutationFn: async (reference: string) => {
+      const res = await http.post('/api/v1/transactions/refund', null, { params: { reference } });
+      return res.data;
+    },
+  });
+}
+
+export function useOpenDispute() {
+  return useMutation({
+    mutationFn: async (payload: { reference: string; reason: string }) => {
+      const res = await http.post('/api/v1/transactions/dispute', null, { params: { reference: payload.reference, reason: payload.reason } });
+      return res.data;
+    },
+  });
+}
+
+export function useResolveDispute() {
+  return useMutation({
+    mutationFn: async (payload: { reference: string; approve: boolean; note?: string }) => {
+      const res = await http.post('/api/v1/transactions/dispute/resolve', null, { params: { reference: payload.reference, approve: payload.approve, note: payload.note } });
+      return res.data;
+    },
+  });
+}
