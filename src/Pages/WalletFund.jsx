@@ -2,6 +2,12 @@ import React, { useState, useEffect } from 'react';
 import { useLocation } from 'react-router-dom';
 import { usePaystackInit, usePaystackVerify } from '../api/queries';
 import toast from 'react-hot-toast';
+import { z } from 'zod';
+
+const schema = z.object({
+  email: z.string().email('Enter a valid email'),
+  amount: z.string().min(1, 'Enter an amount'),
+});
 
 export default function WalletFund() {
   const [email, setEmail] = useState('');
@@ -20,6 +26,11 @@ export default function WalletFund() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    const parsed = schema.safeParse({ email, amount });
+    if (!parsed.success) {
+      toast.error(parsed.error.errors.map((e) => e.message).join(', '));
+      return;
+    }
     initMutation.mutate({ amount, email }, {
       onSuccess: (data) => {
         const redirectUrl = data?.authorization_url || data?.data?.authorization_url;

@@ -1,6 +1,9 @@
 import React, { useState } from 'react';
 import { useResetPasswordConfirm } from '../api/queries';
 import toast from 'react-hot-toast';
+import { z } from 'zod';
+
+const schema = z.object({ token: z.string().min(4, 'Token required'), newPassword: z.string().min(6, 'Password must be at least 6 chars') });
 
 export default function AuthResetConfirm() {
   const [token, setToken] = useState('');
@@ -9,6 +12,11 @@ export default function AuthResetConfirm() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    const parsed = schema.safeParse({ token, newPassword: password });
+    if (!parsed.success) {
+      toast.error(parsed.error.errors.map((e) => e.message).join(', '));
+      return;
+    }
     mutation.mutate({ token, newPassword: password }, {
       onSuccess: () => toast.success('Password reset successful'),
       onError: () => toast.error('Failed to reset password'),

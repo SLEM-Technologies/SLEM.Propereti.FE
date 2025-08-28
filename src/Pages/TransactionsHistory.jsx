@@ -11,7 +11,8 @@ export default function TransactionsHistory() {
   }
 
   if (historyQuery.isError) {
-    toast.error('Failed to load transactions');
+    // Render error state without repeated toasts to avoid noise
+    return <div style={{ padding: 16 }}>Failed to load transactions.</div>;
   }
 
   const transactions = Array.isArray(historyQuery.data?.data) ? historyQuery.data.data : (historyQuery.data || []);
