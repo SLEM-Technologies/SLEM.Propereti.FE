@@ -108,6 +108,32 @@ export function useReplaceLegalDoc(propertyId: string) {
   });
 }
 
+// Search
+export function useSearchProperties(params: { PageNumber?: number; PageSize?: number; SearchParams?: Record<string, string>; sort?: string }) {
+  const { PageNumber = 1, PageSize = 10, SearchParams, sort } = params || {};
+  return useQuery({
+    queryKey: ['search', 'properties', { PageNumber, PageSize, SearchParams, sort }],
+    queryFn: async () => (await http.get('/api/v1/search/properties', { params: { PageNumber, PageSize, SearchParams, sort } })).data,
+  });
+}
+
+export function useSearchSuggest(q?: string, limit: number = 10) {
+  return useQuery({
+    queryKey: ['search', 'suggest', q, limit],
+    queryFn: async () => (await http.get('/api/v1/search/suggest', { params: { q, limit } })).data,
+    enabled: (q?.length || 0) > 0,
+  });
+}
+
+export function useSearchNearby(params: { lat?: number; lng?: number; radiusKm?: number; page?: number; pageSize?: number }) {
+  const { lat, lng, radiusKm = 10, page = 1, pageSize = 10 } = params || {};
+  return useQuery({
+    queryKey: ['search', 'nearby', { lat, lng, radiusKm, page, pageSize }],
+    queryFn: async () => (await http.get('/api/v1/search/nearby', { params: { lat, lng, radiusKm, page, pageSize } })).data,
+    enabled: typeof lat === 'number' && typeof lng === 'number',
+  });
+}
+
 // Additional Auth flows
 export function useForgotPassword() {
   return useMutation({
