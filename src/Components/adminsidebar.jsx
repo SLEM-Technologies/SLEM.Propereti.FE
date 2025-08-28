@@ -1,6 +1,7 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "../Styles/sidemenu.module.css";
+import { BASE_URL } from "./API/API";
 import {
   LayoutDashboard,
   BarChart3,
@@ -21,8 +22,8 @@ const Sidemenu = () => {
   const menuItems = [
     { icon: LayoutDashboard, label: "Admin Panel", path: "/admin-properties" },
     { icon: BarChart3, label: "Overview", path: "/overview" },
-    { icon: Briefcase, label: "Properties", path: "/properties-admin" },
-    { icon: Users, label: "Customers", path: "/customers" },
+    { icon: Briefcase, label: "Properties", path: "/properties-rt" },
+    { icon: Users, label: "Customers", path: "/properties-customer" },
     { icon: Bell, label: "Notifications", badge: "5", path: "/notifications" },
     { icon: Settings, label: "Settings", path: "/settings" },
   ];

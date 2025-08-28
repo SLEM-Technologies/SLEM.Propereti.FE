@@ -2,6 +2,7 @@ import React, { useState } from "react";
 import Adheader from "../../Components/adminheader.jsx";
 import Adsidebar from "../../Components/adminsidebar.jsx";
 import styles from "./Props.module.css";
+import { Search, Filter, MoreVertical } from "lucide-react";
 
 const AdBrowseprop = () => {
   const [activeTab, setActiveTab] = useState("companies");
@@ -35,10 +36,13 @@ const AdBrowseprop = () => {
   const totalPages = Math.ceil(customers.length / pageSize);
   const paginated = customers.slice((page - 1) * pageSize, page * pageSize);
   const [filterOpen, setFilterOpen] = useState(false);
+  const [showFilter, setShowFilter] = useState(false);
 
-  const toggleFilter = () => {
-    setFilterOpen(!filterOpen);
-  };
+  const toggleFilter = () => setShowFilter((prev) => !prev);
+
+  //   const toggleFilter = () => {
+  //     setFilterOpen(!filterOpen);
+  //   };
   return (
     <div className={styles.dashboardContainer}>
       <Adsidebar />
@@ -74,78 +78,88 @@ const AdBrowseprop = () => {
           />
         </div>
 
-         <div className={styles.container}>
-      {/* Top Bar */}
-      <div className={styles.topBar}>
-        <div className={styles.searchWrapper}>
-          <input
-            type="text"
-            placeholder="Search"
-            className={styles.searchInput}
-          />
-        </div>
-        <button className={styles.newCustomer}>New Customer</button>
-        <div className={styles.filterWrapper}>
-          <button onClick={toggleFilter} className={styles.filterButton}>
-            Filter ▾
-          </button>
-          {filterOpen && (
-            <div className={styles.filterDropdown}>
-              <label>
-                <input type="checkbox" /> By Name
-              </label>
-              <label>
-                <input type="checkbox" /> By Nationality
-              </label>
-              <label>
-                <input type="checkbox" /> By Relationship Manager
-              </label>
-              <label>
-                <input type="checkbox" /> By Email
-              </label>
+        <div className={styles.topBar1}>
+          <h4>All</h4>
+          <div className={styles.topBar}>
+            {/* Search */}
+            <div className={styles.searchWrapper}>
+              <Search className={styles.searchIcon} size={16} />
+              <input
+                type="text"
+                placeholder="Search"
+                className={styles.searchInput}
+              />
             </div>
-          )}
-        </div>
-      </div>
 
-      {/* Table */}
-      <table className={styles.table}>
-        <thead>
-          <tr>
-            <th>No.</th>
-            <th>Relationship Manager</th>
-            <th>Full Name</th>
-            <th>Nationality</th>
-            <th>Email</th>
-            <th>Phone No.</th>
-            <th></th>
-          </tr>
-        </thead>
-        <tbody>
-          {[...Array(9)].map((_, i) => (
-            <tr key={i}>
-              <td>{i + 1}</td>
-              <td>Text</td>
-              <td>Text</td>
-              <td>Text</td>
-              <td>Text</td>
-              <td>Text</td>
-              <td className={styles.view}>View</td>
-            </tr>
-          ))}
-        </tbody>
-      </table>
+            {/* Buttons */}
+            <button className={styles.newCustomer}>New Customer</button>
 
-      {/* Pagination */}
-      <div className={styles.pagination}>
-        <span>Showing rows 1 to 2 of 2</span>
-        <div>
-          <button className={styles.pageBtn}>‹ Previous</button>
-          <button className={styles.pageBtnActive}>1</button>
-          <button className={styles.pageBtn}>Next ›</button>
+            <div className={styles.filterWrapper}>
+              <button className={styles.filterBtn} onClick={toggleFilter}>
+                Filter
+                <Filter size={16} className={styles.filterIcon} />
+              </button>
+
+              {showFilter && (
+                <div className={styles.filterDropdown}>
+                  <label>
+                    <input type="checkbox" /> Nationality
+                  </label>
+                  <label>
+                    <input type="checkbox" /> Relationship Manager
+                  </label>
+                  <label>
+                    <input type="checkbox" /> Email Verified
+                  </label>
+                </div>
+              )}
+            </div>
+          </div>
         </div>
-      </div>
-    </div>
+        <div className={styles.container}>
+          {/* Top Bar */}
+
+          {/* Table */}
+          <table className={styles.table}>
+            <thead>
+              <tr>
+                <th>No.</th>
+                <th>Relationship Manager</th>
+                <th>Full Name</th>
+                <th>Nationality</th>
+                <th>Email</th>
+                <th>Phone No.</th>
+                <th></th>
+              </tr>
+            </thead>
+            <tbody>
+              {[...Array(10)].map((_, i) => (
+                <tr key={i}>
+                  <td>{i + 1}</td>
+                  <td>{i === 0 ? "AdaObi" : "Text"}</td>
+                  <td>{i === 0 ? "Rendevous Group Of Company" : "Text"}</td>
+                  <td>{i === 0 ? "Afolayan Rendevous" : "Text"}</td>
+                  <td>{i === 0 ? "Afolayan Rendevous" : "Text"}</td>
+                  <td>{i === 0 ? "654324567" : "Text"}</td>
+                  <td className={styles.actions}>
+                    <a href="#">View</a>
+                    <MoreVertical size={16} />
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+
+          {/* Pagination */}
+          <div className={styles.pagination}>
+            <span>Showing rows 1 to 2 of 2</span>
+            <div className={styles.pageNav}>
+              <button>&lt; Previous</button>
+              <span>1</span>
+              <button>Next &gt;</button>
+            </div>
+          </div>
+        </div>
       </div>
     </div>
   );

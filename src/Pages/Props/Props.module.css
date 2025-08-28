@@ -21,12 +21,13 @@
 }
 .tabContainer {
   position: relative;
-  background: #1a1a2e;
+  background: #1a1a2e1b;
   height: 40px;
   display: flex;
   align-items: center;
   border-bottom: 1px solid #2e2e4f;
-  font-family: 'Nunito Sans', sans-serif;
+  font-family: "Nunito Sans", sans-serif;
+  margin-bottom: 100px;
 }
 
 .tab {
@@ -46,6 +47,7 @@
 .activeTab {
   color: #fff;
   font-weight: 600;
+  border-bottom: 2px solid #ffffff;
 }
 
 .tabUnderline {
@@ -69,115 +71,144 @@
   transition: left 0.3s, transform 0.3s;
   z-index: 1;
 }
-
 .container {
-  width: 100%;
   background: #fff;
-  border-radius: 8px;
   padding: 16px;
+  border-radius: 8px;
 }
 
 .topBar {
   display: flex;
-  justify-content: flex-end;
   align-items: center;
-  gap: 12px;
+  /* justify-content: space-between; */
   margin-bottom: 16px;
+  gap: 12px;
+}
+.topBar1 {
+  display: flex;
+  flex-direction: row;
+  justify-content: space-between;
+  align-items: center;
 }
 
+/* 🔍 Search */
 .searchWrapper {
+  position: relative;
   flex: 1;
+  max-width: 280px;
 }
 
 .searchInput {
   width: 100%;
-  max-width: 280px;
-  padding: 8px 12px;
+  padding: 8px 12px 8px 36px;
   border: 1px solid #ccc;
   border-radius: 6px;
+  background: #386a0d00;
 }
 
+.searchIcon {
+  position: absolute;
+  top: 50%;
+  left: 12px;
+  transform: translateY(-50%);
+  color: #666;
+}
+
+/* New Customer Button */
 .newCustomer {
-  background: #0d2d6c;
+  background: #012268;
   color: #fff;
-  border: none;
   padding: 8px 16px;
+  border: none;
   border-radius: 6px;
   cursor: pointer;
 }
 
+/* Filter */
 .filterWrapper {
   position: relative;
 }
 
-.filterButton {
-  padding: 8px 12px;
+.filterBtn {
+  display: flex;
+  align-items: center;
+  gap: 6px;
+  background: #f4f4f400;
   border: 1px solid #ccc;
-  background: #fff;
+  padding: 8px 12px;
   border-radius: 6px;
   cursor: pointer;
+  color: #1a1b23;
+}
+
+.filterIcon {
+  color: #333;
 }
 
 .filterDropdown {
   position: absolute;
-  right: 0;
   top: 110%;
+  right: 0;
   background: #fff;
-  border: 1px solid #ccc;
+  border: 1px solid #ddd;
   border-radius: 6px;
   padding: 10px;
+  box-shadow: 0px 4px 8px rgba(0, 0, 0, 0.1);
   display: flex;
   flex-direction: column;
   gap: 6px;
-  min-width: 180px;
-  z-index: 100;
+  z-index: 10;
 }
 
+/* Table */
 .table {
   width: 100%;
   border-collapse: collapse;
-  margin-top: 16px;
 }
 
 .table th {
-  background: #f2f4f8;
-  padding: 12px;
+  background: #e1e6ef21;
   text-align: left;
-  font-weight: 600;
+  padding: 10px;
+  border-bottom: 1px solid #ddd;
+  color: #1d2433;
 }
 
 .table td {
-  padding: 12px;
+  padding: 10px;
   border-bottom: 1px solid #eee;
+  color: #1d2433;
 }
 
-.view {
-  color: #0d2d6c;
-  cursor: pointer;
-  font-weight: 600;
+.actions {
+  display: flex;
+  align-items: center;
+  gap: 8px;
 }
 
+.actions a {
+  color: #0d1e6a;
+  text-decoration: none;
+  font-weight: 500;
+}
+
+/* Pagination */
 .pagination {
+  margin-top: 16px;
   display: flex;
   justify-content: space-between;
   align-items: center;
-  padding-top: 16px;
-  font-size: 14px;
 }
 
-.pageBtn {
-  background: transparent;
+.pageNav {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.pageNav button {
+  background: none;
   border: none;
-  margin: 0 4px;
+  color: #0d1e6a;
   cursor: pointer;
-  font-size: 14px;
-}
-
-.pageBtnActive {
-  background: #0d2d6c;
-  color: #fff;
-  border: none;
-  border-radius: 4px;
-  padding: 4px 10px;
-  margin: 0 4px;
 }

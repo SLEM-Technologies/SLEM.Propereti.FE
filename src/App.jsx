@@ -24,6 +24,9 @@ import Onetime from "./Pages/HelpSupport//OneTimePayment"
 import Installmentalpay from "./Pages/HelpSupport/InstallmentalPayment";
 import Adminbp from "./Pages/Admin/AdBrowseprop"
 import Prop from "./Pages/Props/Props"
+import Overview from "./Pages/Views/Overview"
+import Overview2 from "./Pages/Views/Overview2"
+import Resources1 from "./Pages/Resources/AddProperties"
 const App = () => {
   return (
     <div className="app">
@@ -38,7 +41,6 @@ const App = () => {
         <Route path="/signup/step-4" element={<Step1 />} />
         <Route path="/signup/step-5" element={<Step2 />} />
         <Route path="/signup/step-6" element={<Step3 />} />
-        <Route path="/signup" element={<SignUp />} />
         <Route path="/login" element={<Login />} />
         <Route path="/property" element={<Property />} />
         <Route path="/property2" element={<Property2 />} />
@@ -52,7 +54,11 @@ const App = () => {
         <Route path="/browse-properties/one-time" element={<Onetime />} />
         <Route path="/browse-properties/installment" element={<Installmentalpay />} />
         <Route path="/admin-properties" element={<Adminbp />} />
-        <Route path="/properties-admin" element={<Prop />} />
+        <Route path="/properties-customer" element={<Prop />} />
+        <Route path="/overview" element={<Overview />} />
+        <Route path="/overview/team" element={<Overview />} />
+        <Route path="/overview/roles" element={<Overview2 />} />
+        <Route path="/properties-rt" element={<Resources1 />} />
 
 
       </Routes>
