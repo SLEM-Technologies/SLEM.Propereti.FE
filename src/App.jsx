@@ -39,6 +39,7 @@ import CompaniesList from "./Pages/CompaniesList.jsx";
 import TransactionsHistory from "./Pages/TransactionsHistory.jsx";
 import TransactionDetail from "./Pages/TransactionDetail.jsx";
 import TransferFunds from "./Pages/TransferFunds.jsx";
+import NotificationsFeed from "./Pages/NotificationsFeed.jsx";
 const App = () => {
   return (
     <div className="app">
@@ -88,6 +89,9 @@ const App = () => {
         <Route path="/transactions" element={<AuthGuard><TransactionsHistory /></AuthGuard>} />
         <Route path="/transactions/:reference" element={<AuthGuard><TransactionDetail /></AuthGuard>} />
         <Route path="/transactions/transfer" element={<AuthGuard><TransferFunds /></AuthGuard>} />
+
+        {/* Notifications */}
+        <Route path="/notifications" element={<AuthGuard><NotificationsFeed /></AuthGuard>} />
 
       </Routes>
     </div>

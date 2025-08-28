@@ -188,3 +188,32 @@ export function useResolveDispute() {
     },
   });
 }
+
+// Notifications
+export function useNotificationsList(params: { page?: number; pageSize?: number; unreadOnly?: boolean }) {
+  const { page = 1, pageSize = 10, unreadOnly = false } = params || {};
+  return useQuery({
+    queryKey: ['notifications', { page, pageSize, unreadOnly }],
+    queryFn: async () => (await http.get('/api/v1/notifications', { params: { page, pageSize, unreadOnly } })).data,
+    enabled: !!tokenStore.access,
+    select: (data) => data,
+  });
+}
+
+export function useMarkNotificationRead() {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await http.post(`/api/v1/notifications/${id}/read`);
+      return res.data;
+    },
+  });
+}
+
+export function useMarkAllNotificationsRead() {
+  return useMutation({
+    mutationFn: async () => {
+      const res = await http.post('/api/v1/notifications/read-all');
+      return res.data;
+    },
+  });
+}
