@@ -13,7 +13,7 @@ export default function CompaniesList() {
     <div style={{ padding: 16 }}>
       <h2>Companies</h2>
       <ul>
-        {items?.map((c: any) => (
+        {items?.map((c) => (
           <li key={c.id}>{c.name || c.companyName || c.id}</li>
         ))}
       </ul>

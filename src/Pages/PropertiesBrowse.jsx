@@ -14,7 +14,7 @@ export default function PropertiesBrowse() {
     <div style={{ padding: 16 }}>
       <h2>Properties</h2>
       <ul>
-        {items?.map((p: any) => (
+        {items?.map((p) => (
           <li key={p.id}>
             <Link to={`/properties/${p.id}`}>{p.propertyName || p.title || p.id}</Link>
           </li>

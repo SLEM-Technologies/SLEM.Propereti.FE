@@ -7,7 +7,7 @@ export default function AuthResetConfirm() {
   const [password, setPassword] = useState('');
   const mutation = useResetPasswordConfirm();
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     mutation.mutate({ token, newPassword: password }, {
       onSuccess: () => toast.success('Password reset successful'),

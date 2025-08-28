@@ -6,7 +6,7 @@ export default function AuthForgotPassword() {
   const [email, setEmail] = useState('');
   const mutation = useForgotPassword();
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     mutation.mutate(email, {
       onSuccess: () => toast.success('Password reset email sent'),

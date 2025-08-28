@@ -18,10 +18,10 @@ export default function WalletFund() {
     }
   }, [reference, verifyQuery.data]);
 
-  const onSubmit = (e: any) => {
+  const onSubmit = (e) => {
     e.preventDefault();
     initMutation.mutate({ amount, email }, {
-      onSuccess: (data: any) => {
+      onSuccess: (data) => {
         const redirectUrl = data?.authorization_url || data?.data?.authorization_url;
         if (redirectUrl) window.location.href = redirectUrl;
         else toast.error('Failed to start Paystack');
