@@ -34,6 +34,7 @@ import PropertyDetail from "./Pages/PropertyDetail.jsx";
 import PropertyCreate from "./Pages/PropertyCreate.jsx";
 import PropertyLegalDocs from "./Pages/PropertyLegalDocs.jsx";
 import SearchProperties from "./Pages/SearchProperties.jsx";
+import SearchMap from "./Pages/SearchMap.jsx";
 import Contracts from "./Pages/Contracts.jsx";
 import Logout from "./Pages/Logout.jsx";
 import AuthGuard from "./components/AuthGuard.tsx";
@@ -95,6 +96,7 @@ const App = () => {
         <Route path="/properties/create" element={<AuthGuard><RoleGuard allow={["company"]}><PropertyCreate /></RoleGuard></AuthGuard>} />
         <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><RoleGuard allow={["company","admin"]}><PropertyLegalDocs /></RoleGuard></AuthGuard>} />
         <Route path="/search" element={<SearchProperties />} />
+        <Route path="/search/map" element={<SearchMap />} />
         <Route path="/contracts" element={<AuthGuard><Contracts /></AuthGuard>} />
         <Route path="/logout" element={<Logout />} />
 
