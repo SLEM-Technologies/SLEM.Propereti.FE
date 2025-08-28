@@ -515,6 +515,28 @@
   .rightFeatures {
     grid-template-columns: 1fr;
   }
+  .hero{
+    height: auto;
+    padding: 40px 0;
+  }
+  .overlay{
+    padding: 20px;
+  }
+  .span{
+    max-width: 100%;
+  }
+  .inputs{
+    flex-direction: column;
+    align-items: stretch;
+    gap: 12px;
+  }
+  .inputGroup{
+    min-width: auto;
+    width: 100%;
+  }
+  .button{
+    width: 100%;
+  }
   .mapImage {
     width: 60%;
     margin: auto;
