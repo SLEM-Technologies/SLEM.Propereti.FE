@@ -49,6 +49,7 @@ import TransactionsHistory from "./Pages/TransactionsHistory.jsx";
 import TransactionDetail from "./Pages/TransactionDetail.jsx";
 import TransferFunds from "./Pages/TransferFunds.jsx";
 import NotificationsFeed from "./Pages/NotificationsFeed.jsx";
+import CompanyDashboard from "./Pages/CompanyDashboard.jsx";
 const App = () => {
   return (
     <div className="app">
@@ -109,6 +110,7 @@ const App = () => {
 
         {/* Notifications */}
         <Route path="/notifications" element={<AuthGuard><NotificationsFeed /></AuthGuard>} />
+        <Route path="/company/dashboard" element={<AuthGuard><RoleGuard allow={["company","admin"]}><CompanyDashboard /></RoleGuard></AuthGuard>} />
 
       </Routes>
     </div>

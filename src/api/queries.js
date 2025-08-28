@@ -252,6 +252,13 @@ export function useCompaniesList() {
         queryFn: async () => (await http.get('/api/v1/companies/get-all-companies')).data,
     });
 }
+export function useCompanyMembers(companyId) {
+    return useQuery({
+        queryKey: ['company', 'members', companyId],
+        queryFn: async () => (await http.get('/api/v1/companies/members', { params: { companyId } })).data,
+        enabled: !!companyId && !!tokenStore.access,
+    });
+}
 // Transactions
 export function useTransactionHistory() {
     return useQuery({
