@@ -23,6 +23,7 @@ import RegisterOptions from "./Pages/RegisterOptions";
 import Onetime from "./Pages/HelpSupport//OneTimePayment"
 import Installmentalpay from "./Pages/HelpSupport/InstallmentalPayment";
 import Adminbp from "./Pages/Admin/AdBrowseprop"
+import AdminRolesPermissions from "./Pages/Admin/AdminRolesPermissions.jsx";
 import Prop from "./Pages/Props/Props"
 import Overview from "./Pages/Views/Overview"
 import Overview2 from "./Pages/Views/Overview2"
@@ -68,6 +69,7 @@ const App = () => {
         <Route path="/browse-properties/one-time" element={<Onetime />} />
         <Route path="/browse-properties/installment" element={<Installmentalpay />} />
         <Route path="/admin-properties" element={<Adminbp />} />
+        <Route path="/admin/roles-permissions" element={<AuthGuard><AdminRolesPermissions /></AuthGuard>} />
         <Route path="/properties-customer" element={<Prop />} />
         <Route path="/overview" element={<Overview />} />
         <Route path="/overview/team" element={<Overview />} />

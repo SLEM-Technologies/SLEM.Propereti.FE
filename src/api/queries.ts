@@ -236,3 +236,47 @@ export function useWalletWithdraw() {
     },
   });
 }
+
+// Admin Roles & Permissions
+export function useCreateRole() {
+  return useMutation({
+    mutationFn: async (payload: { name?: string; description?: string; isSystemGenerated?: boolean; companyId?: string }) => {
+      const res = await http.post('/api/v1/admin/roles', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useListRolesByCompany(companyId?: string) {
+  return useQuery({
+    queryKey: ['admin', 'roles', companyId],
+    queryFn: async () => (await http.get(`/api/v1/admin/roles/${companyId}`)).data,
+    enabled: !!companyId && !!tokenStore.access,
+  });
+}
+
+export function useAssignUserRole() {
+  return useMutation({
+    mutationFn: async (payload: { userId?: string; roleId?: string; companyId?: string }) => {
+      const res = await http.post('/api/v1/admin/roles/assign', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useAssignPermission() {
+  return useMutation({
+    mutationFn: async (payload: { role?: string; permission?: string }) => {
+      const res = await http.post('/api/v1/admin/permissions/assign', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useListPermissionsByCompany(companyId?: string) {
+  return useQuery({
+    queryKey: ['admin', 'permissions', companyId],
+    queryFn: async () => (await http.get(`/api/v1/admin/permissions/${companyId}`)).data,
+    enabled: !!companyId && !!tokenStore.access,
+  });
+}
