@@ -1,5 +1,5 @@
 import React, { useState } from 'react';
-import { useWalletStatements, useWalletWithdraw } from '../api/queries';
+import { useWalletStatements, useWalletWithdraw, useUserProfile } from '../api/queries';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
 
@@ -17,6 +17,9 @@ export default function WalletStatements() {
 
   const listQuery = useWalletStatements({ page, pageSize, type: type || undefined, from: from || undefined, to: to || undefined });
   const withdrawMutation = useWalletWithdraw();
+  const profile = useUserProfile();
+  const isVerified = !!(profile.data?.emailVerified || profile.data?.isEmailVerified || profile.data?.phoneVerified || profile.data?.isPhoneVerified);
+  const showVerify = profile.isSuccess && !isVerified;
 
   const onFilter = (e) => {
     e.preventDefault();
@@ -104,12 +107,17 @@ export default function WalletStatements() {
       <hr style={{ margin: '16px 0' }} />
 
       <h3>Withdraw</h3>
+      {showVerify && (
+        <div role="alert" style={{ background: '#fff7e6', border: '1px solid #ffe58f', padding: 12, borderRadius: 8, marginBottom: 12 }}>
+          Please verify your email/phone to withdraw. <a href="/auth/verify" style={{ textDecoration: 'underline' }}>Verify now</a>
+        </div>
+      )}
       <form onSubmit={onWithdraw} style={{ display: 'grid', gap: 8, maxWidth: 400 }}>
         <label>
           <div>Amount</div>
           <input aria-label="Withdraw amount" type="number" step="0.01" value={withdrawAmount} onChange={(e) => setWithdrawAmount(e.target.value)} />
         </label>
-        <button type="submit" disabled={withdrawMutation.isPending}>Withdraw</button>
+        <button type="submit" disabled={withdrawMutation.isPending || showVerify}>Withdraw</button>
       </form>
     </div>
   );

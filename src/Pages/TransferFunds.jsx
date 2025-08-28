@@ -1,7 +1,7 @@
 import React, { useState } from 'react';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { useTransferFunds } from '../api/queries';
+import { useTransferFunds, useUserProfile } from '../api/queries';
 
 const schema = z.object({
   receiverId: z.string().uuid({ message: 'Receiver ID must be a valid UUID' }),
@@ -12,6 +12,7 @@ export default function TransferFunds() {
   const [receiverId, setReceiverId] = useState('');
   const [amount, setAmount] = useState('');
   const mutation = useTransferFunds();
+  const profile = useUserProfile();
 
   const onSubmit = (e) => {
     e.preventDefault();
@@ -27,9 +28,17 @@ export default function TransferFunds() {
     });
   };
 
+  const isVerified = !!(profile.data?.emailVerified || profile.data?.isEmailVerified || profile.data?.phoneVerified || profile.data?.isPhoneVerified);
+  const showVerify = profile.isSuccess && !isVerified;
+
   return (
     <div style={{ padding: 16 }}>
       <h2>Transfer Funds</h2>
+      {showVerify && (
+        <div role="alert" style={{ background: '#fff7e6', border: '1px solid #ffe58f', padding: 12, borderRadius: 8, marginBottom: 12 }}>
+          Please verify your email/phone to proceed. <a href="/auth/verify" style={{ textDecoration: 'underline' }}>Verify now</a>
+        </div>
+      )}
       <form onSubmit={onSubmit} style={{ display: 'grid', gap: 8, maxWidth: 400 }}>
         <label>
           <div>Receiver ID</div>
@@ -39,7 +48,7 @@ export default function TransferFunds() {
           <div>Amount</div>
           <input aria-label="Amount" type="number" step="0.01" placeholder="Amount" value={amount} onChange={(e) => setAmount(e.target.value)} />
         </label>
-        <button type="submit" disabled={mutation.isPending}>Send</button>
+        <button type="submit" disabled={mutation.isPending || showVerify}>Send</button>
       </form>
     </div>
   );
