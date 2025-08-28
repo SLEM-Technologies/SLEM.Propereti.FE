@@ -28,6 +28,19 @@ export function useRegister() {
         },
     });
 }
+export function useLogout() {
+    return useMutation({
+        mutationFn: async () => {
+            try {
+                await http.post('/api/v1/auth/logout');
+            }
+            finally {
+                tokenStore.clear();
+            }
+            return true;
+        },
+    });
+}
 // Queries
 export function useUserProfile() {
     return useQuery({

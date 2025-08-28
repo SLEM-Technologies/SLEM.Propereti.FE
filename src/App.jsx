@@ -35,6 +35,7 @@ import PropertyCreate from "./Pages/PropertyCreate.jsx";
 import PropertyLegalDocs from "./Pages/PropertyLegalDocs.jsx";
 import SearchProperties from "./Pages/SearchProperties.jsx";
 import Contracts from "./Pages/Contracts.jsx";
+import Logout from "./Pages/Logout.jsx";
 import AuthGuard from "./components/AuthGuard.tsx";
 import AuthForgotPassword from "./Pages/AuthForgotPassword.jsx";
 import AuthResetConfirm from "./Pages/AuthResetConfirm.jsx";
@@ -89,6 +90,7 @@ const App = () => {
         <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><PropertyLegalDocs /></AuthGuard>} />
         <Route path="/search" element={<SearchProperties />} />
         <Route path="/contracts" element={<AuthGuard><Contracts /></AuthGuard>} />
+        <Route path="/logout" element={<Logout />} />
 
         {/* New flows */}
         <Route path="/auth/forgot-password" element={<AuthForgotPassword />} />
