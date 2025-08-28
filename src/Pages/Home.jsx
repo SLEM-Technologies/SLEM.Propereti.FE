@@ -10,27 +10,19 @@ import icon4 from "../assets/icons/resale-icon.svg";
 import Draggable from "react-draggable";
 import mapImage from "../assets/images/map.png";
 import LocationSearch from "../Components/LocationSearch.jsx";
-import { FaCamera, FaHome, FaClipboardList } from "react-icons/fa";
+// Removed unused icons for cleaner code
 import Virt from "../assets/icons/virtual-home-icon.svg";
 import Best from "../assets/icons/find-best-home-icon.svg";
 import Copy from "../assets/images/IconCopy.png";
 import ForFooter from "../Components/ForFooter.jsx";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 // import { classicNameResolver } from "typescript";
 
 const Home = () => {
   const [activeTab, setActiveTab] = useState("lease");
 
-  const containerStyle = {
-    width: "100vw",
-    height: "100vh",
-  };
-
-  const center = {
-    lat: 13.1119, // Use real coordinates
-    lng: 80.217,
-  };
+  // Removed unused map constants
 
   return (
     <div className={styles.body}>
