@@ -1,6 +1,7 @@
-import React, { useMemo, useState } from 'react';
+import React, { useEffect, useMemo, useState } from 'react';
 import { useNotificationsList, useMarkNotificationRead, useMarkAllNotificationsRead } from '../api/queries';
 import toast from 'react-hot-toast';
+import { startNotificationsRealtime, subscribeRealtime } from '../lib/realtime';
 
 export default function NotificationsFeed() {
   const [page, setPage] = useState(1);
@@ -43,6 +44,16 @@ export default function NotificationsFeed() {
       onError: () => toast.error('Failed to mark all as read'),
     });
   };
+
+  useEffect(() => {
+    startNotificationsRealtime();
+    const unsubscribe = subscribeRealtime((payload) => {
+      if (payload?.type === 'notification') {
+        listQuery.refetch();
+      }
+    });
+    return () => unsubscribe();
+  }, []);
 
   return (
     <div style={{ padding: 16 }}>
