@@ -53,3 +53,83 @@ export function usePropertyById(id?: string) {
     enabled: !!id,
   });
 }
+
+// Additional Auth flows
+export function useForgotPassword() {
+  return useMutation({
+    mutationFn: async (email: string) => {
+      const res = await http.post('/api/v1/accounts/forgot-password', null, { params: { Email: email } });
+      return res.data;
+    },
+  });
+}
+
+export function useResetPasswordConfirm() {
+  return useMutation({
+    mutationFn: async (payload: { token: string; newPassword: string }) => {
+      const res = await http.post('/api/v1/auth/password-reset/confirm', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useVerifyEmail() {
+  return useMutation({
+    mutationFn: async (payload: { email: string; otpCode: string }) => {
+      const res = await http.post('/api/v1/accounts/verify-email', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useVerifyPhone() {
+  return useMutation({
+    mutationFn: async (payload: { phoneNumber: string; otpCode: string }) => {
+      const res = await http.post('/api/v1/accounts/verify-phonenumber', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useResendEmailVerification() {
+  return useMutation({
+    mutationFn: async (payload: { email: string }) => {
+      const res = await http.post('/api/v1/auth/resend-email-verification', payload);
+      return res.data;
+    },
+  });
+}
+
+// Paystack
+export function usePaystackInit() {
+  return useMutation({
+    mutationFn: async (payload: { amount: string; email: string }) => {
+      const res = await http.post('/api/v1/paystack', payload);
+      return res.data;
+    },
+  });
+}
+
+export function usePaystackVerify(reference?: string) {
+  return useQuery({
+    queryKey: ['paystack-verify', reference],
+    queryFn: async () => (await http.get('/api/v1/paystack', { params: { reference } })).data,
+    enabled: !!reference,
+  });
+}
+
+export function usePaystackReceipt(reference?: string) {
+  return useQuery({
+    queryKey: ['paystack-receipt', reference],
+    queryFn: async () => (await http.get('/api/v1/paystack/receipt', { params: { reference } })).data,
+    enabled: !!reference,
+  });
+}
+
+// Companies
+export function useCompaniesList() {
+  return useQuery({
+    queryKey: ['companies'],
+    queryFn: async () => (await http.get('/api/v1/companies/get-all-companies')).data,
+  });
+}

@@ -31,6 +31,11 @@ import Profile from "./Pages/Profile.jsx";
 import PropertiesBrowse from "./Pages/PropertiesBrowse.jsx";
 import PropertyDetail from "./Pages/PropertyDetail.jsx";
 import AuthGuard from "./components/AuthGuard.tsx";
+import AuthForgotPassword from "./Pages/AuthForgotPassword.jsx";
+import AuthResetConfirm from "./Pages/AuthResetConfirm.jsx";
+import AuthVerify from "./Pages/AuthVerify.jsx";
+import WalletFund from "./Pages/WalletFund.jsx";
+import CompaniesList from "./Pages/CompaniesList.jsx";
 const App = () => {
   return (
     <div className="app">
@@ -68,6 +73,13 @@ const App = () => {
         <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
         <Route path="/market/properties" element={<PropertiesBrowse />} />
         <Route path="/market/properties/:id" element={<PropertyDetail />} />
+
+        {/* New flows */}
+        <Route path="/auth/forgot-password" element={<AuthForgotPassword />} />
+        <Route path="/auth/reset-password" element={<AuthResetConfirm />} />
+        <Route path="/auth/verify" element={<AuthVerify />} />
+        <Route path="/wallet/fund" element={<AuthGuard><WalletFund /></AuthGuard>} />
+        <Route path="/companies" element={<CompaniesList />} />
 
       </Routes>
     </div>
