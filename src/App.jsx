@@ -37,6 +37,7 @@ import SearchProperties from "./Pages/SearchProperties.jsx";
 import Contracts from "./Pages/Contracts.jsx";
 import Logout from "./Pages/Logout.jsx";
 import AuthGuard from "./components/AuthGuard.tsx";
+import RoleGuard from "./components/RoleGuard.tsx";
 import AuthForgotPassword from "./Pages/AuthForgotPassword.jsx";
 import AuthResetConfirm from "./Pages/AuthResetConfirm.jsx";
 import AuthVerify from "./Pages/AuthVerify.jsx";
@@ -75,7 +76,7 @@ const App = () => {
         <Route path="/browse-properties/one-time" element={<Onetime />} />
         <Route path="/browse-properties/installment" element={<Installmentalpay />} />
         <Route path="/admin-properties" element={<Adminbp />} />
-        <Route path="/admin/roles-permissions" element={<AuthGuard><AdminRolesPermissions /></AuthGuard>} />
+        <Route path="/admin/roles-permissions" element={<AuthGuard><RoleGuard allow={["admin"]}><AdminRolesPermissions /></RoleGuard></AuthGuard>} />
         <Route path="/properties-customer" element={<Prop />} />
         <Route path="/overview" element={<Overview />} />
         <Route path="/overview/team" element={<Overview />} />
@@ -86,8 +87,8 @@ const App = () => {
         <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
         <Route path="/market/properties" element={<PropertiesBrowse />} />
         <Route path="/market/properties/:id" element={<PropertyDetail />} />
-        <Route path="/properties/create" element={<AuthGuard><PropertyCreate /></AuthGuard>} />
-        <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><PropertyLegalDocs /></AuthGuard>} />
+        <Route path="/properties/create" element={<AuthGuard><RoleGuard allow={["company"]}><PropertyCreate /></RoleGuard></AuthGuard>} />
+        <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><RoleGuard allow={["company","admin"]}><PropertyLegalDocs /></RoleGuard></AuthGuard>} />
         <Route path="/search" element={<SearchProperties />} />
         <Route path="/contracts" element={<AuthGuard><Contracts /></AuthGuard>} />
         <Route path="/logout" element={<Logout />} />
