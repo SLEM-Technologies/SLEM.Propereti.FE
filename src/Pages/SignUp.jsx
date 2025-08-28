@@ -68,7 +68,6 @@ const SignUp = () => {
 
     setFormData((prev) => ({ ...prev, [name]: value }));
   };
-
   const inputsRef = useRef([]);
   const [otp, setOtp] = useState(["", "", "", "", "", ""]);
 
@@ -567,7 +566,7 @@ const SignUp = () => {
             <div className={styles.container1}>
               <h2 className={styles.title1}>Verify Phone Number</h2>
               <p className={styles.subtitle1}>
-                A six-digit code has been sent to the inputted mobile number
+                A six-digit code has been sent to the inputted email address
                 <br />
                 <span className={styles.note1}>
                   Kindly enter code to continue.
