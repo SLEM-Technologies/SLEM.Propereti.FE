@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useMemo, useCallback } from "react";
 import PropertyCard from "./PropertyCard.jsx";
 import "../Styles/PropertyListings.module.css";
 
@@ -89,19 +89,22 @@ const PropertyListings = () => {
   const [activeTab, setActiveTab] = useState("Buy");
   const [searchTerm, setSearchTerm] = useState("");
 
-  const handleTabClick = (tab) => {
+  const handleTabClick = useCallback((tab) => {
     setActiveTab(tab);
-  };
+  }, []);
 
-  const handleSearchChange = (e) => {
+  const handleSearchChange = useCallback((e) => {
     setSearchTerm(e.target.value);
-  };
+  }, []);
 
-  const filteredProperties = properties.filter(
-    (property) =>
-      property.title.toLowerCase().includes(searchTerm.toLowerCase()) ||
-      property.location.toLowerCase().includes(searchTerm.toLowerCase())
-  );
+  const filteredProperties = useMemo(() => {
+    const q = searchTerm.toLowerCase();
+    return properties.filter(
+      (property) =>
+        property.title.toLowerCase().includes(q) ||
+        property.location.toLowerCase().includes(q)
+    );
+  }, [searchTerm]);
 
   return (
     <section className="propertyListings">

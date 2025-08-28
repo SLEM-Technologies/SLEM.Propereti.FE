@@ -35,7 +35,9 @@ const LocationSearch = () => {
               <span className={styles.date}>Select Move-in Date 📅</span>
             </div>
             <Link to="/properties">
-              <button className={styles.button}>Browse Properties</button>
+              <button className={styles.button} aria-label="Browse properties">
+                Browse Properties
+              </button>
             </Link>
           </div>
         </div>

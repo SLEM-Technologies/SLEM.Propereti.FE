@@ -6,7 +6,7 @@ import { useNavigate } from "react-router-dom";
 import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { BASE_URL } from "../../Components/API/API.js";
-import axios from "axios";
+import apiClient from "../../lib/apiClient";
 
 const Step4 = () => {
   const navigate = useNavigate();
@@ -57,15 +57,7 @@ const Step4 = () => {
 
     try {
       for (const account of accounts) {
-        await axios.post(
-          `${BASE_URL}/api/v1/users/add-user-bank-details`,
-          account,
-          {
-            headers: {
-              Authorization: `Bearer ${token}`,
-            },
-          }
-        );
+        await apiClient.post(`/api/v1/users/add-user-bank-details`, account);
       }
 
       Swal.fire({

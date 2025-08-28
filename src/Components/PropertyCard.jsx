@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, memo } from "react";
 import "../Styles/PropertyCard.module.css";
 import { FaRegHeart, FaHeart } from "react-icons/fa";
 import Bed from "../assets/icons/bed.svg";
@@ -314,4 +314,4 @@ const PropertyCard = ({ property }) => {
   );
 };
 
-export default PropertyCard;
+export default memo(PropertyCard);

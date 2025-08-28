@@ -7,7 +7,7 @@ import SignupSteps from "../../Components/Stepcounter";
 import { ArrowLeft } from "lucide-react";
 import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../../Components/API/API.js";
-import axios from "axios";
+import apiClient from "../../lib/apiClient";
 
 const Step6 = () => {
   const navigate = useNavigate();
@@ -92,12 +92,7 @@ const Step6 = () => {
 
         console.log("Submitting JSON Payload:", payload);
 
-        await axios.post(`${BASE_URL}/api/v1/address/add-address`, payload, {
-          headers: {
-            "Content-Type": "application/json",
-            Authorization: `Bearer ${token}`,
-          },
-        });
+        await apiClient.post(`/api/v1/address/add-address`, payload);
       }
 
       Swal.fire({

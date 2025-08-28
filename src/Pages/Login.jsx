@@ -5,7 +5,8 @@ import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { Eye, EyeOff } from "lucide-react";
 import { BASE_URL } from "../Components/API/API.js";
-import axios from "axios";
+import { isValidEmail } from "../utils/validators";
+import apiClient from "../lib/apiClient";
 import googlelogo from "../assets/icons/Google Logo.svg";
 import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
 
@@ -36,11 +37,19 @@ const Login = () => {
       });
       return;
     }
+    if (!isValidEmail(formData.email)) {
+      Swal.fire({
+        icon: "warning",
+        title: "Invalid Email",
+        text: "Please enter a valid email address.",
+      });
+      return;
+    }
 
     setIsLoading(true);
 
-    axios
-      .post(`${BASE_URL}/api/v1/accounts/user-login`, {
+    apiClient
+      .post(`/api/v1/accounts/user-login`, {
         email: formData.email,
         password: formData.password,
         firstLogin: true,
@@ -167,6 +176,8 @@ const Login = () => {
                 onChange={handleInputChange}
                 placeholder="Email address"
                 className={styles.input}
+                id="login-email"
+                aria-label="Email address"
               />
             </div>
 
@@ -179,11 +190,14 @@ const Login = () => {
                   onChange={handleInputChange}
                   placeholder="Password"
                   className={styles.input}
+                  id="login-password"
+                  aria-label="Password"
                 />
                 <button
                   type="button"
                   onClick={() => setShowPassword(!showPassword)}
                   className={styles.eyeButton}
+                  aria-label={showPassword ? "Hide password" : "Show password"}
                 >
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
@@ -196,7 +210,7 @@ const Login = () => {
               </div>
             )}
 
-            <button type="submit" className={styles.btnproceed_on}>
+            <button type="submit" className={styles.btnproceed_on} aria-label="Login">
               Login
             </button>
 
