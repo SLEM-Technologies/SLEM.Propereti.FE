@@ -45,3 +45,11 @@ export function usePropertiesList() {
     queryFn: async () => (await http.get('/api/v1/properties/get-all-properties')).data,
   });
 }
+
+export function usePropertyById(id?: string) {
+  return useQuery({
+    queryKey: ['property', id],
+    queryFn: async () => (await http.get(`/api/v1/properties/get-property-by-id`, { params: { Id: id } })).data,
+    enabled: !!id,
+  });
+}

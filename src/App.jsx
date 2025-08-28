@@ -27,6 +27,10 @@ import Prop from "./Pages/Props/Props"
 import Overview from "./Pages/Views/Overview"
 import Overview2 from "./Pages/Views/Overview2"
 import Resources1 from "./Pages/Resources/AddProperties"
+import Profile from "./Pages/Profile.jsx";
+import PropertiesBrowse from "./Pages/PropertiesBrowse.jsx";
+import PropertyDetail from "./Pages/PropertyDetail.jsx";
+import AuthGuard from "./components/AuthGuard.tsx";
 const App = () => {
   return (
     <div className="app">
@@ -60,6 +64,10 @@ const App = () => {
         <Route path="/overview/roles" element={<Overview2 />} />
         <Route path="/properties-rt" element={<Resources1 />} />
 
+        {/* New typed API-powered routes */}
+        <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
+        <Route path="/market/properties" element={<PropertiesBrowse />} />
+        <Route path="/market/properties/:id" element={<PropertyDetail />} />
 
       </Routes>
     </div>
