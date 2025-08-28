@@ -49,6 +49,14 @@ export function useUserProfile() {
         enabled: !!tokenStore.access,
     });
 }
+export function useUpdateUserProfile() {
+    return useMutation({
+        mutationFn: async (payload) => {
+            const res = await http.put('/api/v1/users/update-user-profile', payload);
+            return res.data;
+        },
+    });
+}
 export function usePropertiesList() {
     return useQuery({
         queryKey: ['properties'],
