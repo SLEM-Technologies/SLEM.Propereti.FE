@@ -54,6 +54,60 @@ export function usePropertyById(id?: string) {
   });
 }
 
+export function useCreateProperty() {
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const res = await http.post('/api/v1/properties/create-property', payload);
+      return res.data;
+    },
+  });
+}
+
+// Legal docs
+export function useListLegalDocs(propertyId?: string) {
+  return useQuery({
+    queryKey: ['legal-docs', propertyId],
+    queryFn: async () => (await http.get(`/api/v1/properties/${propertyId}/legal-docs`)).data,
+    enabled: !!propertyId && !!tokenStore.access,
+  });
+}
+
+export function useUploadLegalDoc(propertyId: string) {
+  return useMutation({
+    mutationFn: async (payload: { documentType?: string; base64: string }) => {
+      const res = await http.post(`/api/v1/properties/${propertyId}/legal-docs`, payload.base64, { params: { documentType: payload.documentType } });
+      return res.data;
+    },
+  });
+}
+
+export function useGetLegalDoc(propertyId: string) {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await http.get(`/api/v1/properties/${propertyId}/legal-docs/${id}`);
+      return res.data;
+    },
+  });
+}
+
+export function useDeleteLegalDoc(propertyId: string) {
+  return useMutation({
+    mutationFn: async (id: string) => {
+      const res = await http.delete(`/api/v1/properties/${propertyId}/legal-docs/${id}`);
+      return res.data;
+    },
+  });
+}
+
+export function useReplaceLegalDoc(propertyId: string) {
+  return useMutation({
+    mutationFn: async (payload: { id: string; base64: string }) => {
+      const res = await http.post(`/api/v1/properties/${propertyId}/legal-docs/${payload.id}/replace`, payload.base64);
+      return res.data;
+    },
+  });
+}
+
 // Additional Auth flows
 export function useForgotPassword() {
   return useMutation({

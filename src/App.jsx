@@ -31,6 +31,8 @@ import Resources1 from "./Pages/Resources/AddProperties"
 import Profile from "./Pages/Profile.jsx";
 import PropertiesBrowse from "./Pages/PropertiesBrowse.jsx";
 import PropertyDetail from "./Pages/PropertyDetail.jsx";
+import PropertyCreate from "./Pages/PropertyCreate.jsx";
+import PropertyLegalDocs from "./Pages/PropertyLegalDocs.jsx";
 import AuthGuard from "./components/AuthGuard.tsx";
 import AuthForgotPassword from "./Pages/AuthForgotPassword.jsx";
 import AuthResetConfirm from "./Pages/AuthResetConfirm.jsx";
@@ -81,6 +83,8 @@ const App = () => {
         <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
         <Route path="/market/properties" element={<PropertiesBrowse />} />
         <Route path="/market/properties/:id" element={<PropertyDetail />} />
+        <Route path="/properties/create" element={<AuthGuard><PropertyCreate /></AuthGuard>} />
+        <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><PropertyLegalDocs /></AuthGuard>} />
 
         {/* New flows */}
         <Route path="/auth/forgot-password" element={<AuthForgotPassword />} />
