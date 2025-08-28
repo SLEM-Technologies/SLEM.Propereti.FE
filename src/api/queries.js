@@ -251,3 +251,42 @@ export function useListPermissionsByCompany(companyId) {
         enabled: !!companyId && !!tokenStore.access,
     });
 }
+// User preferences & settings
+export function useUserPreferences() {
+    return useQuery({
+        queryKey: ['user-preferences'],
+        queryFn: async () => (await http.get('/api/v1/users/preferences')).data,
+        enabled: !!tokenStore.access,
+    });
+}
+export function useUpdateUserPreferences() {
+    return useMutation({
+        mutationFn: async (payload) => {
+            const res = await http.put('/api/v1/users/preferences', payload);
+            return res.data;
+        },
+    });
+}
+export function useUserNotificationSettings() {
+    return useQuery({
+        queryKey: ['user-notification-settings'],
+        queryFn: async () => (await http.get('/api/v1/users/notification-settings')).data,
+        enabled: !!tokenStore.access,
+    });
+}
+export function useUpdateUserNotificationSettings() {
+    return useMutation({
+        mutationFn: async (payload) => {
+            const res = await http.put('/api/v1/users/notification-settings', payload);
+            return res.data;
+        },
+    });
+}
+export function useUploadAvatar() {
+    return useMutation({
+        mutationFn: async (base64) => {
+            const res = await http.post('/api/v1/users/upload-avatar', base64);
+            return res.data;
+        },
+    });
+}
