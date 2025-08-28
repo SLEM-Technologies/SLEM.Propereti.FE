@@ -488,3 +488,30 @@ export function useUploadAvatar() {
     },
   });
 }
+
+// KYC
+export function useGetBankDetails() {
+  return useQuery({
+    queryKey: ['bank-details'],
+    queryFn: async () => (await http.get('/api/v1/users/get-bank-details')).data,
+    enabled: !!tokenStore.access,
+  });
+}
+
+export function useAddBankDetails() {
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const res = await http.post('/api/v1/users/add-user-bank-details', payload);
+      return res.data;
+    },
+  });
+}
+
+export function useUpdateBankDetails() {
+  return useMutation({
+    mutationFn: async (payload: any) => {
+      const res = await http.put('/api/v1/users/update-user-bank-details', payload);
+      return res.data;
+    },
+  });
+}

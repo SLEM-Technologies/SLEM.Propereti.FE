@@ -51,6 +51,7 @@ import TransferFunds from "./Pages/TransferFunds.jsx";
 import NotificationsFeed from "./Pages/NotificationsFeed.jsx";
 import PropertyPurchase from "./Pages/PropertyPurchase.jsx";
 import TransactionReceipt from "./Pages/TransactionReceipt.jsx";
+import KYC from "./Pages/KYC.jsx";
 import CompanyDashboard from "./Pages/CompanyDashboard.jsx";
 const App = () => {
   return (
@@ -104,6 +105,7 @@ const App = () => {
         <Route path="/wallet/fund" element={<AuthGuard><WalletFund /></AuthGuard>} />
         <Route path="/wallet/statements" element={<AuthGuard><WalletStatements /></AuthGuard>} />
         <Route path="/settings" element={<AuthGuard><UserSettings /></AuthGuard>} />
+        <Route path="/kyc" element={<AuthGuard><KYC /></AuthGuard>} />
         <Route path="/companies" element={<CompaniesList />} />
 
         {/* Transactions */}

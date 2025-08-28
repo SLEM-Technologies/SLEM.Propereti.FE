@@ -2,7 +2,7 @@ import React, { useState } from 'react';
 import { useParams, useNavigate } from 'react-router-dom';
 import { z } from 'zod';
 import toast from 'react-hot-toast';
-import { usePropertyById, usePayForProperty, usePaystackInit } from '../api/queries';
+import { usePropertyById, usePayForProperty, usePaystackInit, useGetBankDetails, useUserProfile } from '../api/queries';
 import AuthGuard from '../components/AuthGuard.tsx';
 
 const schema = z.object({
@@ -17,6 +17,8 @@ export default function PropertyPurchase() {
   const propQuery = usePropertyById(id);
   const payMutation = usePayForProperty();
   const paystackInit = usePaystackInit();
+  const bank = useGetBankDetails();
+  const user = useUserProfile();
   const [form, setForm] = useState({ amount: '', agreedMonthlyPercentage: '0', paymentType: '1', email: '' });
 
   const startPaystack = () => {
@@ -32,6 +34,14 @@ export default function PropertyPurchase() {
 
   const onSubmit = (e) => {
     e.preventDefault();
+    // Enforce basic KYC: require address and bank details present
+    const hasBank = !!(bank.data && (bank.data.data || bank.data));
+    const p = user.data?.data ?? user.data;
+    const hasAddress = !!(p?.address);
+    if (!hasBank || !hasAddress) {
+      toast.error('Complete KYC (address and bank details) before purchase');
+      return;
+    }
     const parsed = schema.safeParse({ amount: form.amount, agreedMonthlyPercentage: form.agreedMonthlyPercentage, paymentType: form.paymentType });
     if (!parsed.success) {
       toast.error(parsed.error.errors.map((e) => e.message).join(', '));
