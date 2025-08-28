@@ -217,3 +217,22 @@ export function useMarkAllNotificationsRead() {
     },
   });
 }
+
+// Wallet
+export function useWalletStatements(params: { page?: number; pageSize?: number; type?: string; from?: string; to?: string }) {
+  const { page = 1, pageSize = 10, type, from, to } = params || {};
+  return useQuery({
+    queryKey: ['wallet', 'statements', { page, pageSize, type, from, to }],
+    queryFn: async () => (await http.get('/api/v1/wallets/statements', { params: { page, pageSize, type, from, to } })).data,
+    enabled: !!tokenStore.access,
+  });
+}
+
+export function useWalletWithdraw() {
+  return useMutation({
+    mutationFn: async (amount: number) => {
+      const res = await http.post('/api/v1/wallets/withdraw', null, { params: { amount } });
+      return res.data;
+    },
+  });
+}

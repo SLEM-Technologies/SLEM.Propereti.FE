@@ -36,6 +36,7 @@ import AuthResetConfirm from "./Pages/AuthResetConfirm.jsx";
 import AuthVerify from "./Pages/AuthVerify.jsx";
 import WalletFund from "./Pages/WalletFund.jsx";
 import CompaniesList from "./Pages/CompaniesList.jsx";
+import WalletStatements from "./Pages/WalletStatements.jsx";
 import TransactionsHistory from "./Pages/TransactionsHistory.jsx";
 import TransactionDetail from "./Pages/TransactionDetail.jsx";
 import TransferFunds from "./Pages/TransferFunds.jsx";
@@ -83,6 +84,7 @@ const App = () => {
         <Route path="/auth/reset-password" element={<AuthResetConfirm />} />
         <Route path="/auth/verify" element={<AuthVerify />} />
         <Route path="/wallet/fund" element={<AuthGuard><WalletFund /></AuthGuard>} />
+        <Route path="/wallet/statements" element={<AuthGuard><WalletStatements /></AuthGuard>} />
         <Route path="/companies" element={<CompaniesList />} />
 
         {/* Transactions */}
