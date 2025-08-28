@@ -49,6 +49,8 @@ import TransactionsHistory from "./Pages/TransactionsHistory.jsx";
 import TransactionDetail from "./Pages/TransactionDetail.jsx";
 import TransferFunds from "./Pages/TransferFunds.jsx";
 import NotificationsFeed from "./Pages/NotificationsFeed.jsx";
+import PropertyPurchase from "./Pages/PropertyPurchase.jsx";
+import TransactionReceipt from "./Pages/TransactionReceipt.jsx";
 import CompanyDashboard from "./Pages/CompanyDashboard.jsx";
 const App = () => {
   return (
@@ -88,6 +90,7 @@ const App = () => {
         <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
         <Route path="/market/properties" element={<PropertiesBrowse />} />
         <Route path="/market/properties/:id" element={<PropertyDetail />} />
+        <Route path="/purchase/:id" element={<AuthGuard><PropertyPurchase /></AuthGuard>} />
         <Route path="/properties/create" element={<AuthGuard><RoleGuard allow={["company"]}><PropertyCreate /></RoleGuard></AuthGuard>} />
         <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><RoleGuard allow={["company","admin"]}><PropertyLegalDocs /></RoleGuard></AuthGuard>} />
         <Route path="/search" element={<SearchProperties />} />
@@ -107,6 +110,7 @@ const App = () => {
         <Route path="/transactions" element={<AuthGuard><TransactionsHistory /></AuthGuard>} />
         <Route path="/transactions/:reference" element={<AuthGuard><TransactionDetail /></AuthGuard>} />
         <Route path="/transactions/transfer" element={<AuthGuard><TransferFunds /></AuthGuard>} />
+        <Route path="/transactions/receipt" element={<AuthGuard><TransactionReceipt /></AuthGuard>} />
 
         {/* Notifications */}
         <Route path="/notifications" element={<AuthGuard><NotificationsFeed /></AuthGuard>} />

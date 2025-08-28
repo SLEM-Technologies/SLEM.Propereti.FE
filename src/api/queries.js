@@ -245,6 +245,14 @@ export function usePaystackReceipt(reference) {
         enabled: !!reference,
     });
 }
+export function usePayForProperty() {
+    return useMutation({
+        mutationFn: async (payload) => {
+            const res = await http.post('/api/v1/properties/pay-for-property', payload);
+            return res.data;
+        },
+    });
+}
 // Companies
 export function useCompaniesList() {
     return useQuery({

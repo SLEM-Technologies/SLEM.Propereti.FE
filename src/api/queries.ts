@@ -273,6 +273,15 @@ export function usePaystackReceipt(reference?: string) {
   });
 }
 
+export function usePayForProperty() {
+  return useMutation({
+    mutationFn: async (payload: { porpertyId: string; amount: number; agreedMonthlyPercentage: number; paymentType: number }) => {
+      const res = await http.post('/api/v1/properties/pay-for-property', payload);
+      return res.data;
+    },
+  });
+}
+
 // Companies
 export function useCompaniesList() {
   return useQuery({
