@@ -1,6 +1,7 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import PropertyCard from "./PropertyCard.jsx";
 import "../Styles/PropertyListings.module.css";
+import { PropertiesAPI } from "./API/API.js";
 
 // Import images
 import img1 from "../assets/images/house-card1.jpg";
@@ -16,7 +17,7 @@ import Bed from "../assets/icons/bed.svg"
 import Bath from "../assets/icons/bath.svg"
 import Square from "../assets/icons/square-meters.svg"
 
-const properties = [
+const fallbackProperties = [
   {
     id: 1,
     title: "Palm Harbor",
@@ -88,6 +89,8 @@ const properties = [
 const PropertyListings = () => {
   const [activeTab, setActiveTab] = useState("Buy");
   const [searchTerm, setSearchTerm] = useState("");
+  const [properties, setProperties] = useState(fallbackProperties);
+  const [isLoading, setIsLoading] = useState(true);
 
   const handleTabClick = (tab) => {
     setActiveTab(tab);
@@ -96,6 +99,37 @@ const PropertyListings = () => {
   const handleSearchChange = (e) => {
     setSearchTerm(e.target.value);
   };
+
+  useEffect(() => {
+    let isMounted = true;
+    (async () => {
+      try {
+        const res = await PropertiesAPI.list();
+        const apiData = res?.data || res;
+        const mapped = Array.isArray(apiData)
+          ? apiData.map((p, idx) => ({
+              id: p.id || p._id || idx,
+              title: p.title || p.name || p.propertyType || 'Property',
+              price: p.price ? `${p.price}` : p.amount ? `${p.amount}` : '$—',
+              location: p.location || p.city || p.address || '—',
+              beds: p.beds || p.bedrooms || 0,
+              baths: p.baths || p.bathrooms || 0,
+              size: p.size || p.area || '—',
+              image: p.imageUrl || p.image || fallbackProperties[idx % fallbackProperties.length].image,
+              popular: Boolean(p.popular),
+            }))
+          : fallbackProperties;
+        if (isMounted) setProperties(mapped);
+      } catch {
+        if (isMounted) setProperties(fallbackProperties);
+      } finally {
+        if (isMounted) setIsLoading(false);
+      }
+    })();
+    return () => {
+      isMounted = false;
+    };
+  }, []);
 
   const filteredProperties = properties.filter(
     (property) =>
@@ -375,9 +409,15 @@ const PropertyListings = () => {
 
         {/* Property Grid */}
         <div className="propertyGrid">
-          {filteredProperties.map((property) => (
-            <PropertyCard key={property.id} property={property} />
-          ))}
+          {isLoading ? (
+            <div>Loading properties...</div>
+          ) : filteredProperties.length > 0 ? (
+            filteredProperties.map((property) => (
+              <PropertyCard key={property.id} property={property} />
+            ))
+          ) : (
+            <div>No properties found.</div>
+          )}
         </div>
 
         {/* Browse More Button */}

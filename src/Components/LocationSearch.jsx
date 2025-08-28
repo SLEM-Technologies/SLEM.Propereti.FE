@@ -1,6 +1,6 @@
 import React, { useState } from "react";
 import styles from "../Styles/LocationSearch.module.css";
-import { Link } from "react-router";
+import { Link } from "react-router-dom";
 
 const LocationSearch = () => {
   const [activeTab, setActiveTab] = useState("lease");
