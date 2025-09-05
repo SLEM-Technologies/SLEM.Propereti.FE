@@ -23,13 +23,42 @@ import RegisterOptions from "./Pages/RegisterOptions";
 import Onetime from "./Pages/HelpSupport//OneTimePayment"
 import Installmentalpay from "./Pages/HelpSupport/InstallmentalPayment";
 import Adminbp from "./Pages/Admin/AdBrowseprop"
+import AdminRolesPermissions from "./Pages/Admin/AdminRolesPermissions.jsx";
 import Prop from "./Pages/Props/Props"
 import Overview from "./Pages/Views/Overview"
 import Overview2 from "./Pages/Views/Overview2"
 import Resources1 from "./Pages/Resources/AddProperties"
+import Profile from "./Pages/Profile.jsx";
+import PropertiesBrowse from "./Pages/PropertiesBrowse.jsx";
+import PropertyDetail from "./Pages/PropertyDetail.jsx";
+import PropertyCreate from "./Pages/PropertyCreate.jsx";
+import PropertyLegalDocs from "./Pages/PropertyLegalDocs.jsx";
+import SearchProperties from "./Pages/SearchProperties.jsx";
+import SearchMap from "./Pages/SearchMap.jsx";
+import Contracts from "./Pages/Contracts.jsx";
+import Logout from "./Pages/Logout.jsx";
+import AuthGuard from "./components/AuthGuard.tsx";
+import RoleGuard from "./components/RoleGuard.tsx";
+import AuthForgotPassword from "./Pages/AuthForgotPassword.jsx";
+import AuthResetConfirm from "./Pages/AuthResetConfirm.jsx";
+import AuthVerify from "./Pages/AuthVerify.jsx";
+import WalletFund from "./Pages/WalletFund.jsx";
+import CompaniesList from "./Pages/CompaniesList.jsx";
+import WalletStatements from "./Pages/WalletStatements.jsx";
+import UserSettings from "./Pages/UserSettings.jsx";
+import TransactionsHistory from "./Pages/TransactionsHistory.jsx";
+import TransactionDetail from "./Pages/TransactionDetail.jsx";
+import TransferFunds from "./Pages/TransferFunds.jsx";
+import NotificationsFeed from "./Pages/NotificationsFeed.jsx";
+import PropertyPurchase from "./Pages/PropertyPurchase.jsx";
+import TransactionReceipt from "./Pages/TransactionReceipt.jsx";
+import KYC from "./Pages/KYC.jsx";
+import Nav from "./components/Nav.jsx";
+import CompanyDashboard from "./Pages/CompanyDashboard.jsx";
 const App = () => {
   return (
     <div className="app">
+      <Nav />
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/about-us" element={<About />} />
@@ -54,12 +83,44 @@ const App = () => {
         <Route path="/browse-properties/one-time" element={<Onetime />} />
         <Route path="/browse-properties/installment" element={<Installmentalpay />} />
         <Route path="/admin-properties" element={<Adminbp />} />
+        <Route path="/admin/roles-permissions" element={<AuthGuard><RoleGuard allow={["admin"]}><AdminRolesPermissions /></RoleGuard></AuthGuard>} />
         <Route path="/properties-customer" element={<Prop />} />
         <Route path="/overview" element={<Overview />} />
         <Route path="/overview/team" element={<Overview />} />
         <Route path="/overview/roles" element={<Overview2 />} />
         <Route path="/properties-rt" element={<Resources1 />} />
 
+        {/* New typed API-powered routes */}
+        <Route path="/profile" element={<AuthGuard><Profile /></AuthGuard>} />
+        <Route path="/market/properties" element={<PropertiesBrowse />} />
+        <Route path="/market/properties/:id" element={<PropertyDetail />} />
+        <Route path="/purchase/:id" element={<AuthGuard><PropertyPurchase /></AuthGuard>} />
+        <Route path="/properties/create" element={<AuthGuard><RoleGuard allow={["company"]}><PropertyCreate /></RoleGuard></AuthGuard>} />
+        <Route path="/properties/:propertyId/legal-docs" element={<AuthGuard><RoleGuard allow={["company","admin"]}><PropertyLegalDocs /></RoleGuard></AuthGuard>} />
+        <Route path="/search" element={<SearchProperties />} />
+        <Route path="/search/map" element={<SearchMap />} />
+        <Route path="/contracts" element={<AuthGuard><Contracts /></AuthGuard>} />
+        <Route path="/logout" element={<Logout />} />
+
+        {/* New flows */}
+        <Route path="/auth/forgot-password" element={<AuthForgotPassword />} />
+        <Route path="/auth/reset-password" element={<AuthResetConfirm />} />
+        <Route path="/auth/verify" element={<AuthVerify />} />
+        <Route path="/wallet/fund" element={<AuthGuard><WalletFund /></AuthGuard>} />
+        <Route path="/wallet/statements" element={<AuthGuard><WalletStatements /></AuthGuard>} />
+        <Route path="/settings" element={<AuthGuard><UserSettings /></AuthGuard>} />
+        <Route path="/kyc" element={<AuthGuard><KYC /></AuthGuard>} />
+        <Route path="/companies" element={<CompaniesList />} />
+
+        {/* Transactions */}
+        <Route path="/transactions" element={<AuthGuard><TransactionsHistory /></AuthGuard>} />
+        <Route path="/transactions/:reference" element={<AuthGuard><TransactionDetail /></AuthGuard>} />
+        <Route path="/transactions/transfer" element={<AuthGuard><TransferFunds /></AuthGuard>} />
+        <Route path="/transactions/receipt" element={<AuthGuard><TransactionReceipt /></AuthGuard>} />
+
+        {/* Notifications */}
+        <Route path="/notifications" element={<AuthGuard><NotificationsFeed /></AuthGuard>} />
+        <Route path="/company/dashboard" element={<AuthGuard><RoleGuard allow={["company","admin"]}><CompanyDashboard /></RoleGuard></AuthGuard>} />
 
       </Routes>
     </div>

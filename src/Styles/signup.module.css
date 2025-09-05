@@ -762,6 +762,13 @@ select option {
   .progressBar {
     display: none;
   }
+  .formSubtitle_X{
+    width: auto;
+    padding: 0 16px;
+  }
+  .btnproceed{ width: 100%; height: 56px; }
+  .dashboardBtn{ width: 100%; height: 56px; }
+  .buttonGroup{ gap: 12px; }
 }
 @media (max-width: 500px) {
   .reed {

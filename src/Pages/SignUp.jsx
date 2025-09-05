@@ -6,7 +6,8 @@ import verifiedImg from "../assets/images/undraw_completed_ngx6 2.png";
 import { Link, useNavigate } from "react-router-dom";
 import { FaCamera } from "react-icons/fa";
 import { BASE_URL } from "../Components/API/API.js";
-import axios from "axios";
+import http from "../api/http";
+import { isValidEmail, isStrongPassword, isPhone } from "../utils/validators";
 import SignupSteps from "../Components/Stepcounter.jsx";
 
 import { ArrowLeft, Eye, EyeOff, ChevronDown } from "lucide-react";
@@ -95,8 +96,8 @@ const SignUp = () => {
       return;
     }
 
-    axios
-      .post(`${BASE_URL}/api/v1/accounts/verify-email`, {
+    http
+      .post(`/api/v1/accounts/verify-email`, {
         email: formData.email,
         otpCode: otpCode,
       })
@@ -121,8 +122,8 @@ const SignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
 
   const resendOTP = () => {
-    axios
-      .post(`${BASE_URL}/api/v1/accounts/register-user`, {
+    http
+      .post(`/api/v1/accounts/register-user`, {
         email: formData.email,
       })
       .then(() => {
@@ -148,8 +149,8 @@ const SignUp = () => {
   );
 
   useEffect(() => {
-    axios
-      .get(`${BASE_URL}/api/v1/countries/get-all-countries`)
+    http
+      .get(`/api/v1/countries/get-all-countries`)
       .then((res) => {
         const countries = res.data.data;
         setCountryList(countries);
@@ -255,6 +256,36 @@ const SignUp = () => {
                   return;
                 }
 
+                if (!isValidEmail(formData.email)) {
+                  setIsLoading(false);
+                  Swal.fire({
+                    title: "Invalid Email",
+                    text: "Please enter a valid email address.",
+                    icon: "warning",
+                  });
+                  return;
+                }
+
+                if (!isPhone(formData.phoneNumber)) {
+                  setIsLoading(false);
+                  Swal.fire({
+                    title: "Invalid Phone",
+                    text: "Please enter a valid phone number.",
+                    icon: "warning",
+                  });
+                  return;
+                }
+
+                if (!isStrongPassword(formData.password)) {
+                  setIsLoading(false);
+                  Swal.fire({
+                    title: "Weak Password",
+                    text: "Password must be 8+ chars incl. upper, lower, digit and symbol.",
+                    icon: "warning",
+                  });
+                  return;
+                }
+
                 if (formData.password !== formData.confirmPassword) {
                   setIsLoading(false);
                   Swal.fire({
@@ -265,8 +296,8 @@ const SignUp = () => {
                   return;
                 }
 
-                axios
-                  .post(`${BASE_URL}/api/v1/accounts/register-user`, {
+                http
+                  .post(`/api/v1/accounts/register-user`, {
                     email: formData.email,
                     password: formData.password,
                     phoneNumber: formData.phoneNumber,
@@ -336,6 +367,7 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     placeholder="First Name"
                     className={styles.input}
+                    aria-label="First name"
                   />
                 </div>
                 <div className={styles.inputGroup}>
@@ -346,6 +378,7 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     placeholder="Surname"
                     className={styles.input}
+                    aria-label="Surname"
                   />
                 </div>
               </div>
@@ -359,6 +392,7 @@ const SignUp = () => {
                   onChange={handleInputChange}
                   placeholder="Email address"
                   className={`${styles.input} ${styles.error}`}
+                  aria-label="Email address"
                 />
                 {/* <span className={styles.errorIcon}>!</span> */}
               </div>
@@ -409,6 +443,7 @@ const SignUp = () => {
       onChange={handleInputChange}
       placeholder="Phone Number"
       className={styles.input}
+      aria-label="Phone number"
     />
   </div>
 </div>
@@ -422,6 +457,7 @@ const SignUp = () => {
                     value={formData.gender}
                     onChange={handleInputChange}
                     className={styles.input}
+                    aria-label="Gender"
                   >
                     <option value="">Select Gender</option>
                     <option value="male">Male</option>
@@ -437,6 +473,7 @@ const SignUp = () => {
                     onChange={handleInputChange}
                     placeholder="Date of Birth"
                     className={styles.input}
+                    aria-label="Date of birth"
                   />
                 </div>
               </div>
@@ -450,6 +487,7 @@ const SignUp = () => {
                   onChange={handleInputChange}
                   placeholder="Residential Address"
                   className={styles.input}
+                  aria-label="Residential address"
                 />
               </div>
 
@@ -462,6 +500,7 @@ const SignUp = () => {
                   onChange={handleInputChange}
                   placeholder="Referral code (if any)"
                   className={styles.input}
+                  aria-label="Referral code"
                 />
               </div>
 
@@ -475,11 +514,13 @@ const SignUp = () => {
                     onChange={handlePasswordChange}
                     placeholder="Password"
                     className={styles.input}
+                    aria-label="Password"
                   />
                   <button
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className={styles.eyeButton}
+                    aria-label={showPassword ? "Hide password" : "Show password"}
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>

@@ -3,7 +3,7 @@ import styles from "../Styles/signup.module.css";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../Components/API/API.js";
-import axios from "axios";
+import http from "../api/http";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import SignupSteps from "../Components/Stepcounter.jsx";
 import Charticon from "../assets/icons/Pie chart _Isometric 2.svg";
@@ -99,8 +99,8 @@ const CompanySignUp = () => {
       return;
     }
 
-    axios
-      .post(`${BASE_URL}/api/v1/companies/create-company`, payload)
+    http
+      .post(`/api/v1/companies/create-company`, payload)
       .then(() => {
         Swal.fire({
           title: "Company Created!",
@@ -134,8 +134,8 @@ const CompanySignUp = () => {
       return;
     }
 
-    axios
-      .post(`${BASE_URL}/api/v1/companies/create-company-admin`, {
+    http
+      .post(`/api/v1/companies/create-company-admin`, {
         ...adminData,
       })
       .then(() => {
