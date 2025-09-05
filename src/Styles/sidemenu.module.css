@@ -167,3 +167,80 @@
   font-size: 14px;
   font-weight: 500;
 }
+/* Desktop by default */
+/* .desktopOnly {
+  display: block;
+} */
+
+/* Mobile hamburger (hidden by default) */
+.mobileMenuButton {
+  position: fixed;
+  top: 20px;
+  left: 20px;
+  z-index: 150;
+  background: none;
+  border: none;
+  cursor: pointer;
+  display: none; /* hidden on desktop */
+}
+
+/* Overlay for mobile sidebar */
+.mobileOverlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background: rgba(0, 0, 0, 0.4);
+  z-index: 120;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 0.3s ease;
+}
+.mobileOverlay.show {
+  opacity: 1;
+  pointer-events: all;
+}
+
+/* Mobile sidebar container */
+.mobileSidebar {
+  position: fixed;
+  top: 0;
+  left: -280px;
+  width: 280px;
+  height: 100vh;
+  background: #1a1b23;
+  z-index: 130;
+  transition: left 0.3s ease;
+  display: flex;
+  flex-direction: column;
+}
+
+.mobileSidebar.slideIn {
+  left: 0;
+}
+.mobileSidebar.slideOut {
+  left: -280px;
+}
+
+/* Close button inside mobile sidebar */
+.closeButton {
+  position: absolute;
+  top: 16px;
+  left: 16px;
+  background: none;
+  border: none;
+  cursor: pointer;
+  z-index: 140;
+}
+
+/* Responsive switch */
+@media (max-width: 700px) {
+  .desktopOnly {
+    display: none; /* hide desktop sidebar */
+  }
+  .mobileMenuButton {
+    display: block; /* show hamburger */
+  }
+  
+}

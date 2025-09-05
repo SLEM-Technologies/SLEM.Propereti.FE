@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import styles from "./MapViewPage.module.css";
 import search from "../../assets/icons/sarch.svg";
 import land from "../../assets/icons/land_icon.svg";
@@ -6,33 +6,57 @@ import location from "../../assets/icons/basil_location-solid.svg";
 import pricerange from "../../assets/icons/price_range.svg";
 import bed from "../../assets/icons/beddings.svg";
 import share from "../../assets/icons/share.svg";
-import Locationplus from "../../assets/icons/location_on.svg";
 import Image12 from "../../assets/icons/Image13.svg";
-import Image123 from "../../assets/icons/Image3.svg";
 
 const MapViewPage = ({ isMapView, onViewToggle, onPropertySelect }) => {
+  const [mapUrl, setMapUrl] = useState(
+    "https://www.google.com/maps?q=Ikeja+Nigeria&output=embed"
+  );
+  const [isModalOpen, setIsModalOpen] = useState(false);
+  const [searchQuery, setSearchQuery] = useState("");
+
+  const handleSearchSubmit = (e) => {
+    e.preventDefault();
+    if (searchQuery.trim() !== "") {
+      const query = searchQuery.replace(/\s+/g, "+");
+      setMapUrl(`https://www.google.com/maps?q=${query}&output=embed`);
+      setIsModalOpen(false); // close modal after search
+    }
+  };
+
   const properties = [
     {
       id: 1,
       title: "Investment Land",
       location: "Terry Lane, Golden CO 80403",
       size: "1507 square meters",
-      image:
-Image12,    },
+      image: Image12,
+    },
     {
       id: 2,
       title: "Investment Land",
       location: "Terry Lane, Golden CO 80403",
       size: "1507 square meters",
-      image:
-Image12,    },
+      image: Image12,
+    },
     {
       id: 3,
       title: "Investment Land",
       location: "Terry Lane, Golden CO 80403",
       size: "1507 square meters",
-      image:
-Image12,    },
+      image: Image12,
+    },
+  ];
+  const [isLoading, setIsLoading] = useState(false);
+  // state
+  const [selectedLocation, setSelectedLocation] = useState("");
+
+  // example locations
+  const locations = [
+    "Ikeja, Nigeria",
+    "Lekki, Nigeria",
+    "Abuja, Nigeria",
+    "Golden CO 80403",
   ];
 
   return (
@@ -79,8 +103,17 @@ Image12,    },
 
           <div className={styles.filterWrapper}>
             <img src={location} alt="location" className={styles.filterIcon} />
-            <select className={styles.filterSelect}>
-              <option>Location</option>
+            <select
+              className={styles.filterSelect}
+              value={selectedLocation}
+              onChange={(e) => setSelectedLocation(e.target.value)}
+            >
+              <option value="">Location</option>
+              {locations.map((loc, i) => (
+                <option key={i} value={loc}>
+                  {loc}
+                </option>
+              ))}
             </select>
           </div>
 
@@ -91,7 +124,13 @@ Image12,    },
             </select>
           </div>
 
-          <button className={styles.searchButton}>Search</button>
+          {/* Open Modal on Search */}
+          <button
+            className={styles.searchButton}
+            onClick={() => setIsModalOpen(true)}
+          >
+            Search
+          </button>
         </div>
       </div>
 
@@ -100,18 +139,17 @@ Image12,    },
         <div className={styles.mapContainer}>
           <iframe
             title="location-map"
-            src="https://www.google.com/maps/embed?pb=!1m18!1m12!1m3!1d63327.59289387504!2d3.3203505!3d6.6058741!2m3!1f0!2f0!3f0!3m2!1i1024!2i768!4f13.1!3m3!1m2!1s0x103b93eebca95fdb%3A0x8de08f77a6219d8e!2sIkeja%2C%20Nigeria!5e0!3m2!1sen!2sng!4v1691509390892!5m2!1sen!2sng"
+            src={mapUrl}
             width="100%"
             height="100%"
             style={{ border: 0 }}
             allowFullScreen=""
             loading="lazy"
-            referrerPolicy="no-referrer-when-downgrade"
           ></iframe>
         </div>
 
         <div className={styles.propertyCards}>
-       {properties.slice(0, 3).map((property) => (
+          {properties.slice(0, 3).map((property) => (
             <div
               key={property.id}
               className={styles.propertyCard}
@@ -126,7 +164,6 @@ Image12,    },
               </div>
               <div className={styles.propertyInfo}>
                 <div className={styles.grouph}>
-                  {" "}
                   <h3 className={styles.propertyTitle}>{property.title}</h3>
                   <button
                     className={styles.viewDetailsBtn}
@@ -141,14 +178,12 @@ Image12,    },
                 <div className={styles.propertyDetails}>
                   <div className={styles.locationInfo}>
                     <span className={styles.icon}>
-                      {" "}
                       <img src={location} alt="location" />
                     </span>
                     <span className={styles.location}>{property.location}</span>
                   </div>
                   <div className={styles.sizeInfo}>
                     <span className={styles.icon}>
-                      {" "}
                       <img src={bed} alt="" />
                     </span>
                     <span className={styles.size}>{property.size}</span>
@@ -157,7 +192,6 @@ Image12,    },
                 <div className={styles.priceContainer1}>
                   <span className={styles.price}>{property.price}</span>
                   <button className={styles.shareBtn}>
-                    {" "}
                     <img src={share} alt="share" />
                   </button>
                 </div>
@@ -166,6 +200,36 @@ Image12,    },
           ))}
         </div>
       </div>
+
+      {/* Modal for Search */}
+      {isModalOpen && (
+        <div
+          className={styles.modalOverlay}
+          onClick={() => setIsModalOpen(false)}
+        >
+          <div className={styles.modal} onClick={(e) => e.stopPropagation()}>
+            <button
+              className={styles.closeBtn}
+              onClick={() => setIsModalOpen(false)}
+            >
+              ×
+            </button>
+            <h2>Search Location</h2>
+            <form onSubmit={handleSearchSubmit} className={styles.modalForm}>
+              <input
+                type="text"
+                value={searchQuery}
+                placeholder="Enter a location..."
+                onChange={(e) => setSearchQuery(e.target.value)}
+                className={styles.modalInput}
+              />
+              <button type="submit" className={styles.modalSearchBtn}>
+                Search
+              </button>
+            </form>
+          </div>
+        </div>
+      )}
     </div>
   );
 };
