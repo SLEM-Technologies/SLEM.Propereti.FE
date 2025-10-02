@@ -1,16 +1,20 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // no network in this step
 import Swal from "sweetalert2";
 import { ArrowLeft } from "lucide-react";
+import http from "../../api/http";
 
 import styles from "../../Styles/signup.module.css";
 import Charticon from "../../assets/icons/Pie chart _Isometric 2.svg";
 import { BASE_URL } from "../../Components/API/API.js";
-import PropertySteps from "../../Components/PropertySteps";
+import PropertySteps from "../../Components/PropertySteps.jsx";
+import { FaUpload } from "react-icons/fa";
 
-const Step4 = () => {
+const Prop2 = () => {
   const navigate = useNavigate();
+  const fileInputRef = useRef();
+
   const [formData, setFormData] = useState({
     propertyType: "",
     amount: "",
@@ -21,17 +25,115 @@ const Step4 = () => {
     city: "",
   });
 
+  const [uploadedFile, setUploadedFile] = useState(null);
+
   const handleChange = (field, value) => {
     setFormData((prev) => ({ ...prev, [field]: value }));
   };
 
-  //   const handleContinue = () => {
-  //     console.log(formData);
-  //     navigate("/property2");
-  //   };
-
   const handleCancel = () => {
     navigate("/dashboard");
+  };
+
+  const [base64Image, setBase64Image] = useState(null);
+
+  const handleFileUpload = (file) => {
+    if (file) {
+      setUploadedFile(file);
+
+      const reader = new FileReader();
+      reader.onloadend = () => {
+        setBase64Image(reader.result.split(",")[1]); // strip the base64 header
+      };
+      reader.readAsDataURL(file);
+
+      Swal.fire({
+        icon: "success",
+        title: "File Uploaded",
+        text: `${file.name} uploaded successfully.`,
+        timer: 1500,
+        showConfirmButton: false,
+      });
+    }
+  };
+
+  const handleContinue = async () => {
+    const step4Data =
+      JSON.parse(localStorage.getItem("propertyFormData")) || [];
+
+    if (!base64Image) {
+      Swal.fire({
+        title: "Image Required",
+        text: "Please upload at least one image before continuing.",
+        icon: "warning",
+      });
+      return;
+    }
+
+    // 🔥 Show loading spinner
+    Swal.fire({
+      title: "Uploading Property...",
+      text: "Please wait while we save your property details.",
+      allowOutsideClick: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
+    try {
+      for (const formData of step4Data) {
+        const payload = {
+          propertyName: formData.propertyName || null,
+          propertyType: formData.propertyType || null,
+          model: formData.model || null,
+          price: formData.amount ? Number(formData.amount) : 0,
+          paymentType: formData.paymentType || null,
+          agencyFees: formData.feeType || null,
+          country: formData.country || null,
+          state: formData.state || null,
+          city: formData.city || null,
+          latitude: formData.latitude ? Number(formData.latitude) : 0,
+          longitude: formData.longitude ? Number(formData.longitude) : 0,
+          expiryDate: formData.expiryDate || null,
+          agentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          base64Images: [base64Image],
+        };
+
+        console.log("Submitting property:", payload);
+        const res = await http.post(
+          "/api/v1/properties/create-property",
+          payload
+        );
+
+        if (!res.data?.status) {
+          Swal.fire(
+            "Error",
+            res.data?.message || "Failed to create property.",
+            "error"
+          );
+          return;
+        }
+      }
+
+      // ✅ Success alert
+      Swal.fire({
+        title: "Success!",
+        text: "Property created successfully.",
+        icon: "success",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+
+      localStorage.removeItem("propertyFormData");
+      navigate("/property3");
+    } catch (err) {
+      console.error("Property creation error:", err);
+      Swal.fire(
+        "Error",
+        err?.response?.data?.message || "Something went wrong.",
+        "error"
+      );
+    }
   };
 
   return (
@@ -72,120 +174,54 @@ const Step4 = () => {
 
         <h2 className={styles.formTitle}>Property Details</h2>
         <PropertySteps currentStep={2} />
-        <p className={styles.formSubtitle}>
-          Tell us about the property you want to submit
+        <p className={styles.formSubtitle_X}>
+          Upload an offer letter from your agent/landlord if you have a property
+          you want to rent and you can click on{" "}
+          <a href="#">view sample offer</a> letter to see sample OR upload your
+          tenancy agreement if you want to renew the rent of your current
+          accommodation{" "}
         </p>
 
-        <form action="" className={styles.form}>
+        <div
+          className={`${styles.container6} ${styles.extraClass6}`}
+          onClick={() => fileInputRef.current?.click()}
+        >
+          <FaUpload className={styles.icon} />
+          <p className={styles.text}>Upload your offer letter file. (pdf)</p>
+          <input
+            ref={fileInputRef}
+            type="file"
+            accept=".jpg,.jpeg,.png,.pdf"
+            style={{ display: "none" }}
+            onChange={(e) => handleFileUpload(e.target.files[0] || null)}
+          />
+          {uploadedFile && (
+            <p className={styles.uploadedFile}>
+              Uploaded: <strong>{uploadedFile.name}</strong>
+            </p>
+          )}
+        </div>
+        <center>
           {" "}
-          <div className={styles.container_props}>
-            <div className={styles.inputGroup}>
-              <select
-                className={styles.input}
-                value={formData.propertyType}
-                onChange={(e) => handleChange("propertyType", e.target.value)}
-              >
-                <option value="">Enter Agent name</option>
-                <option value="house">House</option>
-                <option value="apartment">Apartment</option>
-                <option value="land">Land</option>
-              </select>
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="number"
-                placeholder="Enter Phone number"
-                className={styles.input}
-                value={formData.amount}
-                onChange={(e) => handleChange("amount", e.target.value)}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                placeholder="Enter email address"
-                className={styles.input}
-                value={formData.paymentType}
-                onChange={(e) => handleChange("paymentType", e.target.value)}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <select
-                className={styles.input}
-                value={formData.feeType}
-                onChange={(e) => handleChange("feeType", e.target.value)}
-              >
-                <option value="">Expiry date-Rent and payment</option>
-                <option value="5%">5%</option>
-                <option value="10%">10%</option>
-                <option value="none">None</option>
-              </select>
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                placeholder="Enter Bank"
-                className={styles.input}
-                value={formData.paymentType}
-                onChange={(e) => handleChange("paymentType", e.target.value)}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                placeholder="Enter the full address of the property"
-                className={styles.input}
-                value={formData.paymentType}
-                onChange={(e) => handleChange("paymentType", e.target.value)}
-              />
-            </div>
-
-            {/* <div className={styles.inputGroup}>
-              <select
-                className={styles.input}
-                value={formData.state}
-                onChange={(e) => handleChange("state", e.target.value)}
-              >
-                <option value="">Select State</option>
-                <option value="lagos">Lagos</option>
-                <option value="abuja">Abuja</option>
-              </select>
-            </div>
-
-            <div className={styles.inputGroup}>
-              <select
-                className={styles.input}
-                value={formData.city}
-                onChange={(e) => handleChange("city", e.target.value)}
-              >
-                <option value="">Select City</option>
-                <option value="ikeja">Ikeja</option>
-                <option value="lekki">Lekki</option>
-                <option value="garki">Garki</option>
-              </select>
-            </div> */}
-
-            <p className={styles.addMore}>Save</p>
-
-            <div className={styles.buttonGroup}>
-              <button className={styles.dashboardBtn} onClick={handleCancel}>
-                Cancel
-              </button>
-              <Link to="/property3">
-                {" "}
-                <button className={styles.btnproceed}>Continue</button>
-              </Link>
-            </div>
+          <div className={styles.buttonGroup1}>
+            <button
+              className={styles.dashboardBtn}
+              onClick={() => navigate("/dashboard")}
+            >
+              Dashboard
+            </button>
+            <button
+              className={styles.btnproceed}
+              onClick={handleContinue}
+              type="button"
+            >
+              Continue
+            </button>
           </div>
-        </form>
+        </center>
       </div>
     </div>
   );
 };
 
-export default Step4;
+export default Prop2;

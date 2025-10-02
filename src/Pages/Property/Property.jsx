@@ -1,8 +1,9 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { Link, useNavigate } from "react-router-dom";
 // import apiClient from "../../lib/apiClient";
 import Swal from "sweetalert2";
 import { ArrowLeft } from "lucide-react";
+import http from "../../api/http";
 
 import styles from "../../Styles/signup.module.css";
 import Charticon from "../../assets/icons/Pie chart _Isometric 2.svg";
@@ -10,16 +11,34 @@ import { BASE_URL } from "../../Components/API/API.js";
 import PropertySteps from "../../Components/PropertySteps";
 
 const Step4 = () => {
+  const [countryList, setCountryList] = useState([]);
+
+  useEffect(() => {
+    http
+      .get("/api/v1/countries/get-all-countries")
+      .then((res) => {
+        const countries = res?.data?.data || [];
+        setCountryList(countries);
+      })
+      .catch((err) => {
+        console.error("Error fetching countries:", err.response?.data || err);
+      });
+  }, []);
   const navigate = useNavigate();
   const [propertyForms, setPropertyForms] = useState([
     {
+      propertyName: "",
       propertyType: "",
+      model: "",
       amount: "",
       paymentType: "",
       feeType: "",
       country: "",
       state: "",
       city: "",
+      latitude: "",
+      longitude: "",
+      expiryDate: "",
     },
   ]);
 
@@ -44,14 +63,23 @@ const Step4 = () => {
     ]);
   };
 
-  const handleContinue = () => {
-    console.log(propertyForms);
-    navigate("/property2");
-  };
+const handleContinue = (e) => {
+  e.preventDefault();
+  localStorage.setItem("propertyFormData", JSON.stringify(propertyForms));
+  navigate("/property2");
+};
+
 
   const handleCancel = () => {
     navigate("/dashboard");
   };
+  const fileToBase64 = (file) =>
+    new Promise((resolve, reject) => {
+      const reader = new FileReader();
+      reader.readAsDataURL(file);
+      reader.onload = () => resolve(reader.result.split(",")[1]); // strip "data:..."
+      reader.onerror = (error) => reject(error);
+    });
 
   return (
     <div className={styles.container}>
@@ -103,7 +131,9 @@ const Step4 = () => {
                   <select
                     className={styles.input}
                     value={formData.propertyType}
-                    onChange={(e) => handleChange(index, "propertyType", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "propertyType", e.target.value)
+                    }
                   >
                     <option value="">Select the type of property</option>
                     <option value="house">House</option>
@@ -118,7 +148,9 @@ const Step4 = () => {
                     placeholder="Enter the amount"
                     className={styles.input}
                     value={formData.amount}
-                    onChange={(e) => handleChange(index, "amount", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "amount", e.target.value)
+                    }
                   />
                 </div>
 
@@ -128,7 +160,9 @@ const Step4 = () => {
                     placeholder="Enter the payment type"
                     className={styles.input}
                     value={formData.paymentType}
-                    onChange={(e) => handleChange(index, "paymentType", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "paymentType", e.target.value)
+                    }
                   />
                 </div>
 
@@ -136,7 +170,9 @@ const Step4 = () => {
                   <select
                     className={styles.input}
                     value={formData.feeType}
-                    onChange={(e) => handleChange(index, "feeType", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "feeType", e.target.value)
+                    }
                   >
                     <option value="">Agency and Legal fees</option>
                     <option value="5%">5%</option>
@@ -144,23 +180,94 @@ const Step4 = () => {
                     <option value="none">None</option>
                   </select>
                 </div>
-
                 <div className={styles.inputGroup}>
                   <select
                     className={styles.input}
                     value={formData.country}
-                    onChange={(e) => handleChange(index, "country", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "country", e.target.value)
+                    }
                   >
-                    <option value="">Select Country</option>
-                    <option value="nigeria">Nigeria</option>
+                    <option value="">
+                      {countryList.length
+                        ? "Select Country"
+                        : "Loading countries..."}
+                    </option>
+                    {countryList.map((country) => (
+                      <option key={country.id} value={country.name}>
+                        {country.name}
+                      </option>
+                    ))}
                   </select>
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    placeholder="Property Name"
+                    className={styles.input}
+                    value={formData.propertyName}
+                    onChange={(e) =>
+                      handleChange(index, "propertyName", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <input
+                    type="text"
+                    placeholder="Model"
+                    className={styles.input}
+                    value={formData.model}
+                    onChange={(e) =>
+                      handleChange(index, "model", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <input
+                    type="number"
+                    placeholder="Latitude"
+                    className={styles.input}
+                    value={formData.latitude}
+                    onChange={(e) =>
+                      handleChange(index, "latitude", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <input
+                    type="number"
+                    placeholder="Longitude"
+                    className={styles.input}
+                    value={formData.longitude}
+                    onChange={(e) =>
+                      handleChange(index, "longitude", e.target.value)
+                    }
+                  />
+                </div>
+
+                <div className={styles.inputGroup}>
+                  <input
+                    type="date"
+                    placeholder="Expiry Date"
+                    className={styles.input}
+                    value={formData.expiryDate}
+                    onChange={(e) =>
+                      handleChange(index, "expiryDate", e.target.value)
+                    }
+                  />
                 </div>
 
                 <div className={styles.inputGroup}>
                   <select
                     className={styles.input}
                     value={formData.state}
-                    onChange={(e) => handleChange(index, "state", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "state", e.target.value)
+                    }
                   >
                     <option value="">Select State</option>
                     <option value="lagos">Lagos</option>
@@ -172,7 +279,9 @@ const Step4 = () => {
                   <select
                     className={styles.input}
                     value={formData.city}
-                    onChange={(e) => handleChange(index, "city", e.target.value)}
+                    onChange={(e) =>
+                      handleChange(index, "city", e.target.value)
+                    }
                   >
                     <option value="">Select City</option>
                     <option value="ikeja">Ikeja</option>
@@ -191,11 +300,13 @@ const Step4 = () => {
               <button className={styles.dashboardBtn} onClick={handleCancel}>
                 Cancel
               </button>
-              <Link to="/property2">
-                <button className={styles.btnproceed} onClick={handleContinue}>
-                  Continue
-                </button>
-              </Link>
+              <button
+                className={styles.btnproceed}
+                onClick={handleContinue}
+                type="button"
+              >
+                Continue
+              </button>
             </div>
           </div>
         </form>

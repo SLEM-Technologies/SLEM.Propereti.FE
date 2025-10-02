@@ -150,22 +150,25 @@ const SignUp = () => {
 
   useEffect(() => {
     http
-      .get(`/api/v1/countries/get-all-countries`)
+      .get("/api/v1/countries/get-all-countries")
       .then((res) => {
-        const countries = res.data.data;
+        console.log("Countries response:", res.data);
+
+        const countries = res?.data?.data || [];
         setCountryList(countries);
 
-        // Optional: auto-set Nigeria phone code on initial load
+        // Default Nigeria if present
         const nigeria = countries.find((c) => c.name === "Nigeria");
         if (nigeria) {
           setFormData((prev) => ({
             ...prev,
+            country: nigeria.name,
             phoneCode: nigeria.dialCode,
           }));
         }
       })
       .catch((err) => {
-        console.error("Error fetching countries", err);
+        console.error("Error fetching countries:", err.response?.data || err);
       });
   }, []);
 
@@ -295,12 +298,33 @@ const SignUp = () => {
                   });
                   return;
                 }
+                // DOB check (no future birthdays)
+                if (formData.dob && new Date(formData.dob) > new Date()) {
+                  setIsLoading(false);
+                  Swal.fire({
+                    title: "Invalid Date of Birth",
+                    text: "Date of birth cannot be in the future.",
+                    icon: "warning",
+                  });
+                  return;
+                }
 
+                // normalize phone to E.164
+                const cleanedPhone = formData.phoneNumber.replace(/\s|-/g, "");
+                const phoneWithoutLeadingZeros = cleanedPhone.replace(
+                  /^0+/,
+                  ""
+                );
+                const normalizedPhone = cleanedPhone.startsWith("+")
+                  ? cleanedPhone
+                  : `${formData.phoneCode}${phoneWithoutLeadingZeros}`;
+
+                // then send the request with normalizedPhone
                 http
                   .post(`/api/v1/accounts/register-user`, {
                     email: formData.email,
                     password: formData.password,
-                    phoneNumber: formData.phoneNumber,
+                    phoneNumber: normalizedPhone,
                     username: formData.email.split("@")[0],
                     firstName: formData.firstName,
                     lastName: formData.surname,
@@ -311,24 +335,25 @@ const SignUp = () => {
                     refCode: formData.referralCode || "",
                   })
                   .then(() => {
-                    Swal.fire({
-                      title: "Success!",
-                      text: "Registration successful. Please verify your email.",
-                      icon: "success",
-                      timer: 1500,
-                      showConfirmButton: false,
-                    });
-                    setStep(2);
+                    /* ... */
                   })
                   .catch((err) => {
+                    console.error(
+                      "Registration error response:",
+                      err?.response ?? err
+                    );
                     Swal.fire({
                       title: "Registration Failed",
                       text:
-                        err?.response?.data?.message || "Something went wrong.",
+                        err?.response?.data?.message ||
+                        JSON.stringify(err?.response?.data) ||
+                        "Something went wrong.",
                       icon: "error",
                     });
                   })
                   .finally(() => setIsLoading(false));
+
+              
               }}
             >
               <h2 className={styles.formTitle}>Register Individual Account</h2>
@@ -398,56 +423,51 @@ const SignUp = () => {
               </div>
 
               {/* Phone Number */}
-   <div className={styles.phoneRow}>
-<div className={styles.inputGroup}>
-  <div className={styles.selectWrapper}>
-    <select
-      name="country"
-      value={formData.country}
-      onChange={(e) => {
-        const selected = countryList.find(
-          (country) => country.name === e.target.value
-        );
+              <div className={styles.phoneRow}>
+                <div className={styles.inputGroup}>
+                  <div className={styles.selectWrapper}>
+                    <select
+                      name="country"
+                      value={formData.country}
+                      onChange={(e) => {
+                        const selected = countryList.find(
+                          (c) => c.name === e.target.value
+                        );
+                        setFormData({
+                          ...formData,
+                          country: selected?.name || "",
+                          phoneCode: selected?.dialCode || "",
+                        });
+                      }}
+                    >
+                      <option value="">
+                        {countryList.length
+                          ? "Select a country"
+                          : "Loading countries..."}
+                      </option>
+                      {countryList.map((country) => (
+                        <option key={country.id} value={country.name}>
+                          {country.name} ({country.dialCode})
+                        </option>
+                      ))}
+                    </select>
 
-        if (selected) {
-          setFormData({
-            ...formData,
-            country: selected.name,
-            phoneCode: selected.dialCode,
-          });
-        }
-      }}
-      className={styles.select}
-    >
-      {countryList.map((country) => {
-        const shortName = country.name.slice(0, 3); // first 3 letters
-        return (
-          <option key={country.id} value={country.name}>
-            {shortName} ({country.dialCode})
-          </option>
-        );
-      })}
-    </select>
+                    <ChevronDown size={16} className={styles.selectIcon} />
+                  </div>
+                </div>
 
-    <ChevronDown size={16} className={styles.selectIcon} />
-  </div>
-</div>
-
-
-
-  <div className={styles.inputGroup}>
-    <input
-      type="tel"
-      name="phoneNumber"
-      value={formData.phoneNumber}
-      onChange={handleInputChange}
-      placeholder="Phone Number"
-      className={styles.input}
-      aria-label="Phone number"
-    />
-  </div>
-</div>
-
+                <div className={styles.inputGroup}>
+                  <input
+                    type="tel"
+                    name="phoneNumber"
+                    value={formData.phoneNumber}
+                    onChange={handleInputChange}
+                    placeholder="Phone Number"
+                    className={styles.input}
+                    aria-label="Phone number"
+                  />
+                </div>
+              </div>
 
               {/* Gender and DOB */}
               <div className={styles.nameRow}>
@@ -520,7 +540,9 @@ const SignUp = () => {
                     type="button"
                     onClick={() => setShowPassword(!showPassword)}
                     className={styles.eyeButton}
-                    aria-label={showPassword ? "Hide password" : "Show password"}
+                    aria-label={
+                      showPassword ? "Hide password" : "Show password"
+                    }
                   >
                     {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                   </button>

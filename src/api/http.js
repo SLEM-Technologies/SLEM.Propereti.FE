@@ -1,5 +1,6 @@
 import axios from 'axios';
 const baseURL = import.meta.env.VITE_API_BASE_URL;
+
 let accessTokenMemory = null;
 let refreshTokenMemory = null;
 export const tokenStore = {
@@ -79,6 +80,8 @@ async function refreshToken(instance) {
         pendingQueue = [];
     }
 }
+console.log("Loaded baseURL:", baseURL);
+
 const http = axios.create({ baseURL });
 http.interceptors.request.use(attachAuth);
 http.interceptors.response.use((r) => r, async (error) => {
@@ -93,6 +96,7 @@ http.interceptors.response.use((r) => r, async (error) => {
         catch (e) {
             throw e;
         }
+        
     }
     return Promise.reject(error);
 });

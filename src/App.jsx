@@ -53,12 +53,10 @@ import NotificationsFeed from "./Pages/NotificationsFeed.jsx";
 import PropertyPurchase from "./Pages/PropertyPurchase.jsx";
 import TransactionReceipt from "./Pages/TransactionReceipt.jsx";
 import KYC from "./Pages/KYC.jsx";
-import Nav from "./components/Nav.jsx";
 import CompanyDashboard from "./Pages/CompanyDashboard.jsx";
 const App = () => {
   return (
     <div className="app">
-      <Nav />
       <Routes>
         <Route path="/home" element={<Home />} />
         <Route path="/about-us" element={<About />} />
