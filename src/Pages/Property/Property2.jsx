@@ -70,14 +70,11 @@ const Prop2 = () => {
       return;
     }
 
-    // 🔥 Show loading spinner
     Swal.fire({
-      title: "Uploading Property...",
+      title: "Creating Property...",
       text: "Please wait while we save your property details.",
       allowOutsideClick: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
+      didOpen: () => Swal.showLoading(),
     });
 
     try {
@@ -95,27 +92,29 @@ const Prop2 = () => {
           latitude: formData.latitude ? Number(formData.latitude) : 0,
           longitude: formData.longitude ? Number(formData.longitude) : 0,
           expiryDate: formData.expiryDate || null,
-          agentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
+          // ❌ Remove hardcoded agentId - let backend get from token
+          // agentId: "3fa85f64-5717-4562-b3fc-2c963f66afa6",
           base64Images: [base64Image],
         };
 
-        console.log("Submitting property:", payload);
+        console.log(
+          "🔥 Submitting payload (no agentId - using auth token):",
+          payload
+        );
+        console.log("Auth token present:", !!tokenStore.access);
+
         const res = await http.post(
           "/api/v1/properties/create-property",
           payload
         );
 
+        console.log("Response:", res.data);
+
         if (!res.data?.status) {
-          Swal.fire(
-            "Error",
-            res.data?.message || "Failed to create property.",
-            "error"
-          );
-          return;
+          throw new Error(res.data?.message || "Failed to create property.");
         }
       }
 
-      // ✅ Success alert
       Swal.fire({
         title: "Success!",
         text: "Property created successfully.",
@@ -127,7 +126,7 @@ const Prop2 = () => {
       localStorage.removeItem("propertyFormData");
       navigate("/property3");
     } catch (err) {
-      console.error("Property creation error:", err);
+      console.error("Error:", err.response?.data || err);
       Swal.fire(
         "Error",
         err?.response?.data?.message || "Something went wrong.",
@@ -135,6 +134,7 @@ const Prop2 = () => {
       );
     }
   };
+  
 
   return (
     <div className={styles.container}>

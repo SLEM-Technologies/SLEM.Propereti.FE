@@ -17,6 +17,7 @@ const CompanySignUp = () => {
   const [passwordStrength, setPasswordStrength] = useState(0);
 
   // Company form data
+  // Company form data
   const [companyData, setCompanyData] = useState({
     name: "",
     description: "",
@@ -29,6 +30,8 @@ const CompanySignUp = () => {
     adminUserUsername: "",
     adminUserFirstName: "",
     adminUserLastName: "",
+    adminUserEmail: "",
+    adminPassword: "",
     gender: "",
     nationality: "",
   });
@@ -72,13 +75,21 @@ const CompanySignUp = () => {
 
     setPasswordStrength(strength);
   };
-
-  // submit company
   const handleCompanySubmit = (e) => {
     e.preventDefault();
+
     setIsLoading(true);
 
-    // Auto-fill username if empty
+    Swal.fire({
+      title: "Creating Company...",
+      text: "Please wait while we process your request",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => {
+        Swal.showLoading();
+      },
+    });
+
     let autoUsername = companyData.adminUserUsername;
     if (!autoUsername && companyData.contactEmail) {
       autoUsername = companyData.contactEmail.split("@")[0];
@@ -86,37 +97,41 @@ const CompanySignUp = () => {
 
     const payload = {
       ...companyData,
-      adminUserUsername: autoUsername, // ensure not null
+      adminUserUsername: autoUsername,
+      gender: companyData.gender.trim(),
+      nationality: companyData.nationality.trim(),
+      contactWebsite: companyData.contactWebsite.trim(),
     };
-
-    if (!payload.adminUserUsername) {
-      Swal.fire({
-        title: "Missing Field",
-        text: "Admin Username is required (auto-fill failed).",
-        icon: "warning",
-      });
-      setIsLoading(false);
-      return;
-    }
+    console.log("FINAL PAYLOAD TO API:", payload);
 
     http
       .post(`/api/v1/companies/create-company`, payload)
       .then(() => {
+        setStep(2);
         Swal.fire({
           title: "Company Created!",
-          text: "Now create your admin account.",
+          text: "Proceed to complete your admin details.",
           icon: "success",
         });
-        setStep(2);
       })
+
       .catch((err) => {
+        // 🪵 Log server error in console for debugging
+        console.log("SERVER ERROR:", err.response?.data);
+        localStorage.getItem("access_token");
+
+        // ❌ Show error alert to the user
         Swal.fire({
           title: "Failed",
-          text: err?.response?.data?.message || "Something went wrong.",
+          text:
+            err?.response?.data?.message ||
+            "Something went wrong on the server.",
           icon: "error",
         });
       })
-      .finally(() => setIsLoading(false));
+      .finally(() => {
+        setIsLoading(false);
+      });
   };
 
   // submit admin
@@ -155,6 +170,20 @@ const CompanySignUp = () => {
       })
       .finally(() => setIsLoading(false));
   };
+  useEffect(() => {
+    if (step === 2) {
+      setAdminData((prev) => ({
+        ...prev,
+        email: companyData.adminUserEmail,
+        username: companyData.adminUserUsername,
+        phoneNumber: companyData.adminUserPhoneNumber,
+        firstName: companyData.adminUserFirstName,
+        lastName: companyData.adminUserLastName,
+        gender: companyData.gender,
+        nationality: companyData.nationality,
+      }));
+    }
+  }, [step]);
 
   return (
     <div className={styles.container}>
@@ -236,6 +265,83 @@ const CompanySignUp = () => {
                 value={companyData.location}
                 onChange={handleCompanyChange}
                 className={styles.input}
+              />
+            </div>
+            {/* Admin Email */}
+            <div className={styles.inputGroup}>
+              <input
+                type="email"
+                name="adminUserEmail"
+                placeholder="Admin Email"
+                value={companyData.adminUserEmail}
+                onChange={handleCompanyChange}
+                className={styles.input}
+                required
+              />
+            </div>
+            <input
+              type="text"
+              name="adminUserFirstName"
+              placeholder="Admin First Name"
+              value={companyData.adminUserFirstName}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+
+            <input
+              type="text"
+              name="adminUserLastName"
+              placeholder="Admin Last Name"
+              value={companyData.adminUserLastName}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+
+            <input
+              type="text"
+              name="adminUserPhoneNumber"
+              placeholder="Admin Phone Number"
+              value={companyData.adminUserPhoneNumber}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+
+            <select
+              name="gender"
+              value={companyData.gender}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            >
+              <option value="">Select Gender</option>
+              <option value="Male">Male</option>
+              <option value="Female">Female</option>
+              <option value="Other">Other</option>
+            </select>
+
+            <input
+              type="text"
+              name="nationality"
+              placeholder="Nationality"
+              value={companyData.nationality}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+
+            {/* Admin Password */}
+            <div className={styles.inputGroup}>
+              <input
+                type="password"
+                name="adminPassword"
+                placeholder="Admin Password"
+                value={companyData.adminPassword}
+                onChange={handleCompanyChange}
+                className={styles.input}
+                required
               />
             </div>
 

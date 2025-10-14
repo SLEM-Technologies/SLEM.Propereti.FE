@@ -320,6 +320,8 @@ const SignUp = () => {
                   : `${formData.phoneCode}${phoneWithoutLeadingZeros}`;
 
                 // then send the request with normalizedPhone
+                // --- Replace your existing http.post(...).then(() => { /* ... */ }) with this:
+
                 http
                   .post(`/api/v1/accounts/register-user`, {
                     email: formData.email,
@@ -334,8 +336,33 @@ const SignUp = () => {
                     gender: formData.gender,
                     refCode: formData.referralCode || "",
                   })
-                  .then(() => {
-                    /* ... */
+                  .then((res) => {
+                    // Helpful debug log — remove in production if you like
+                    console.log(
+                      "Registration success response:",
+                      res?.data ?? res
+                    );
+
+                    // Show success alert using server-provided message if available
+                    const message =
+                      res?.data?.message ||
+                      res?.data?.data?.message ||
+                      "Registration successful. A verification code has been sent to your email.";
+
+                    Swal.fire({
+                      title: "Registration Successful",
+                      text: message,
+                      icon: "success",
+                      confirmButtonText: "OK",
+                    }).then(() => {
+                      // move to verification step (OTP input)
+                      setStep(2);
+
+                      // optional: focus first OTP input after short delay
+                      setTimeout(() => {
+                        inputsRef.current[0]?.focus();
+                      }, 100);
+                    });
                   })
                   .catch((err) => {
                     console.error(
@@ -352,8 +379,6 @@ const SignUp = () => {
                     });
                   })
                   .finally(() => setIsLoading(false));
-
-              
               }}
             >
               <h2 className={styles.formTitle}>Register Individual Account</h2>
@@ -614,9 +639,14 @@ const SignUp = () => {
               </div>
               {isLoading && <Spinner />}
 
-              <button className={styles.btnproceed} type="submit">
-                Proceed
+              <button
+                className={styles.btnproceed}
+                type="submit"
+                disabled={isLoading}
+              >
+                {isLoading ? "Processing..." : "Proceed"}
               </button>
+
               <p className={styles.ptag}>
                 Already have an account ? <Link to="/login">Login</Link>
               </p>
