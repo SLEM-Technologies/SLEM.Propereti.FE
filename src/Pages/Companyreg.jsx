@@ -5,7 +5,7 @@ import { useNavigate } from "react-router-dom";
 import { BASE_URL } from "../Components/API/API.js";
 import http from "../api/http";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
-import SignupSteps from "../Components/Stepcounter.jsx";
+import SignupSteps from "../Components/Stepcounter1.jsx";
 import Charticon from "../assets/icons/Pie chart _Isometric 2.svg";
 
 const CompanySignUp = () => {
@@ -114,19 +114,14 @@ const CompanySignUp = () => {
           icon: "success",
         });
       })
-
       .catch((err) => {
-        // 🪵 Log server error in console for debugging
         console.log("SERVER ERROR:", err.response?.data);
-        localStorage.getItem("access_token");
-
-        // ❌ Show error alert to the user
+        // Still move to next step even if it fails (for demo)
+        setStep(2);
         Swal.fire({
-          title: "Failed",
-          text:
-            err?.response?.data?.message ||
-            "Something went wrong on the server.",
-          icon: "error",
+          title: "Demo Mode",
+          text: "Backend returned an error, but proceeding for demo purposes.",
+          icon: "info",
         });
       })
       .finally(() => {

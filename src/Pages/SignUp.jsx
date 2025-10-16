@@ -342,6 +342,24 @@ const SignUp = () => {
                       "Registration success response:",
                       res?.data ?? res
                     );
+                    // ✅ Save basic user info for later (so sidebar can use it)
+                    const userInfo = {
+                      firstName: formData.firstName,
+                      lastName: formData.surname,
+                      email: formData.email,
+                      gender: formData.gender,
+                      dob: formData.dob,
+                      address: formData.address,
+                    };
+
+                    localStorage.setItem(
+                      "user",
+                      JSON.stringify({
+                        firstName: formData.firstName,
+                        lastName: formData.surname,
+                        email: formData.email,
+                      })
+                    );
 
                     // Show success alert using server-provided message if available
                     const message =

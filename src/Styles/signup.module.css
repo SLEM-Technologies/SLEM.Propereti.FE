@@ -751,6 +751,7 @@ select option {
 
   .leftSide {
     min-height: 40vh;
+    display: none;
   }
 
   .rightSide {

@@ -22,6 +22,17 @@ const Sidemenu = () => {
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
 
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
+
+  // ✅ Fetch user + token from localStorage
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    const storedToken = localStorage.getItem("access_token");
+    if (storedUser) setUser(JSON.parse(storedUser));
+    if (storedToken) setToken(storedToken);
+  }, []);
+
   const menuItems = [
     { icon: Dashboard, label: "Dashboard", type: "image", path: "/dashboard" },
     {
@@ -49,10 +60,10 @@ const Sidemenu = () => {
     { icon: Settings, label: "Settings", type: "icon", path: "/settings" },
   ];
 
-  const helpIndex = menuItems.length; // index for Help & Support
+  const helpIndex = menuItems.length;
   const [activeIndex, setActiveIndex] = useState(null);
 
-  // Set active menu based on current URL
+  // ✅ Set active menu
   useEffect(() => {
     const foundIndex = menuItems.findIndex(
       (item) => item.path === location.pathname
@@ -64,30 +75,44 @@ const Sidemenu = () => {
     }
   }, [location.pathname]);
 
-  // Reusable sidebar content
+  // ✅ Handle logout
+  const handleLogout = () => {
+    localStorage.removeItem("user");
+    localStorage.removeItem("access_token");
+    setUser(null);
+    setToken(null);
+    navigate("/login");
+  };
+
+  // ✅ Reusable sidebar content
   const renderMenu = () => (
     <>
-      {/* User Profile */}
+      {/* === User Profile === */}
       <div className={styles.userProfile}>
         <div className={styles.avatar}>
-          <img src={Pfp} alt="Indica Watson" />
+          <img src={Pfp} alt={user?.firstName || "User"} />
         </div>
-        <h3 className={styles.userName}>Indica Watson</h3>
-        <p className={styles.userTitle}>Real Estate Advisor</p>
+        <h3 className={styles.userName}>
+          {user
+            ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+            : "Guest User"}
+        </h3>
+        <p className={styles.userTitle}>
+          {user?.email || (token ? "Member" : "Not Logged In")}
+        </p>
       </div>
 
-      {/* Navigation */}
+      {/* === Navigation === */}
       <nav className={styles.navigation}>
         {menuItems.map((item, index) => {
           const isActive = activeIndex === index;
-
           return (
             <div
               key={index}
               className={`${styles.menuItem} ${isActive ? styles.active : ""}`}
               onClick={() => {
                 navigate(item.path);
-                setIsMobileOpen(false); // close mobile on click
+                setIsMobileOpen(false);
               }}
             >
               {item.type === "image" ? (
@@ -112,7 +137,7 @@ const Sidemenu = () => {
         })}
       </nav>
 
-      {/* Bottom */}
+      {/* === Bottom Section === */}
       <div className={styles.bottomSection}>
         {/* Help & Support */}
         <div
@@ -135,7 +160,7 @@ const Sidemenu = () => {
         </div>
 
         {/* Logout */}
-        <div className={styles.logoutItem}>
+        <div className={styles.logoutItem} onClick={handleLogout}>
           <LogOut className={styles.menuIcon} size={20} />
           <span className={styles.menuLabel}>Logout</span>
         </div>

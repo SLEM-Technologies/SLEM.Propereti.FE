@@ -41,6 +41,14 @@ const AdSidemenu = () => {
       setActiveIndex(helpIndex);
     }
   }, [location.pathname]);
+    const [user, setUser] = useState(null);
+    const [token, setToken] = useState(null);
+      useEffect(() => {
+        const storedUser = localStorage.getItem("user");
+        const storedToken = localStorage.getItem("access_token");
+        if (storedUser) setUser(JSON.parse(storedUser));
+        if (storedToken) setToken(storedToken);
+      }, []);
 
   // === reusable sidebar content ===
   const renderMenu = () => (
@@ -50,8 +58,14 @@ const AdSidemenu = () => {
         <div className={styles.avatar}>
           <img src={Pfp} alt="Admin Profile" />
         </div>
-        <h3 className={styles.userName}>Indica Watson</h3>
-        <p className={styles.userTitle}>Admin</p>
+ <h3 className={styles.userName}>
+          {user
+            ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+            : "Admin User"}
+        </h3>
+        <p className={styles.userTitle}>
+          {user?.email || (token ? "Admin" : "Not Logged In")}
+        </p>
       </div>
 
       {/* Navigation */}
