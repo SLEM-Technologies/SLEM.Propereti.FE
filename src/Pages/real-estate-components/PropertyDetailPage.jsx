@@ -1,4 +1,6 @@
-import React from "react";
+import React, { useState, useEffect } from "react";
+import { useNavigate } from "react-router-dom";
+
 import styles from "./PropertyDetailPage.module.css";
 import {
   FaMapMarkerAlt,
@@ -11,7 +13,6 @@ import {
 import Image12 from "../../assets/icons/Image13.svg";
 import Image123 from "../../assets/icons/Image3.svg";
 import Pfp from "../../assets/icons/Profile Image.svg";
-
 
 const PropertyDetailPage = () => {
   const amenities = [
@@ -27,6 +28,19 @@ const PropertyDetailPage = () => {
     { label: "Major Roads", value: "Nearby", icon: <FaRoad /> },
     { label: "Transit", value: "Installment Payment", icon: <FaBus /> },
   ];
+  const [user, setUser] = useState(null);
+
+  useEffect(() => {
+    const storedUser = localStorage.getItem("user");
+    if (storedUser) {
+      setUser(JSON.parse(storedUser));
+    }
+  }, []);
+  const navigate = useNavigate();
+
+  const handleBuyClick = () => {
+    navigate("/browse-properties/one-time");
+  };
 
   return (
     <div className={styles.container}>
@@ -113,19 +127,38 @@ const PropertyDetailPage = () => {
         <div className={styles.agentCard}>
           <img
             src={Pfp}
-            alt="agent"
+            alt={user?.firstName || "Agent"}
             className={styles.agentImg}
           />
-          <h3>Indica Watson</h3>
-          <p>Real Estate Agent</p>
+
+          {/* ✅ Agent Name */}
+          <h3>
+            {user
+              ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
+              : "Guest User"}
+          </h3>
+
+          {/* ✅ Role or Default */}
+          <p>{user?.role || "Real Estate Agent"}</p>
+
+          {/* ✅ Address or Fallback */}
           <p>
-            <FaMapMarkerAlt /> Doane Street, Fremont CA
+            <FaMapMarkerAlt /> {user?.address || "Doane Street, Fremont CA"}
           </p>
-          <p>2 months on here</p>
+
+          {/* ✅ Duration or Placeholder */}
+          <p>{user?.joinedDate ? "Joined recently" : "2 months on here"}</p>
+
+          {/* ✅ Rating placeholder */}
           <p>⭐⭐⭐⭐⭐ (16 Properties)</p>
+
+          {/* ✅ Buttons */}
           <div className={styles.buttons}>
             <button className={styles.msgBtn}>Message</button>
             <button className={styles.callBtn}>Call</button>
+            <button className={styles.msgBtn} onClick={handleBuyClick}>
+              Buy
+            </button>
           </div>
         </div>
 
