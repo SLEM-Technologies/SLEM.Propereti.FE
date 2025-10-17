@@ -101,11 +101,16 @@ const Prop2 = () => {
           "🔥 Submitting payload (no agentId - using auth token):",
           payload
         );
-        console.log("Auth token present:", !!tokenStore.access);
+        const token = localStorage.getItem("access_token");
 
         const res = await http.post(
           "/api/v1/properties/create-property",
-          payload
+          payload,
+          {
+            headers: {
+              Authorization: `Bearer ${token}`,
+            },
+          }
         );
 
         console.log("Response:", res.data);
@@ -134,7 +139,6 @@ const Prop2 = () => {
       );
     }
   };
-  
 
   return (
     <div className={styles.container}>

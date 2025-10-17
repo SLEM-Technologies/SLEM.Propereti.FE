@@ -116,7 +116,7 @@ const Sidemenu = () => {
             showConfirmButton: false,
           });
 
-          navigate("/login");
+          navigate("/home");
         } catch (error) {
           console.error("Logout error:", error);
           Swal.fire({

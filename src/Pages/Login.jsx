@@ -8,8 +8,7 @@ import { BASE_URL } from "../Components/API/API.js";
 import { isValidEmail } from "../utils/validators";
 import http, { tokenStore } from "../api/http";
 import googlelogo from "../assets/icons/Google Logo.svg";
-import { GoogleOAuthProvider, GoogleLogin } from '@react-oauth/google';
-
+import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -57,15 +56,13 @@ const Login = () => {
       .then((res) => {
         console.log("Login response:", res.data); // Check response structure
 
-        // Use the actual token key returned by backend
-        const token = res.data?.token || res.data?.data?.token || res.data?.accessToken;
-        const refresh = res.data?.refreshToken || res.data?.data?.refreshToken;
-
+        const token = res.data?.data?.token;
+        const refresh = res.data?.data?.refreshToken;
         if (!token) {
           Swal.fire({
             icon: "error",
             title: "Login Failed",
-            text: "No token received from server.",
+            text: "No access token received from server.",
           });
           return;
         }
@@ -217,7 +214,11 @@ const Login = () => {
               </div>
             )}
 
-            <button type="submit" className={styles.btnproceed_on} aria-label="Login">
+            <button
+              type="submit"
+              className={styles.btnproceed_on}
+              aria-label="Login"
+            >
               Login
             </button>
 
