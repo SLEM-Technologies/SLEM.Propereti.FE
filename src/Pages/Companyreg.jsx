@@ -1,4 +1,4 @@
-import React, { useState, useEffect } from "react";
+import React, { useState } from "react";
 import styles from "../Styles/signup.module.css";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -14,10 +14,8 @@ const CompanySignUp = () => {
   const [isLoading, setIsLoading] = useState(false);
   const [showPassword, setShowPassword] = useState(false);
   const [showConfirmPassword, setShowConfirmPassword] = useState(false);
-  const [passwordStrength, setPasswordStrength] = useState(0);
 
-  // Company form data
-  // Company form data
+  // === COMPANY FORM DATA ===
   const [companyData, setCompanyData] = useState({
     name: "",
     description: "",
@@ -26,33 +24,22 @@ const CompanySignUp = () => {
     contactEmail: "",
     contactPhoneNumber: "",
     contactWebsite: "",
+  });
+
+  // === ADMIN FORM DATA ===
+  const [adminData, setAdminData] = useState({
+    adminUserEmail: "",
+    adminPassword: "",
+    confirmPassword: "",
     adminUserPhoneNumber: "",
     adminUserUsername: "",
     adminUserFirstName: "",
     adminUserLastName: "",
-    adminUserEmail: "",
-    adminPassword: "",
     gender: "",
     nationality: "",
   });
 
-  // Admin form data
-  const [adminData, setAdminData] = useState({
-    email: "",
-    password: "",
-    confirmPassword: "",
-    phoneNumber: "",
-    username: "",
-    firstName: "",
-    lastName: "",
-    dob: "",
-    address: "",
-    nationality: "",
-    gender: "",
-    refCode: "",
-  });
-
-  // handle input changes
+  // === Handle Input Changes ===
   const handleCompanyChange = (e) => {
     setCompanyData({ ...companyData, [e.target.name]: e.target.value });
   };
@@ -61,127 +48,108 @@ const CompanySignUp = () => {
     setAdminData({ ...adminData, [e.target.name]: e.target.value });
   };
 
-  // password strength
-  const handlePasswordChange = (e) => {
-    const password = e.target.value;
-    setAdminData({ ...adminData, password });
-
-    let strength = 0;
-    if (password.length >= 8) strength++;
-    if (/[A-Z]/.test(password)) strength++;
-    if (/[a-z]/.test(password)) strength++;
-    if (/[0-9]/.test(password)) strength++;
-    if (/[^A-Za-z0-9]/.test(password)) strength++;
-
-    setPasswordStrength(strength);
+  // === STEP 1: NEXT BUTTON (no submit yet) ===
+  const handleCompanyNext = (e) => {
+    e.preventDefault();
+    setStep(2);
   };
-  const handleCompanySubmit = (e) => {
+
+  // === STEP 2: Submit Both Company + Admin Data ===
+  const handleFullSubmit = async (e) => {
     e.preventDefault();
 
-    setIsLoading(true);
-
-    Swal.fire({
-      title: "Creating Company...",
-      text: "Please wait while we process your request",
-      allowOutsideClick: false,
-      allowEscapeKey: false,
-      didOpen: () => {
-        Swal.showLoading();
-      },
-    });
-
-    let autoUsername = companyData.adminUserUsername;
-    if (!autoUsername && companyData.contactEmail) {
-      autoUsername = companyData.contactEmail.split("@")[0];
+    if (adminData.adminPassword !== adminData.confirmPassword) {
+      Swal.fire({
+        icon: "error",
+        title: "Password Mismatch",
+        text: "Passwords do not match.",
+      });
+      return;
     }
 
     const payload = {
       ...companyData,
-      adminUserUsername: autoUsername,
-      gender: companyData.gender.trim(),
-      nationality: companyData.nationality.trim(),
-      contactWebsite: companyData.contactWebsite.trim(),
+      adminUserPhoneNumber: adminData.adminUserPhoneNumber,
+      adminUserUsername: adminData.adminUserUsername,
+      adminUserFirstName: adminData.adminUserFirstName,
+      adminUserLastName: adminData.adminUserLastName,
+      adminUserEmail: adminData.adminUserEmail,
+      adminPassword: adminData.adminPassword,
+      gender: adminData.gender,
+      nationality: adminData.nationality,
     };
-    console.log("FINAL PAYLOAD TO API:", payload);
 
-    http
-      .post(`/api/v1/companies/create-company`, payload)
-      .then(() => {
-        setStep(2);
-        Swal.fire({
-          title: "Company Created!",
-          text: "Proceed to complete your admin details.",
-          icon: "success",
-        });
-      })
-      .catch((err) => {
-        console.log("SERVER ERROR:", err.response?.data);
-        // Still move to next step even if it fails (for demo)
-        setStep(2);
-        Swal.fire({
-          title: "Demo Mode",
-          text: "Backend returned an error, but proceeding for demo purposes.",
-          icon: "info",
-        });
-      })
-      .finally(() => {
-        setIsLoading(false);
-      });
-  };
+    console.log("FINAL PAYLOAD SENT TO API:", payload);
 
-  // submit admin
-  const handleAdminSubmit = (e) => {
-    e.preventDefault();
     setIsLoading(true);
+    Swal.fire({
+      title: "Registering Company & Admin...",
+      text: "Please wait while we process your request.",
+      allowOutsideClick: false,
+      allowEscapeKey: false,
+      didOpen: () => Swal.showLoading(),
+    });
 
-    if (adminData.password !== adminData.confirmPassword) {
+    try {
+      const res = await http.post(
+        `${BASE_URL}/api/v1/companies/create-company`,
+        payload
+      );
+      console.log("Company + Admin Created:", res.data);
+
+      // === OTP VERIFICATION POPUP ===
       Swal.fire({
-        title: "Password Mismatch",
-        text: "Passwords do not match.",
-        icon: "error",
+        title: "Verify Email",
+        text: `An OTP has been sent to ${adminData.adminUserEmail}`,
+        input: "text",
+        inputPlaceholder: "Enter your OTP code",
+        showCancelButton: true,
+        confirmButtonText: "Verify",
+        preConfirm: async (otpCode) => {
+          if (!otpCode) {
+            Swal.showValidationMessage("OTP code is required");
+            return false;
+          }
+          try {
+            await http.post(`${BASE_URL}/api/v1/accounts/verify-email`, {
+              email: adminData.adminUserEmail,
+              otpCode,
+            });
+            return true;
+          } catch (error) {
+            Swal.showValidationMessage(
+              error?.response?.data?.message || "Invalid OTP"
+            );
+            return false;
+          }
+        },
+      }).then((result) => {
+        if (result.isConfirmed) {
+          Swal.fire({
+            icon: "success",
+            title: "Email Verified!",
+            text: "Registration complete. You can now log in.",
+            timer: 2000,
+            showConfirmButton: false,
+          });
+          navigate("/login");
+        }
       });
+    } catch (err) {
+      console.error("Creation error:", err.response?.data);
+      Swal.fire({
+        icon: "error",
+        title: "Registration Failed",
+        text: err?.response?.data?.message || "Something went wrong.",
+      });
+    } finally {
       setIsLoading(false);
-      return;
     }
-
-    http
-      .post(`/api/v1/companies/create-company-admin`, {
-        ...adminData,
-      })
-      .then(() => {
-        Swal.fire({
-          title: "Success!",
-          text: "Company admin account created successfully.",
-          icon: "success",
-        });
-        navigate("/login");
-      })
-      .catch((err) => {
-        Swal.fire({
-          title: "Failed",
-          text: err?.response?.data?.message || "Something went wrong.",
-          icon: "error",
-        });
-      })
-      .finally(() => setIsLoading(false));
   };
-  useEffect(() => {
-    if (step === 2) {
-      setAdminData((prev) => ({
-        ...prev,
-        email: companyData.adminUserEmail,
-        username: companyData.adminUserUsername,
-        phoneNumber: companyData.adminUserPhoneNumber,
-        firstName: companyData.adminUserFirstName,
-        lastName: companyData.adminUserLastName,
-        gender: companyData.gender,
-        nationality: companyData.nationality,
-      }));
-    }
-  }, [step]);
 
   return (
     <div className={styles.container}>
+      {/* === LEFT SIDE === */}
       <div className={styles.leftSide}>
         <div className={styles.welcomeContent}>
           <div className={styles.illustration}>
@@ -193,20 +161,12 @@ const CompanySignUp = () => {
           </div>
           <h1 className={styles.welcomeTitle}>Welcome</h1>
           <p className={styles.welcomeText}>
-            Login to get started
-            <br />
-            If not yet registered click on sign up
-            <br />
-            to get started
+            Register your company and admin to get started.
           </p>
-          <div className={styles.dots}>
-            <span className={styles.dot}></span>
-            <span className={styles.dot}></span>
-            <span className={styles.dot}></span>
-          </div>
         </div>
       </div>
 
+      {/* === RIGHT SIDE === */}
       <div className={styles.rightSide}>
         <button className={styles.backButton} onClick={() => navigate(-1)}>
           <ArrowLeft size={20} /> Back
@@ -216,98 +176,134 @@ const CompanySignUp = () => {
           <SignupSteps currentStep={step} />
         </div>
 
-        {/* Step 1: Company Form */}
+        {/* === STEP 1: COMPANY FORM === */}
         {step === 1 && (
-          <form className={styles.form1} onSubmit={handleCompanySubmit}>
+          <form className={styles.form1} onSubmit={handleCompanyNext}>
             <h2 className={styles.formTitle}>Register Company</h2>
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="name"
-                placeholder="Company Name"
-                value={companyData.name}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
 
-            <div className={styles.inputGroup}>
-              <textarea
-                name="description"
-                placeholder="Company Description"
-                value={companyData.description}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
+            <input
+              type="text"
+              name="name"
+              placeholder="Company Name"
+              value={companyData.name}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+            <textarea
+              name="description"
+              placeholder="Company Description"
+              value={companyData.description}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="address"
+              placeholder="Address"
+              value={companyData.address}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="location"
+              placeholder="Location"
+              value={companyData.location}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+            <input
+              type="email"
+              name="contactEmail"
+              placeholder="Contact Email"
+              value={companyData.contactEmail}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="contactPhoneNumber"
+              placeholder="Contact Phone"
+              value={companyData.contactPhoneNumber}
+              onChange={handleCompanyChange}
+              className={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="contactWebsite"
+              placeholder="Website"
+              value={companyData.contactWebsite}
+              onChange={handleCompanyChange}
+              className={styles.input}
+            />
 
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="address"
-                placeholder="Company Address"
-                value={companyData.address}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
+            <button type="submit" className={styles.btnproceed}>
+              Next: Admin Details
+            </button>
+          </form>
+        )}
 
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="location"
-                placeholder="Location"
-                value={companyData.location}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
-            {/* Admin Email */}
-            <div className={styles.inputGroup}>
-              <input
-                type="email"
-                name="adminUserEmail"
-                placeholder="Admin Email"
-                value={companyData.adminUserEmail}
-                onChange={handleCompanyChange}
-                className={styles.input}
-                required
-              />
-            </div>
+        {/* === STEP 2: ADMIN FORM === */}
+        {step === 2 && (
+          <form className={styles.form1} onSubmit={handleFullSubmit}>
+            <h2 className={styles.formTitle}>Register Company Admin</h2>
+
+            <input
+              type="email"
+              name="adminUserEmail"
+              placeholder="Admin Email"
+              value={adminData.adminUserEmail}
+              onChange={handleAdminChange}
+              className={styles.input}
+              required
+            />
             <input
               type="text"
               name="adminUserFirstName"
-              placeholder="Admin First Name"
-              value={companyData.adminUserFirstName}
-              onChange={handleCompanyChange}
+              placeholder="First Name"
+              value={adminData.adminUserFirstName}
+              onChange={handleAdminChange}
               className={styles.input}
               required
             />
-
             <input
               type="text"
               name="adminUserLastName"
-              placeholder="Admin Last Name"
-              value={companyData.adminUserLastName}
-              onChange={handleCompanyChange}
+              placeholder="Last Name"
+              value={adminData.adminUserLastName}
+              onChange={handleAdminChange}
               className={styles.input}
               required
             />
-
             <input
               type="text"
               name="adminUserPhoneNumber"
-              placeholder="Admin Phone Number"
-              value={companyData.adminUserPhoneNumber}
-              onChange={handleCompanyChange}
+              placeholder="Phone Number"
+              value={adminData.adminUserPhoneNumber}
+              onChange={handleAdminChange}
+              className={styles.input}
+              required
+            />
+            <input
+              type="text"
+              name="adminUserUsername"
+              placeholder="Username"
+              value={adminData.adminUserUsername}
+              onChange={handleAdminChange}
               className={styles.input}
               required
             />
 
             <select
               name="gender"
-              value={companyData.gender}
-              onChange={handleCompanyChange}
+              value={adminData.gender}
+              onChange={handleAdminChange}
               className={styles.input}
               required
             >
@@ -321,165 +317,23 @@ const CompanySignUp = () => {
               type="text"
               name="nationality"
               placeholder="Nationality"
-              value={companyData.nationality}
-              onChange={handleCompanyChange}
+              value={adminData.nationality}
+              onChange={handleAdminChange}
               className={styles.input}
               required
             />
-
-            {/* Admin Password */}
-            <div className={styles.inputGroup}>
-              <input
-                type="password"
-                name="adminPassword"
-                placeholder="Admin Password"
-                value={companyData.adminPassword}
-                onChange={handleCompanyChange}
-                className={styles.input}
-                required
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="email"
-                name="contactEmail"
-                placeholder="Contact Email"
-                value={companyData.contactEmail}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="contactPhoneNumber"
-                placeholder="Contact Phone"
-                value={companyData.contactPhoneNumber}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="contactWebsite"
-                placeholder="Website"
-                value={companyData.contactWebsite}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="adminUserUsername"
-                placeholder="Admin Username (auto-filled from email)"
-                value={companyData.adminUserUsername}
-                onChange={handleCompanyChange}
-                className={styles.input}
-              />
-            </div>
-
-            <button type="submit" className={styles.btnproceed}>
-              Next: Admin Details
-            </button>
-          </form>
-        )}
-
-        {/* Step 2: Admin Form */}
-        {step === 2 && (
-          <form className={styles.form1} onSubmit={handleAdminSubmit}>
-            <h2 className={styles.formTitle}>Register Company Admin</h2>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="email"
-                name="email"
-                placeholder="Admin Email"
-                value={adminData.email}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="firstName"
-                placeholder="First Name"
-                value={adminData.firstName}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="lastName"
-                placeholder="Last Name"
-                value={adminData.lastName}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="phoneNumber"
-                placeholder="Phone Number"
-                value={adminData.phoneNumber}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="username"
-                placeholder="Username"
-                value={adminData.username}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="date"
-                name="dob"
-                value={adminData.dob}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
-
-            <div className={styles.inputGroup}>
-              <input
-                type="text"
-                name="address"
-                placeholder="Address"
-                value={adminData.address}
-                onChange={handleAdminChange}
-                className={styles.input}
-              />
-            </div>
 
             {/* Password */}
             <div className={styles.inputGroup}>
               <div className={styles.passwordWrapper}>
                 <input
                   type={showPassword ? "text" : "password"}
-                  name="password"
-                  value={adminData.password}
-                  onChange={handlePasswordChange}
+                  name="adminPassword"
                   placeholder="Password"
+                  value={adminData.adminPassword}
+                  onChange={handleAdminChange}
                   className={styles.input}
+                  required
                 />
                 <button
                   type="button"
@@ -489,25 +343,18 @@ const CompanySignUp = () => {
                   {showPassword ? <EyeOff size={16} /> : <Eye size={16} />}
                 </button>
               </div>
-              <div className={styles.passwordStrength}>
-                <div
-                  className={`${styles.strengthBar} ${
-                    styles[`strength${passwordStrength}`]
-                  }`}
-                ></div>
-              </div>
             </div>
 
-            {/* Confirm Password */}
             <div className={styles.inputGroup}>
               <div className={styles.passwordWrapper}>
                 <input
                   type={showConfirmPassword ? "text" : "password"}
                   name="confirmPassword"
+                  placeholder="Confirm Password"
                   value={adminData.confirmPassword}
                   onChange={handleAdminChange}
-                  placeholder="Confirm Password"
                   className={styles.input}
+                  required
                 />
                 <button
                   type="button"
