@@ -1,6 +1,10 @@
 import React, { useState, useEffect } from "react";
 import { useNavigate, useLocation } from "react-router-dom";
 import styles from "../Styles/sidemenu.module.css";
+import Swal from "sweetalert2";
+import http from "../api/http"; // same http instance used in login
+import { BASE_URL } from "../Components/API/API";
+
 import {
   Briefcase,
   Wallet,
@@ -76,12 +80,55 @@ const Sidemenu = () => {
   }, [location.pathname]);
 
   // ✅ Handle logout
-  const handleLogout = () => {
-    localStorage.removeItem("user");
-    localStorage.removeItem("access_token");
-    setUser(null);
-    setToken(null);
-    navigate("/login");
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem("refresh_token");
+
+    Swal.fire({
+      title: "Are you sure?",
+      text: "You’ll be logged out of your account.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonColor: "#3085d6",
+      cancelButtonColor: "#d33",
+      confirmButtonText: "Yes, log out",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          // Call logout endpoint if refresh token exists
+          if (refreshToken) {
+            await http.post(`${BASE_URL}/api/v1/auth/logout`, {
+              refreshToken,
+            });
+          }
+
+          // Clear user data
+          localStorage.removeItem("user");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          setUser(null);
+          setToken(null);
+
+          Swal.fire({
+            icon: "success",
+            title: "Logged Out",
+            text: "You’ve been successfully logged out.",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+
+          navigate("/login");
+        } catch (error) {
+          console.error("Logout error:", error);
+          Swal.fire({
+            icon: "error",
+            title: "Logout Failed",
+            text:
+              error?.response?.data?.message ||
+              "Something went wrong while logging out.",
+          });
+        }
+      }
+    });
   };
 
   // ✅ Reusable sidebar content
