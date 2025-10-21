@@ -1,0 +1,95 @@
+/* 🔹 Main popup */
+.custom-swal-popup {
+  display: grid !important;
+  border-radius: 54px !important;
+  background: linear-gradient(135deg, #1a1b23 0%, #11163f 100%) !important;
+  color: #fff !important;
+  padding: 2.5rem !important;
+  box-shadow: 0 0 40px rgba(0, 0, 0, 0.6) !important;
+  backdrop-filter: blur(10px) !important;
+  border: 1px solid rgba(255, 255, 255, 0.15) !important;
+  transition: all 0.3s ease-in-out !important;
+}
+
+/* 🔹 Title styling */
+.custom-swal-title {
+  color: #fff !important;
+  font-weight: 700 !important;
+  font-size: 1.4rem !important;
+  text-align: center !important;
+  letter-spacing: 0.5px !important;
+}
+
+/* 🔹 Text styling */
+.swal2-html-container {
+  color: #ddd !important;
+  font-size: 1rem !important;
+  text-align: center !important;
+  margin-top: 0.8rem !important;
+}
+
+/* 🔹 Confirm button */
+.custom-swal-button {
+  background: linear-gradient(135deg, #4158d0, #c850c0) !important;
+  color: #fff !important;
+  border-radius: 12px !important;
+  padding: 10px 25px !important;
+  font-weight: 600 !important;
+  letter-spacing: 0.3px !important;
+  border: none !important;
+  box-shadow: 0 4px 12px rgba(0, 0, 0, 0.3) !important;
+  transition: all 0.2s ease-in-out !important;
+}
+
+.custom-swal-button:hover {
+  transform: translateY(-2px) scale(1.03) !important;
+  box-shadow: 0 6px 18px rgba(255, 255, 255, 0.2) !important;
+}
+
+/* 🔹 Optional: Animate popup entry */
+.swal2-show {
+  animation: fadeInScale 0.4s ease !important;
+}
+.swal-theme-cancel-button {
+  background: transparent;
+  color: #aaa;
+  border: 1px solid #444;
+  border-radius: 8px;
+  padding: 10px 20px;
+  font-weight: 500;
+  transition: 0.3s ease;
+}
+
+.swal-theme-cancel-button:hover {
+  color: #fff;
+  border-color: #666;
+}
+
+.swal-theme-input {
+  background: #2a2a3d;
+  color: #fff;
+  border: 1px solid #555;
+  border-radius: 6px;
+  padding: 10px;
+  outline: none;
+  width: 100%;
+  box-sizing: border-box;
+}
+
+.swal-theme-input::placeholder {
+  color: #888;
+}
+.swal2-loader {
+  border-color: #4e6cff transparent #4e6cff transparent !important;
+}
+
+@keyframes fadeInScale {
+  0% {
+    opacity: 0;
+    transform: scale(0.9);
+  }
+  100% {
+    opacity: 1;
+    transform: scale(1);
+  }
+}

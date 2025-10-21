@@ -4,6 +4,8 @@ import styles from "../Styles/sidemenu.module.css";
 import Swal from "sweetalert2";
 import http from "../api/http"; // same http instance used in login
 import { BASE_URL } from "../Components/API/API";
+import "../Styles/swalStyles.css";
+import { ThemedSwal } from "../utils/ThemedSwal";
 
 import {
   Briefcase,
@@ -83,7 +85,7 @@ const Sidemenu = () => {
   const handleLogout = async () => {
     const refreshToken = localStorage.getItem("refresh_token");
 
-    Swal.fire({
+    ThemedSwal({
       title: "Are you sure?",
       text: "You’ll be logged out of your account.",
       icon: "warning",
@@ -108,7 +110,7 @@ const Sidemenu = () => {
           setUser(null);
           setToken(null);
 
-          Swal.fire({
+          ThemedSwal({
             icon: "success",
             title: "Logged Out",
             text: "You’ve been successfully logged out.",
@@ -119,7 +121,8 @@ const Sidemenu = () => {
           navigate("/home");
         } catch (error) {
           console.error("Logout error:", error);
-          Swal.fire({
+
+          ThemedSwal({
             icon: "error",
             title: "Logout Failed",
             text:

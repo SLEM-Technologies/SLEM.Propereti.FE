@@ -9,6 +9,8 @@ import { BASE_URL } from "../Components/API/API.js";
 import http from "../api/http";
 import { isValidEmail, isStrongPassword, isPhone } from "../utils/validators";
 import SignupSteps from "../Components/Stepcounter.jsx";
+import "../Styles/swalStyles.css";
+import { ThemedSwal } from "../utils/ThemedSwal.js";
 
 import { ArrowLeft, Eye, EyeOff, ChevronDown } from "lucide-react";
 
@@ -88,7 +90,12 @@ const SignUp = () => {
   const verifyEmail = () => {
     const otpCode = otp.join("");
     if (otpCode.length < 6) {
-      Swal.fire({
+      // Swal.fire({
+      //   title: "Invalid Code",
+      //   text: "Please enter the complete 6-digit code.",
+      //   icon: "warning",
+      // });
+      ThemedSwal({
         title: "Invalid Code",
         text: "Please enter the complete 6-digit code.",
         icon: "warning",
@@ -102,7 +109,12 @@ const SignUp = () => {
         otpCode: otpCode,
       })
       .then(() => {
-        Swal.fire({
+        // Swal.fire({
+        //   title: "Verified!",
+        //   text: "Email verification successful.",
+        //   icon: "success",
+        // });
+        ThemedSwal({
           title: "Verified!",
           text: "Email verification successful.",
           icon: "success",
@@ -110,7 +122,12 @@ const SignUp = () => {
         setStep(3);
       })
       .catch((err) => {
-        Swal.fire({
+        // Swal.fire({
+        //   title: "Verification Failed",
+        //   text: err?.response?.data?.message || "Invalid OTP.",
+        //   icon: "error",
+        // });
+        ThemedSwal({
           title: "Verification Failed",
           text: err?.response?.data?.message || "Invalid OTP.",
           icon: "error",
@@ -127,14 +144,19 @@ const SignUp = () => {
         email: formData.email,
       })
       .then(() => {
-        Swal.fire({
+        // Swal.fire({
+        //   title: "OTP Sent",
+        //   text: "A new OTP has been sent to your email.",
+        //   icon: "info",
+        // });
+        ThemedSwal({
           title: "OTP Sent",
           text: "A new OTP has been sent to your email.",
           icon: "info",
         });
       })
       .catch((err) => {
-        Swal.fire({
+        ThemedSwal({
           title: "Failed",
           text: err?.response?.data?.message || "Could not resend OTP.",
           icon: "error",
@@ -251,47 +273,76 @@ const SignUp = () => {
                     .join(", ");
 
                   setIsLoading(false);
-                  Swal.fire({
+                  // Swal.fire({
+                  //   title: "Missing Fields",
+                  //   text: `Please fill out the following field(s): ${missingFieldsText}.`,
+                  //   icon: "warning",
+                  // });
+                  ThemedSwal({
                     title: "Missing Fields",
                     text: `Please fill out the following field(s): ${missingFieldsText}.`,
                     icon: "warning",
                   });
+
                   return;
                 }
 
                 if (!isValidEmail(formData.email)) {
                   setIsLoading(false);
-                  Swal.fire({
+                  // Swal.fire({
+                  //   title: "Invalid Email",
+                  //   text: "Please enter a valid email address.",
+                  //   icon: "warning",
+                  // });
+                  ThemedSwal({
                     title: "Invalid Email",
                     text: "Please enter a valid email address.",
                     icon: "warning",
                   });
+
                   return;
                 }
 
                 if (!isPhone(formData.phoneNumber)) {
                   setIsLoading(false);
-                  Swal.fire({
+                  // Swal.fire({
+                  //   title: "Invalid Phone",
+                  //   text: "Please enter a valid phone number.",
+                  //   icon: "warning",
+                  // });
+                  ThemedSwal({
                     title: "Invalid Phone",
                     text: "Please enter a valid phone number.",
                     icon: "warning",
                   });
+
                   return;
                 }
 
                 if (!isStrongPassword(formData.password)) {
                   setIsLoading(false);
-                  Swal.fire({
+                  // Swal.fire({
+                  //   title: "Weak Password",
+                  //   text: "Password must be 8+ chars incl. upper, lower, digit and symbol.",
+                  //   icon: "warning",
+                  // });
+                  ThemedSwal({
                     title: "Weak Password",
                     text: "Password must be 8+ chars incl. upper, lower, digit and symbol.",
                     icon: "warning",
                   });
+
                   return;
                 }
 
                 if (formData.password !== formData.confirmPassword) {
                   setIsLoading(false);
-                  Swal.fire({
+                  // Swal.fire({
+                  //   title: "Password Mismatch",
+                  //   text: "Passwords do not match.",
+                  //   icon: "error",
+                  // });
+                  ThemedSwal({
                     title: "Password Mismatch",
                     text: "Passwords do not match.",
                     icon: "error",
@@ -301,7 +352,12 @@ const SignUp = () => {
                 // DOB check (no future birthdays)
                 if (formData.dob && new Date(formData.dob) > new Date()) {
                   setIsLoading(false);
-                  Swal.fire({
+                  // Swal.fire({
+                  //   title: "Invalid Date of Birth",
+                  //   text: "Date of birth cannot be in the future.",
+                  //   icon: "warning",
+                  // });
+                  ThemedSwal({
                     title: "Invalid Date of Birth",
                     text: "Date of birth cannot be in the future.",
                     icon: "warning",
@@ -371,7 +427,14 @@ const SignUp = () => {
                       title: "Registration Successful",
                       text: message,
                       icon: "success",
-                      confirmButtonText: "OK",
+                      confirmButtonText: "Continue",
+                      background: "transparent", // keep it clean, we handle bg via CSS
+                      color: "#fff",
+                      customClass: {
+                        popup: "custom-swal-popup",
+                        title: "custom-swal-title",
+                        confirmButton: "custom-swal-button",
+                      },
                     }).then(() => {
                       // move to verification step (OTP input)
                       setStep(2);
@@ -387,7 +450,15 @@ const SignUp = () => {
                       "Registration error response:",
                       err?.response ?? err
                     );
-                    Swal.fire({
+                    // Swal.fire({
+                    //   title: "Registration Failed",
+                    //   text:
+                    //     err?.response?.data?.message ||
+                    //     JSON.stringify(err?.response?.data) ||
+                    //     "Something went wrong.",
+                    //   icon: "error",
+                    // });
+                    ThemedSwal({
                       title: "Registration Failed",
                       text:
                         err?.response?.data?.message ||

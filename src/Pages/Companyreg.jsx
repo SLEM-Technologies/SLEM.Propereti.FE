@@ -7,6 +7,8 @@ import http from "../api/http";
 import { ArrowLeft, Eye, EyeOff } from "lucide-react";
 import SignupSteps from "../Components/Stepcounter1.jsx";
 import Charticon from "../assets/icons/Pie chart _Isometric 2.svg";
+import "../Styles/swalStyles.css";
+import { ThemedSwal } from "../utils/ThemedSwal.js";
 
 const CompanySignUp = () => {
   const navigate = useNavigate();
@@ -59,7 +61,7 @@ const CompanySignUp = () => {
     e.preventDefault();
 
     if (adminData.adminPassword !== adminData.confirmPassword) {
-      Swal.fire({
+      ThemedSwal({
         icon: "error",
         title: "Password Mismatch",
         text: "Passwords do not match.",
@@ -82,7 +84,7 @@ const CompanySignUp = () => {
     console.log("FINAL PAYLOAD SENT TO API:", payload);
 
     setIsLoading(true);
-    Swal.fire({
+    ThemedSwal({
       title: "Registering Company & Admin...",
       text: "Please wait while we process your request.",
       allowOutsideClick: false,
@@ -98,25 +100,64 @@ const CompanySignUp = () => {
       console.log("Company + Admin Created:", res.data);
 
       // === OTP VERIFICATION POPUP ===
-      Swal.fire({
+      ThemedSwal({
         title: "Verify Email",
         text: `An OTP has been sent to ${adminData.adminUserEmail}`,
         input: "text",
         inputPlaceholder: "Enter your OTP code",
         showCancelButton: true,
         confirmButtonText: "Verify",
+        allowOutsideClick: false,
+        allowEscapeKey: false,
+        background: "#1e1e2f",
+        color: "#fff",
+        customClass: {
+          popup: "swal-theme-popup",
+          title: "swal-theme-title",
+          htmlContainer: "swal-theme-text",
+          confirmButton: "swal-theme-button",
+          cancelButton: "swal-theme-cancel-button",
+          input: "swal-theme-input",
+        },
         preConfirm: async (otpCode) => {
           if (!otpCode) {
             Swal.showValidationMessage("OTP code is required");
             return false;
           }
+
+          // 🌀 Show themed loading while verifying
+
+          ThemedSwal({
+            title: "Verifying...",
+            text: "Please wait while we verify your OTP.",
+            allowOutsideClick: false,
+            allowEscapeKey: false,
+            background: "#1e1e2f",
+            color: "#fff",
+            customClass: {
+              popup: "swal-theme-popup",
+              title: "swal-theme-title",
+              htmlContainer: "swal-theme-text",
+            },
+            didOpen: () => {
+              Swal.showLoading();
+            },
+          });
+
           try {
             await http.post(`${BASE_URL}/api/v1/accounts/verify-email`, {
               email: adminData.adminUserEmail,
               otpCode,
             });
+            Swal.close();
+            ThemedSwal({
+              title: "Verification Successful 🎉",
+              text: "Your email has been successfully verified.",
+              icon: "success",
+            });
             return true;
           } catch (error) {
+            Swal.close();
             Swal.showValidationMessage(
               error?.response?.data?.message || "Invalid OTP"
             );
@@ -125,7 +166,7 @@ const CompanySignUp = () => {
         },
       }).then((result) => {
         if (result.isConfirmed) {
-          Swal.fire({
+          ThemedSwal({
             icon: "success",
             title: "Email Verified!",
             text: "Registration complete. You can now log in.",
@@ -137,7 +178,8 @@ const CompanySignUp = () => {
       });
     } catch (err) {
       console.error("Creation error:", err.response?.data);
-      Swal.fire({
+
+      ThemedSwal({
         icon: "error",
         title: "Registration Failed",
         text: err?.response?.data?.message || "Something went wrong.",
