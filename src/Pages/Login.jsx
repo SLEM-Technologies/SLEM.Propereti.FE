@@ -9,6 +9,7 @@ import { isValidEmail } from "../utils/validators";
 import http, { tokenStore } from "../api/http";
 import googlelogo from "../assets/icons/Google Logo.svg";
 import { GoogleOAuthProvider, GoogleLogin } from "@react-oauth/google";
+import { ThemedSwal } from "../utils/ThemedSwal.js";
 
 const Login = () => {
   const navigate = useNavigate();
@@ -29,7 +30,7 @@ const Login = () => {
     e.preventDefault();
 
     if (!formData.email || !formData.password) {
-      Swal.fire({
+      ThemedSwal({
         icon: "warning",
         title: "Missing Fields",
         text: "Please enter both email and password.",
@@ -37,7 +38,7 @@ const Login = () => {
       return;
     }
     if (!isValidEmail(formData.email)) {
-      Swal.fire({
+      ThemedSwal({
         icon: "warning",
         title: "Invalid Email",
         text: "Please enter a valid email address.",
@@ -54,12 +55,12 @@ const Login = () => {
         firstLogin: true,
       })
       .then((res) => {
-        console.log("Login response:", res.data); // Check response structure
+        console.log("Login response:", res.data);
 
         const token = res.data?.data?.token;
         const refresh = res.data?.data?.refreshToken;
         if (!token) {
-          Swal.fire({
+          ThemedSwal({
             icon: "error",
             title: "Login Failed",
             text: "No access token received from server.",
@@ -67,34 +68,45 @@ const Login = () => {
           return;
         }
 
-        // Save token (legacy + new)
-        try {
-          tokenStore.access = token;
-          if (refresh) tokenStore.refresh = refresh;
-        } catch {}
+        // Save token
+        tokenStore.access = token;
+        if (refresh) tokenStore.refresh = refresh;
         localStorage.setItem("token", token);
-        localStorage.setItem("access_token", token);
         if (refresh) localStorage.setItem("refresh_token", refresh);
 
-        Swal.fire({
+        ThemedSwal({
           icon: "success",
           title: "Login Successful",
           text: "Welcome back!",
           timer: 1500,
           showConfirmButton: false,
         });
+        // Save balances
+        const walletBalance = res.data?.data?.walletBalance || 0;
+        const portfolioBalance = res.data?.data?.portfolioBalance || 0;
 
-        const fromOnboarding = new URLSearchParams(window.location.search).get(
-          "fromOnboarding"
-        );
-        if (fromOnboarding) {
-          navigate("/signup/step-4");
-        } else {
+        localStorage.setItem("walletBalance", walletBalance);
+        localStorage.setItem("portfolioBalance", portfolioBalance);
+
+        // Decode token and route based on role
+        try {
+          const payloadBase64 = token.split(".")[1];
+          const decodedPayload = JSON.parse(atob(payloadBase64));
+          const userRole = decodedPayload?.Role;
+          console.log("User Role:", userRole);
+
+          if (userRole === "CompanyAdministrator") {
+            navigate("/admin-properties");
+          } else {
+            navigate("/dashboard");
+          }
+        } catch (decodeError) {
+          console.error("Failed to decode token:", decodeError);
           navigate("/dashboard");
         }
       })
       .catch((err) => {
-        Swal.fire({
+        ThemedSwal({
           icon: "error",
           title: "Login Failed",
           text: err?.response?.data?.message || "Invalid credentials.",
@@ -124,13 +136,13 @@ const Login = () => {
     // listen for auth response (needs your backend to redirect back to redirectUri with token)
     window.addEventListener("message", (event) => {
       if (event.data.type === "google-auth-success") {
-        Swal.fire({
+        ThemedSwal({
           icon: "success",
           title: "Login successful!",
           text: `Welcome ${event.data.user.name}`,
         });
       } else if (event.data.type === "google-auth-error") {
-        Swal.fire({
+        ThemedSwal({
           icon: "error",
           title: "Login failed",
           text: "Please try again.",

@@ -1,4 +1,4 @@
-import React, { useState } from "react";
+import React, { useState, useRef } from "react";
 import styles from "../Styles/signup.module.css";
 import Swal from "sweetalert2";
 import { useNavigate } from "react-router-dom";
@@ -97,88 +97,26 @@ const CompanySignUp = () => {
         `${BASE_URL}/api/v1/companies/create-company`,
         payload
       );
+
       console.log("Company + Admin Created:", res.data);
 
-      // === OTP VERIFICATION POPUP ===
+      Swal.close();
+
+      // ✅ Move to OTP verification screen instead of showing modal
       ThemedSwal({
-        title: "Verify Email",
-        text: `An OTP has been sent to ${adminData.adminUserEmail}`,
-        input: "text",
-        inputPlaceholder: "Enter your OTP code",
-        showCancelButton: true,
-        confirmButtonText: "Verify",
-        allowOutsideClick: false,
-        allowEscapeKey: false,
-        background: "#1e1e2f",
-        color: "#fff",
-        customClass: {
-          popup: "swal-theme-popup",
-          title: "swal-theme-title",
-          htmlContainer: "swal-theme-text",
-          confirmButton: "swal-theme-button",
-          cancelButton: "swal-theme-cancel-button",
-          input: "swal-theme-input",
-        },
-        preConfirm: async (otpCode) => {
-          if (!otpCode) {
-            Swal.showValidationMessage("OTP code is required");
-            return false;
-          }
-
-          // 🌀 Show themed loading while verifying
-
-          ThemedSwal({
-            title: "Verifying...",
-            text: "Please wait while we verify your OTP.",
-            allowOutsideClick: false,
-            allowEscapeKey: false,
-            background: "#1e1e2f",
-            color: "#fff",
-            customClass: {
-              popup: "swal-theme-popup",
-              title: "swal-theme-title",
-              htmlContainer: "swal-theme-text",
-            },
-            didOpen: () => {
-              Swal.showLoading();
-            },
-          });
-
-          try {
-            await http.post(`${BASE_URL}/api/v1/accounts/verify-email`, {
-              email: adminData.adminUserEmail,
-              otpCode,
-            });
-            Swal.close();
-            ThemedSwal({
-              title: "Verification Successful 🎉",
-              text: "Your email has been successfully verified.",
-              icon: "success",
-            });
-            return true;
-          } catch (error) {
-            Swal.close();
-            Swal.showValidationMessage(
-              error?.response?.data?.message || "Invalid OTP"
-            );
-            return false;
-          }
-        },
-      }).then((result) => {
-        if (result.isConfirmed) {
-          ThemedSwal({
-            icon: "success",
-            title: "Email Verified!",
-            text: "Registration complete. You can now log in.",
-            timer: 2000,
-            showConfirmButton: false,
-          });
-          navigate("/login");
-        }
+        icon: "success",
+        title: "Registration Successful!",
+        text: `An OTP has been sent to ${adminData.adminUserEmail}.`,
+        timer: 1800,
+        showConfirmButton: false,
       });
+
+      // Move to step 3 (OTP verification)
+      setStep(3);
     } catch (err) {
       console.error("Creation error:", err.response?.data);
 
+      Swal.close();
       ThemedSwal({
         icon: "error",
         title: "Registration Failed",
@@ -186,6 +124,83 @@ const CompanySignUp = () => {
       });
     } finally {
       setIsLoading(false);
+    }
+  };
+
+  const [otp, setOtp] = useState(["", "", "", "", "", ""]);
+  const inputsRef = useRef([]);
+  const handleChange = (e, index) => {
+    const value = e.target.value;
+    if (/^[0-9]?$/.test(value)) {
+      const newOtp = [...otp];
+      newOtp[index] = value;
+      setOtp(newOtp);
+
+      if (value && index < 5) {
+        inputsRef.current[index + 1].focus();
+      }
+    }
+  };
+
+  const resendOTP = async () => {
+    try {
+      await http.post(`${BASE_URL}/api/v1/accounts/resend-email-otp`, {
+        email: adminData.adminUserEmail,
+      });
+      ThemedSwal({
+        icon: "success",
+        title: "OTP Resent!",
+        text: `A new code has been sent to ${adminData.adminUserEmail}`,
+      });
+    } catch (error) {
+      ThemedSwal({
+        icon: "error",
+        title: "Failed",
+        text: error?.response?.data?.message || "Could not resend OTP",
+      });
+    }
+  };
+
+  const verifyEmail = async () => {
+    const code = otp.join("");
+    if (code.length !== 6) {
+      ThemedSwal({
+        icon: "warning",
+        title: "Incomplete OTP",
+        text: "Please enter all 6 digits.",
+      });
+      return;
+    }
+
+    try {
+      ThemedSwal({
+        title: "Verifying...",
+        text: "Please wait while we verify your OTP.",
+        allowOutsideClick: false,
+        didOpen: () => Swal.showLoading(),
+      });
+
+      await http.post(`${BASE_URL}/api/v1/accounts/verify-email`, {
+        email: adminData.adminUserEmail,
+        otpCode: code,
+      });
+
+      Swal.close();
+      ThemedSwal({
+        icon: "success",
+        title: "Email Verified 🎉",
+        text: "Your email has been successfully verified.",
+        timer: 2000,
+        showConfirmButton: false,
+      });
+      navigate("/login");
+    } catch (error) {
+      Swal.close();
+      ThemedSwal({
+        icon: "error",
+        title: "Verification Failed",
+        text: error?.response?.data?.message || "Invalid OTP",
+      });
     }
   };
 
@@ -416,6 +431,48 @@ const CompanySignUp = () => {
               Complete Registration
             </button>
           </form>
+        )}
+        {step === 3 && (
+          <div className={styles.form}>
+            <div className={styles.container1}>
+              <h2 className={styles.title1}>Verify Email Address</h2>
+              <p className={styles.subtitle1}>
+                A six-digit code has been sent to {adminData.adminUserEmail}
+                <br />
+                <span className={styles.note1}>
+                  Kindly enter the code to continue.
+                </span>
+              </p>
+
+              <div className={styles.inputWrapper1}>
+                {Array(6)
+                  .fill("")
+                  .map((_, i) => (
+                    <input
+                      key={i}
+                      maxLength="1"
+                      className={styles.otpInput}
+                      value={otp[i]}
+                      onChange={(e) => handleChange(e, i)}
+                      ref={(el) => (inputsRef.current[i] = el)}
+                    />
+                  ))}
+              </div>
+
+              <div className={styles.actions1}>
+                <button className={styles.resend} onClick={resendOTP}>
+                  Resend OTP
+                </button>
+              </div>
+
+              <button className={styles.backButton} onClick={() => setStep(2)}>
+                <ArrowLeft size={20} /> Back
+              </button>
+              <button className={styles.btnproceed} onClick={verifyEmail}>
+                Verify
+              </button>
+            </div>
+          </div>
         )}
       </div>
     </div>

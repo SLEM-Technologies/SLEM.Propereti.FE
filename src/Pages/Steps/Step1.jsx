@@ -197,9 +197,9 @@ const Step4 = () => {
               </div>
             ))}
 
-            <p className={styles.addMore} onClick={addAccount}>
+            {/* <p className={styles.addMore} onClick={addAccount}>
               ＋ Add more account
-            </p>
+            </p> */}
 
             <div className={styles.buttonGroup}>
               <button className={styles.dashboardBtn} onClick={handleCancel}>

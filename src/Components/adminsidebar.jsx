@@ -12,63 +12,154 @@ import {
   LogOut,
   Menu,
   X,
+  UserCog,
 } from "lucide-react";
 
+import Swal from "sweetalert2";
+import { ThemedSwal } from "../utils/ThemedSwal";
+import http from "../api/http";
+import { BASE_URL } from "../Components/API/API";
 import Pfp from "../assets/icons/Profile Image.svg";
 
 const AdSidemenu = () => {
   const navigate = useNavigate();
   const location = useLocation();
   const [isMobileOpen, setIsMobileOpen] = useState(false);
+  const [user, setUser] = useState(null);
+  const [token, setToken] = useState(null);
 
   const menuItems = [
-    { icon: LayoutDashboard, label: "Admin Panel", type: "icon", path: "/admin-properties" },
-    { icon: BarChart3, label: "Overview", type: "icon", path: "/overview" },
-    { icon: Briefcase, label: "Properties", type: "icon", path: "/properties-rt" },
-    { icon: Users, label: "Customers", type: "icon", path: "/properties-customer" },
-    { icon: Bell, label: "Notifications", badge: "5", type: "icon", path: "/notifications" },
-    { icon: Settings, label: "Settings", type: "icon", path: "/settings" },
+    { icon: LayoutDashboard, label: "Admin Panel", path: "/admin-properties" },
+    { icon: BarChart3, label: "Overview", path: "/overview" },
+    { icon: Briefcase, label: "Manage Properties", path: "/properties-rt" },
+    {
+      icon: Users,
+      label: "Customers",
+      path: "/properties-customer", // 👥 list of customers
+    },
+    {
+      icon: UserCog,
+      label: "Customer Management",
+      path: "/dashboard", // ⚙️ customer page / admin management
+    },
+    { icon: Bell, label: "Notifications", badge: "5", path: "/notifications" },
+    { icon: Settings, label: "Settings", path: "/settings" },
   ];
 
   const helpIndex = menuItems.length;
   const [activeIndex, setActiveIndex] = useState(null);
 
+  // ✅ Decode JWT function
+  const decodeToken = (token) => {
+    try {
+      const payloadBase64 = token.split(".")[1];
+      const decoded = JSON.parse(atob(payloadBase64));
+      return decoded;
+    } catch (err) {
+      console.error("Invalid token format:", err);
+      return null;
+    }
+  };
+
+  // ✅ Load user & token on mount
   useEffect(() => {
-    const foundIndex = menuItems.findIndex((item) => item.path === location.pathname);
+    const storedToken = localStorage.getItem("access_token");
+    if (storedToken) {
+      setToken(storedToken);
+      const decodedUser = decodeToken(storedToken);
+
+      if (decodedUser) {
+        const userData = {
+          username: decodedUser.unique_name || "Admin User",
+          email: decodedUser.email || "admin@domain.com",
+          role: decodedUser.Role || "CompanyAdministrator",
+        };
+        setUser(userData);
+        localStorage.setItem("user", JSON.stringify(userData));
+      }
+    } else {
+      // fallback
+      const storedUser = localStorage.getItem("user");
+      if (storedUser) setUser(JSON.parse(storedUser));
+    }
+  }, []);
+
+  // ✅ Track active route
+  useEffect(() => {
+    const foundIndex = menuItems.findIndex(
+      (item) => item.path === location.pathname
+    );
     if (foundIndex !== -1) {
       setActiveIndex(foundIndex);
     } else if (location.pathname === "/help-support") {
       setActiveIndex(helpIndex);
     }
   }, [location.pathname]);
-    const [user, setUser] = useState(null);
-    const [token, setToken] = useState(null);
-      useEffect(() => {
-        const storedUser = localStorage.getItem("user");
-        const storedToken = localStorage.getItem("access_token");
-        if (storedUser) setUser(JSON.parse(storedUser));
-        if (storedToken) setToken(storedToken);
-      }, []);
 
-  // === reusable sidebar content ===
+  // ✅ Handle Logout
+  const handleLogout = async () => {
+    const refreshToken = localStorage.getItem("refresh_token");
+
+    ThemedSwal({
+      title: "Are you sure?",
+      text: "You’ll be logged out of the admin panel.",
+      icon: "warning",
+      showCancelButton: true,
+      confirmButtonText: "Yes, log out",
+    }).then(async (result) => {
+      if (result.isConfirmed) {
+        try {
+          if (refreshToken) {
+            await http.post(`${BASE_URL}/api/v1/auth/logout`, { refreshToken });
+          }
+
+          // Clear stored data
+          localStorage.removeItem("user");
+          localStorage.removeItem("access_token");
+          localStorage.removeItem("refresh_token");
+          setUser(null);
+          setToken(null);
+
+          ThemedSwal({
+            icon: "success",
+            title: "Logged Out",
+            text: "Admin has been successfully logged out.",
+            timer: 1500,
+            showConfirmButton: false,
+          });
+
+          navigate("/login");
+        } catch (error) {
+          console.error("Logout error:", error);
+          ThemedSwal({
+            icon: "error",
+            title: "Logout Failed",
+            text:
+              error?.response?.data?.message ||
+              "Something went wrong while logging out.",
+          });
+        }
+      }
+    });
+  };
+
+  // === Reusable Sidebar Content ===
   const renderMenu = () => (
     <>
-      {/* User Profile */}
+      {/* === User Profile === */}
       <div className={styles.userProfile}>
         <div className={styles.avatar}>
           <img src={Pfp} alt="Admin Profile" />
         </div>
- <h3 className={styles.userName}>
-          {user
-            ? `${user.firstName || ""} ${user.lastName || ""}`.trim()
-            : "Admin User"}
+        <h3 className={styles.userName}>
+          {user ? user.username : "Admin User"}
         </h3>
         <p className={styles.userTitle}>
-          {user?.email || (token ? "Admin" : "Not Logged In")}
+          {user?.email || "No email available"}
         </p>
       </div>
 
-      {/* Navigation */}
+      {/* === Navigation === */}
       <nav className={styles.navigation}>
         {menuItems.map((item, index) => {
           const isActive = activeIndex === index;
@@ -81,40 +172,42 @@ const AdSidemenu = () => {
                 setIsMobileOpen(false);
               }}
             >
-              {item.type === "icon" ? (
-                <item.icon
-                  className={`${styles.menuIcon} ${isActive ? styles.activeIcon : ""}`}
-                  size={20}
-                />
-              ) : (
-                <img src={item.icon} className={styles.menuIcon} alt={item.label} />
-              )}
+              <item.icon
+                className={`${styles.menuIcon} ${
+                  isActive ? styles.activeIcon : ""
+                }`}
+                size={20}
+              />
               <span className={styles.menuLabel}>{item.label}</span>
-              <div className={styles.sideBar}></div>
               {item.badge && <span className={styles.badge}>{item.badge}</span>}
             </div>
           );
         })}
       </nav>
 
-      {/* Bottom Section */}
+      {/* === Bottom Section === */}
       <div className={styles.bottomSection}>
+        {/* Help & Support */}
         <div
-          className={`${styles.menuItem} ${activeIndex === helpIndex ? styles.active : ""}`}
+          className={`${styles.menuItem} ${
+            activeIndex === helpIndex ? styles.active : ""
+          }`}
           onClick={() => {
             navigate("/help-support");
             setIsMobileOpen(false);
           }}
         >
           <HelpCircle
-            className={`${styles.menuIcon} ${activeIndex === helpIndex ? styles.activeIcon : ""}`}
+            className={`${styles.menuIcon} ${
+              activeIndex === helpIndex ? styles.activeIcon : ""
+            }`}
             size={20}
           />
           <span className={styles.menuLabel}>Help & Support</span>
-          <div className={styles.sideBar}></div>
         </div>
 
-        <div className={styles.logoutItem}>
+        {/* Logout */}
+        <div className={styles.logoutItem} onClick={handleLogout}>
           <LogOut className={styles.menuIcon} size={20} />
           <span className={styles.menuLabel}>Logout</span>
         </div>

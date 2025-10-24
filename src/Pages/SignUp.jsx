@@ -746,7 +746,7 @@ const SignUp = () => {
         {step === 2 && (
           <div className={styles.form}>
             <div className={styles.container1}>
-              <h2 className={styles.title1}>Verify Phone Number</h2>
+              <h2 className={styles.title1}>Verify Email Address</h2>
               <p className={styles.subtitle1}>
                 A six-digit code has been sent to the inputted email address
                 <br />
