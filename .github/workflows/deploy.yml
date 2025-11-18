@@ -1,0 +1,41 @@
+name: Deploy React App to FTP
+
+on:
+  push:
+    branches:
+      - main
+      - Develop  # Adjust this if your main branch has a different name
+
+jobs:
+  build-and-deploy:
+    runs-on: ubuntu-latest
+
+    steps:
+      - name: 🛎️ Checkout Repository
+        uses: actions/checkout@v3
+
+      - name: 🔧 Setup Node.js
+        uses: actions/setup-node@v3
+        with:
+          node-version: 18  # Ensure this matches your project's Node.js version
+
+      - name: 📦 Install Dependencies
+        run: npm install
+
+      - name: 🏗️ Build Project
+        run: npm run build
+
+      - name: 📁 Prepare Build Output
+        run: |
+          mkdir -p publish
+          mv dist/* publish/
+
+      - name: 🚀 Deploy to FTP server
+        uses: SamKirkland/FTP-Deploy-Action@v4.3.5
+        with:
+          server: ${{ secrets.FTP_SERVER }}
+          username: ${{ secrets.FTP_USERNAME }}
+          password: ${{ secrets.FTP_PASSWORD }}
+          local-dir: ${{ github.workspace }}/publish/
+          server-dir: ${{ secrets.SERVER_DIR }}
+          log-level: verbose
